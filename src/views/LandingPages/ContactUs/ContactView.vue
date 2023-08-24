@@ -21,13 +21,21 @@ onMounted(() => {
 
 import { ref } from "vue";
 import axios from "axios";
+import router from "@/router/index.js";
 
 const userId = ref("");
 const userPw = ref("");
 const userName = ref("");
 const btnradio = ref("");
+const userPwCheck = ref("");
 // eslint-disable-next-line no-unused-vars
-let radioValues = ref("");
+let errormsg = ref("");
+// const duplicateCheck = () =>{
+//   const id ={
+//     userId : userId.value,
+//   };
+//
+// }
 const submitForm = () => {
   const user = {
     userId: userId.value,
@@ -36,16 +44,20 @@ const submitForm = () => {
     gender: btnradio.value,
   };
   console.log(user);
-  axios
-    .post("http://localhost:8080/signup", user)
-    // eslint-disable-next-line no-unused-vars
-    .then((response) => {
-      radioValues = "성공";
-    })
-    .catch((error) => {
-      radioValues = btnradio.value;
-      console.error(error);
-    });
+  if (userPw.value === userPwCheck.value && userId.value) {
+    axios
+      .post("http://localhost:8080/signup", user)
+      // eslint-disable-next-line no-unused-vars
+      .then((response) => {
+        router.push("../pages/landing-pages/basic");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  } else {
+    errormsg.value = "비밀번호가 서로 다릅니다";
+    console.log(errormsg);
+  }
 };
 </script>
 <template>
@@ -127,7 +139,7 @@ const submitForm = () => {
                             class="btn-check"
                             name="btnradio"
                             id="male"
-                            v-model="selectedGender"
+                            v-model="btnradio"
                             value="1"
                             autocomplete="off"
                           />
@@ -140,7 +152,7 @@ const submitForm = () => {
                             class="btn-check"
                             name="btnradio"
                             id="female"
-                            v-model="selectedGender"
+                            v-model="btnradio"
                             value="0"
                             autocomplete="off"
                           />
@@ -188,6 +200,8 @@ const submitForm = () => {
                           label="비밀번호 확인"
                           id="userPwCheck"
                           placeholder="PASSWORD CHECK"
+                          :value="userPwCheck"
+                          @update:value="userPwCheck = $event"
                         />
                       </div>
                     </div>
@@ -204,7 +218,7 @@ const submitForm = () => {
                     <!--                    </div>-->
                     <div class="row">
                       <div class="col-md-12 text-center">
-                        <p>{{ radioValues }}</p>
+                        <p class="text-danger">{{ errormsg }}</p>
                       </div>
                     </div>
                     <div class="row">
