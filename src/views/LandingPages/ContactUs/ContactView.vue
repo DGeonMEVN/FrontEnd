@@ -24,24 +24,26 @@ import axios from "axios";
 
 const userId = ref("");
 const userPw = ref("");
-
+const userName = ref("");
+const btnradio = ref("");
+// eslint-disable-next-line no-unused-vars
+let radioValues = ref("");
 const submitForm = () => {
-  console.log("클릭");
-  console.log("userId:", userId.value);
   const user = {
     userId: userId.value,
     userPw: userPw.value,
+    userName: userName.value,
+    gender: btnradio.value,
   };
   console.log(user);
-
   axios
     .post("http://localhost:8080/signup", user)
     // eslint-disable-next-line no-unused-vars
     .then((response) => {
-      alert("성공");
+      radioValues = "성공";
     })
     .catch((error) => {
-      alert("실패");
+      radioValues = btnradio.value;
       console.error(error);
     });
 };
@@ -110,6 +112,8 @@ const submitForm = () => {
                           label="이름"
                           id="userName"
                           placeholder="Full Name"
+                          :value="userName"
+                          @update:value="userName = $event"
                         />
                       </div>
                       <div class="col-md-6 text-center">
@@ -122,10 +126,12 @@ const submitForm = () => {
                             type="radio"
                             class="btn-check"
                             name="btnradio"
-                            id="btnradio1"
+                            id="male"
+                            v-model="selectedGender"
+                            value="1"
                             autocomplete="off"
                           />
-                          <label class="btn btn-outline-success" for="btnradio1"
+                          <label class="btn btn-outline-success" for="male"
                             >남성</label
                           >
 
@@ -133,10 +139,12 @@ const submitForm = () => {
                             type="radio"
                             class="btn-check"
                             name="btnradio"
-                            id="btnradio2"
+                            id="female"
+                            v-model="selectedGender"
+                            value="0"
                             autocomplete="off"
                           />
-                          <label class="btn btn-outline-success" for="btnradio2"
+                          <label class="btn btn-outline-success" for="female"
                             >여성</label
                           >
                         </div>
@@ -196,7 +204,7 @@ const submitForm = () => {
                     <!--                    </div>-->
                     <div class="row">
                       <div class="col-md-12 text-center">
-                        <p>zz</p>
+                        <p>{{ radioValues }}</p>
                       </div>
                     </div>
                     <div class="row">
