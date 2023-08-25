@@ -44,7 +44,7 @@ const submitForm = () => {
     gender: btnradio.value,
   };
   console.log(user);
-  if (userPw.value === userPwCheck.value && userId.value) {
+  if (userPw.value === userPwCheck.value) {
     axios
       .post("http://localhost:8080/signup", user)
       // eslint-disable-next-line no-unused-vars
