@@ -11,4 +11,10 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    proxy: {
+      "/signup": "http://localhost:8080", // 프록시 설정\
+      "/auth/login": "http://localhost:8080",
+    },
+  },
 });
