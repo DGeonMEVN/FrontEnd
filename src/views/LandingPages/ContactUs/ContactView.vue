@@ -46,7 +46,7 @@ const submitForm = () => {
   console.log(user);
   if (userPw.value === userPwCheck.value) {
     axios
-      .post("http://localhost:8080/signup", user)
+      .post("/signup", user)
       // eslint-disable-next-line no-unused-vars
       .then((response) => {
         router.push("../pages/landing-pages/basic");
