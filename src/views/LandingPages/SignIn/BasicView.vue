@@ -37,6 +37,7 @@ const submitForm = () => {
     .post("/auth/login", user)
     // eslint-disable-next-line no-unused-vars
     .then((response) => {
+      console.log("response.data", response.data);
       router.replace("/");
     })
     .catch((error) => {
