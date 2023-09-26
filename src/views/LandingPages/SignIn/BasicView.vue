@@ -18,8 +18,6 @@ import DefaultFooter from "@/examples/footers/FooterDefault.vue";
 onMounted(() => {
   setMaterialInput();
 });
-
-
 // eslint-disable-next-line no-unused-vars
 const userId = ref("");
 // eslint-disable-next-line no-unused-vars
@@ -37,7 +35,9 @@ const submitForm = () => {
     .post("/auth/login", user)
     // eslint-disable-next-line no-unused-vars
     .then((response) => {
-      console.log("response.data", response.data);
+      localStorage.setItem("user", response.data.userId);
+      alert(localStorage.getItem("user"));
+      // console.log("response.data", response.data);
       router.replace("/");
     })
     .catch((error) => {
@@ -54,7 +54,7 @@ const submitForm = () => {
       class="page-header align-items-start min-vh-100"
       :style="{
         backgroundImage:
-          'url(https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80)'
+          'url(https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80)',
       }"
       loading="lazy"
     >
@@ -126,7 +126,10 @@ const submitForm = () => {
                     회원이 아니신가요?
                     <RouterLink
                       :to="{ name: 'contactus' }"
-                      class="text-success text-gradient font-weight-bold">회원가입</RouterLink>
+                      class="text-success text-gradient font-weight-bold"
+                    >
+                      회원가입</RouterLink
+                    >
                   </p>
                 </form>
               </div>
@@ -134,7 +137,6 @@ const submitForm = () => {
           </div>
         </div>
       </div>
-
     </div>
   </Header>
   <DefaultFooter />
