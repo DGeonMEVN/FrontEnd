@@ -21,6 +21,7 @@ onMounted(() => {
 
 import { ref } from "vue";
 import axios from "axios";
+// eslint-disable-next-line no-unused-vars
 import router from "@/router/index.js";
 
 const userId = ref("");
@@ -47,9 +48,8 @@ const submitForm = () => {
   if (userPw.value === userPwCheck.value) {
     axios
       .post("/signup", user)
-      // eslint-disable-next-line no-unused-vars
-      .then((response) => {
-        router.push("../pages/landing-pages/basic");
+      .then(() => {
+        router.replace("/pages/landing-pages/basic");
       })
       .catch((error) => {
         console.error(error);
