@@ -194,7 +194,7 @@ watch(
               <i
                 class="material-icons opacity-6 me-2 text-md"
                 :class="getTextColor()"
-                >dashboard</i
+              >dashboard</i
               >
               일지
               <img
