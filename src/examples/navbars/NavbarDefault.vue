@@ -52,12 +52,13 @@ onMounted(() => {
 const logout = () => {
   console.log("로그아웃 호출");
   axios
-    .get("http://localhost:8080/auth/logout")
+    .post("/api/auth/logout")
     .then(() => {
       localStorage.removeItem("user");
       router.replace("/pages/landing-pages/basic");
     })
     .catch((error) => {
+      console.log("실패");
       console.error(error);
     });
 };
@@ -193,7 +194,7 @@ watch(
               <i
                 class="material-icons opacity-6 me-2 text-md"
                 :class="getTextColor()"
-                >dashboard</i
+              >dashboard</i
               >
               일지
               <img
