@@ -52,12 +52,13 @@ onMounted(() => {
 const logout = () => {
   console.log("로그아웃 호출");
   axios
-    .get("http://localhost:8080/auth/logout")
+    .post("/api/auth/logout")
     .then(() => {
       localStorage.removeItem("user");
       router.replace("/pages/landing-pages/basic");
     })
     .catch((error) => {
+      console.log("실패");
       console.error(error);
     });
 };
