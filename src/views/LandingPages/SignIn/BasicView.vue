@@ -32,7 +32,7 @@ const submitForm = () => {
   };
   console.log(user);
   axios
-    .post("/auth/login", user)
+    .post("/api/auth/login", user)
     // eslint-disable-next-line no-unused-vars
     .then((response) => {
       localStorage.setItem("user", response.data.userId);
