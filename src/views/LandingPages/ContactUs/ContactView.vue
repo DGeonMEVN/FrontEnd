@@ -29,14 +29,13 @@ const userPw = ref("");
 const userName = ref("");
 const btnradio = ref("");
 const userPwCheck = ref("");
-// eslint-disable-next-line no-unused-vars
 let errormsg = ref("");
-// const duplicateCheck = () =>{
-//   const id ={
-//     userId : userId.value,
-//   };
-//
-// }
+
+/**
+ * @author ovmkas
+ * @data 2023-08-24
+ * @description 회원 가입을 위한 비동기 통신{userId},{userPw},{userName},{gender}를 기입한다
+ */
 const submitForm = () => {
   const user = {
     userId: userId.value,
@@ -47,7 +46,7 @@ const submitForm = () => {
   console.log(user);
   if (userPw.value === userPwCheck.value) {
     axios
-      .post("/signup", user)
+      .post("/api/auth/signup", user)
       .then(() => {
         router.replace("/pages/landing-pages/basic");
       })
@@ -58,6 +57,31 @@ const submitForm = () => {
     errormsg.value = "비밀번호가 서로 다릅니다";
     console.log(errormsg);
   }
+};
+
+/**
+ * @param e form전송을 막기 위함
+ * @author ovmkas
+ * @data 2023-10-06
+ * @description 회원가입시 아이디 중복확인을 위한
+ */
+const userIdCehck=(e)=>{
+  e.preventDefault();
+  const id = { userId : userId.value}
+  console.log(id);
+  axios
+    .post("/api/auth/idcheck", id)
+    .then((res)=>{
+      console.log(res.data.checkId);
+      if(res.data.checkId){
+        errormsg.value = "중복된 ID입니다."
+      }else{
+        errormsg.value = "사용가능한 ID입니다."
+      }
+    })
+    .catch((error)=>{
+
+    });
 };
 </script>
 <template>
@@ -177,6 +201,7 @@ const submitForm = () => {
                           variant="gradient"
                           color="success"
                           class="mt-3 mb-0"
+                          @click="userIdCehck"
                         >
                           중복확인
                         </MaterialButton>
