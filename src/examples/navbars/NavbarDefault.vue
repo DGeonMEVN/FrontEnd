@@ -258,22 +258,21 @@ watch(
               </div>
             </div>
           </li>
-          <li class="nav-item dropdown dropdown-hover mx-2">
-            <div v-if="user === null">
-              <RouterLink
-                :to="{ name: 'signin-basic' }"
-                class="dropdown-item border-radius-md"
-              >
-                <span>로그인</span>
-              </RouterLink>
-            </div>
-            <div v-else>
-              <button class="dropdown-item border-radius-md" @click="logout">
-                로그아웃
-              </button>
-            </div>
-          </li>
+
         </ul>
+        <div class="nav-item dropdown dropdown-hover mx-2" v-if="user === null">
+          <RouterLink
+            :to="{ name: 'signin-basic' }"
+            class="dropdown-item border-radius-md"
+          >
+            <span>로그인</span>
+          </RouterLink>
+        </div>
+        <div class="nav-item dropdown dropdown-hover mx-2" v-else>
+          <button class="dropdown-item border-radius-md" @click="logout">
+            로그아웃
+          </button>
+        </div>
         <!--        <ul class="navbar-nav d-lg-block d-none">-->
         <!--          <li class="nav-item">-->
         <!--            <a-->
