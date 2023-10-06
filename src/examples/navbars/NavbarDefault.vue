@@ -45,10 +45,22 @@ const props = defineProps({
 
 const user = ref();
 
+/**
+ *
+ * @author DGeon
+ * @data 2023-09-11
+ * @description 페이지 로드 시 localstorage의 값을 가져온 뒤 if문으로 {로그인},{로그아웃} 버튼을 표시 해주기 위해 localStorage의 {user} 값을 불러온다
+ */
 onMounted(() => {
   user.value = localStorage.getItem("user");
 });
 
+/**
+ *
+ * @author DGeon
+ * @data 2023-10-05
+ * @description {로그아웃} 버튼 눌렀을 때 동작 하는 함수로써 express와 통신하여 Cookie의 값과 localstorage의 값을 삭제하고 로그인 페이지로 이동 한다
+ */
 const logout = () => {
   console.log("로그아웃 호출");
   axios
