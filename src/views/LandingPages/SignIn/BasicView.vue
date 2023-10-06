@@ -18,13 +18,15 @@ import DefaultFooter from "@/examples/footers/FooterDefault.vue";
 onMounted(() => {
   setMaterialInput();
 });
-// eslint-disable-next-line no-unused-vars
 const userId = ref("");
-// eslint-disable-next-line no-unused-vars
 const userPw = ref("");
-// eslint-disable-next-line no-unused-vars
 let errormsg = ref("");
 
+/**
+ * @author ovmkas
+ * @data 2023-09-04
+ * @description 로그인을 하기 위한 함수로 form전송을 한다 로그인이 성공하면 첫 페이지로 이동한다
+ */
 const submitForm = () => {
   const user = {
     userId: userId.value,
