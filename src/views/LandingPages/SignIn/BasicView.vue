@@ -37,9 +37,10 @@ const submitForm = () => {
     .post("/api/auth/login", user)
     // eslint-disable-next-line no-unused-vars
     .then((response) => {
-      localStorage.setItem("user", response.data.userId);
-      alert(localStorage.getItem("user"));
+      localStorage.setItem("userToken", response.data.data.accessToken);
+      // alert(localStorage.getItem("user"));
       // console.log("response.data", response.data);
+      // console.log(response.data.data);
       router.replace("/");
     })
     .catch((error) => {

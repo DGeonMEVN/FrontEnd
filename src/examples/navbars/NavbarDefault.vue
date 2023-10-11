@@ -43,7 +43,7 @@ const props = defineProps({
   },
 });
 
-const user = ref();
+const userToken = ref();
 
 /**
  *
@@ -52,7 +52,7 @@ const user = ref();
  * @description 페이지 로드 시 localstorage의 값을 가져온 뒤 if문으로 {로그인},{로그아웃} 버튼을 표시 해주기 위해 localStorage의 {user} 값을 불러온다
  */
 onMounted(() => {
-  user.value = localStorage.getItem("user");
+  user.value = localStorage.getItem("userToken");
 });
 
 /**
@@ -245,29 +245,40 @@ watch(
                       >
                         <span>일지</span>
                       </RouterLink>
+                      <div
+                        class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1"
+                      >
+                        마이페이지
+                      </div>
+                      <RouterLink
+                        :to="{ name: 'about' }"
+                        class="dropdown-item border-radius-md"
+                      >
+                        <span>내 정보</span>
+                      </RouterLink>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="d-lg-none">
-                <div
-                  class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0"
-                >
-                  게시판
-                </div>
-                <RouterLink
-                  :to="{ name: 'about' }"
-                  class="dropdown-item border-radius-md"
-                >
-                  <span>공지사항</span>
-                </RouterLink>
-                <RouterLink
-                  :to="{ name: 'contactus' }"
-                  class="dropdown-item border-radius-md"
-                >
-                  <span>일지</span>
-                </RouterLink>
-              </div>
+<!--              <div class="d-lg-none">-->
+<!--                <div-->
+<!--                  class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0"-->
+<!--                >-->
+<!--                  게시판-->
+<!--                </div>-->
+<!--                <RouterLink-->
+<!--                  :to="{ name: 'about' }"-->
+<!--                  class="dropdown-item border-radius-md"-->
+<!--                >-->
+<!--                  <span>공지사항</span>-->
+<!--                </RouterLink>-->
+<!--                <RouterLink-->
+<!--                  :to="{ name: 'contactus' }"-->
+<!--                  class="dropdown-item border-radius-md"-->
+<!--                >-->
+<!--                  <span>일지</span>-->
+<!--                </RouterLink>-->
+<!--              </div>-->
             </div>
           </li>
 
