@@ -43,7 +43,7 @@ const props = defineProps({
   },
 });
 
-const userToken = ref();
+const user = ref();
 
 /**
  *
@@ -62,17 +62,17 @@ onMounted(() => {
  * @description {로그아웃} 버튼 눌렀을 때 동작 하는 함수로써 express와 통신하여 Cookie의 값과 localstorage의 값을 삭제하고 로그인 페이지로 이동 한다
  */
 const logout = () => {
-  console.log("로그아웃 호출");
-  axios
-    .post("/api/auth/logout")
-    .then(() => {
-      localStorage.removeItem("user");
+  // console.log("로그아웃 호출");
+  // axios
+  //   .post("/api/auth/logout")
+  //   .then(() => {
+      localStorage.removeItem("userToken");
       router.replace("/pages/landing-pages/basic");
-    })
-    .catch((error) => {
-      console.log("실패");
-      console.error(error);
-    });
+    // })
+    // .catch((error) => {
+    //   console.log("실패");
+    //   console.error(error);
+    // });
 };
 
 // set arrow  color
