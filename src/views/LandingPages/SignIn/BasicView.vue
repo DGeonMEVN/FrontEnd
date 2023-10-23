@@ -1,6 +1,6 @@
 <script setup>
-import { onMounted, ref } from "vue";
-
+import { inject, onMounted, ref } from "vue";
+import VueCookies from "vue-cookies";
 // example components
 import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
 import Header from "@/examples/Header.vue";
@@ -37,10 +37,25 @@ const submitForm = () => {
     .post("/api/auth/login", user)
     // eslint-disable-next-line no-unused-vars
     .then((response) => {
+      // const token = response.data.data.accessToken;
       localStorage.setItem("userToken", response.data.data.accessToken);
       // alert(localStorage.getItem("user"));
       // console.log("response.data", response.data);
       // console.log(response.data.data);
+
+      // const headers = {
+      //   Authorization: `Bearer ${token}`
+      // };
+      // axios.defaults.baseURL = "http://localhost:3000/";
+
+      // axios.defaults.headers = headers;
+      // const { accessToken } = response.data.data.accessToken;
+      // axios.defaults.baseURL = "http://localhost:8080"; // API의 기본 URL을 설정
+      // axios.defaults.withCredentials = true; // 인증 정보를 보내도록 설정
+      // axios.defaults.headers.common[
+      //   "Authorization"
+      //   ] = `Bearer ${accessToken}`;
+      VueCookies.set("Token", response.data.data.accessToken, '7d');
       router.replace("/");
     })
     .catch((error) => {
