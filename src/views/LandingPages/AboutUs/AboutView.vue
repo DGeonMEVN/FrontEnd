@@ -16,6 +16,8 @@ import Information from "./Sections/AboutInformation.vue";
 import AboutTeam from "./Sections/AboutTeam.vue";
 import Featuring from "./Sections/AboutFeaturing.vue";
 import Newsletter from "./Sections/AboutNewsletter.vue";
+import axios from "axios";
+import router from "@/router/index.js";
 
 const body = document.getElementsByTagName("body")[0];
 //hooks
@@ -34,7 +36,21 @@ onMounted(() => {
       loop: true,
     });
   }
+  alert("zz")
+  axios
+    .get("/api/auth/refresh")
+    // eslint-disable-next-line no-unused-vars
+    .then((response) => {
+      alert(response.message);
+      alert("호출");
+    })
+    {
+      alert("에러")
+      console.error(error);
+    }
+
 });
+
 
 onUnmounted(() => {
   body.classList.remove("about-us");

@@ -2,7 +2,7 @@
 import { RouterLink } from "vue-router";
 import { onMounted, ref, watch } from "vue";
 import { useWindowsWidth } from "@/assets/js/useWindowsWidth.js";
-
+import VueCookies from "vue-cookies";
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import DownArrWhite from "@/assets/img/down-arrow-white.svg";
@@ -67,6 +67,7 @@ const logout = () => {
   //   .post("/api/auth/logout")
   //   .then(() => {
       localStorage.removeItem("userToken");
+      VueCookies.remove("Token");
       router.replace("/pages/landing-pages/basic");
     // })
     // .catch((error) => {
