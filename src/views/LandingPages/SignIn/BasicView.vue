@@ -38,7 +38,7 @@ const submitForm = () => {
     // eslint-disable-next-line no-unused-vars
     .then((response) => {
       // const token = response.data.data.accessToken;
-      localStorage.setItem("userToken", response.data.data.accessToken);
+      // localStorage.setItem("userToken", response.data.data.accessToken);
       // alert(localStorage.getItem("user"));
       // console.log("response.data", response.data);
       // console.log(response.data.data);
@@ -55,7 +55,8 @@ const submitForm = () => {
       // axios.defaults.headers.common[
       //   "Authorization"
       //   ] = `Bearer ${accessToken}`;
-      VueCookies.set("Token", response.data.data.accessToken, '7d');
+      VueCookies.set("authorization", response.data.data.accessToken);
+      VueCookies.set("refresh", response.data.data.refreshToken);
       router.replace("/");
     })
     .catch((error) => {
