@@ -146,9 +146,20 @@ const router = createRouter({
       name: "el-typography",
       component: ElTypography,
     },
+    //user path 사용자 정의 패스
     {
       path: "/"
-    }
+    },
+    {
+      path: "/auth/signup",
+      name: "signup",
+      component: ContactView,
+    },
+    {
+      path: "/auth/login",
+      name: "login",
+      component: SignInBasicView,
+    },
   ],
 });
 
