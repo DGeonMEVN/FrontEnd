@@ -18,6 +18,7 @@ import Featuring from "./Sections/AboutFeaturing.vue";
 import Newsletter from "./Sections/AboutNewsletter.vue";
 import axios from "axios";
 import router from "@/router/index.js";
+import VueCookies from "vue-cookies";
 
 const body = document.getElementsByTagName("body")[0];
 //hooks
@@ -36,19 +37,48 @@ onMounted(() => {
       loop: true,
     });
   }
-  alert("zz")
-  axios
-    .get("/api/auth/refresh")
+
+  const AxiosInst = axios.create({
+    baseURL: 'http://localhost:8080'
+  });
+
+  AxiosInst.interceptors.request.use(
+    (config) => {
+      let accessToken = VueCookies.get('authorization');
+      let refreshToken = VueCookies.get('refresh');
+      if (accessToken && refreshToken) {
+        config.headers.Authorization = accessToken;
+        config.headers.Refresh = refreshToken;
+        return config;
+      }else{
+        VueCookies.remove('authorization');
+        VueCookies.remove('refresh');
+        router.replace("/pages/landing-pages/basic");
+      }
+
+    }
+  );
+
+  AxiosInst
+    .post("/api/auth/refresh")
     // eslint-disable-next-line no-unused-vars
     .then((response) => {
-      alert(response.message);
-      alert("호출");
+      if(!response.data.ok){
+          VueCookies.remove("authorization")
+          VueCookies.remove("refresh")
+          router.replace("/auth/login");
+      }else if(response.data.data.accessToken){
+        VueCookies.set("authorization", response.data.data.accessToken);
+        VueCookies.set("refresh", response.data.data.refreshToken);
+      }
     })
-    {
-      alert("에러")
-      console.error(error);
-    }
+    .catch((err)=>{
+      // console.log(err.response.data.message);
+      // if(!err.response.data.ok){
 
+      // }
+      console.error(err);
+    })
 });
 
 
