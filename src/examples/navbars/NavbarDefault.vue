@@ -2,7 +2,6 @@
 import { RouterLink } from "vue-router";
 import { onMounted, ref, watch } from "vue";
 import { useWindowsWidth } from "@/assets/js/useWindowsWidth.js";
-import jwt from "jsonwebtoken";
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import DownArrWhite from "@/assets/img/down-arrow-white.svg";
@@ -45,8 +44,8 @@ const props = defineProps({
   },
 });
 
-const user = ref();
-
+let user = ref();
+let isVisible = ref();
 /**
  *
  * @author DGeon
@@ -54,12 +53,25 @@ const user = ref();
  * @description 페이지 로드 시 localstorage의 값을 가져온 뒤 if문으로 {로그인},{로그아웃} 버튼을 표시 해주기 위해 localStorage의 {user} 값을 불러온다
  */
 onMounted(() => {
-  user.value = VueCookies.get("authorization")
+  const token = VueCookies.get("authorization");
+  user.value = null;
+  console.log(user.value);
   // const accessToken = VueCookies.get("authorization");
   // const secretKey = 'jwtpassword';
   // const decodedPayload = jwt.verify(accessToken, secretKey);
   //
   // console.log(decodedPayload);
+  if(token){
+    const payloadBase64 = token.split('.')[1];
+    const payload = atob(payloadBase64);
+    const parse = JSON.parse(payload);
+    if(parse.userId !== null){
+      user.value = parse.userId;
+      isVisible.value = true;
+    }else{
+      isVisible.value = false;
+    }
+  }
 });
 
 /**
@@ -75,12 +87,18 @@ const logout = () => {
 
   AxiosInst.interceptors.request.use(
     (config) => {
-      let access_token = VueCookies.get('refresh');
-      console.log(VueCookies.get('refresh'));
-      if (access_token) {
-        config.headers.Authorization = access_token;
+      let accessToken = VueCookies.get('authorization');
+      let refreshToken = VueCookies.get('refresh');
+      if (accessToken && refreshToken) {
+        config.headers.Authorization = accessToken;
+        config.headers.Refresh = refreshToken;
+        return config;
+      }else{
+        VueCookies.remove('authorization');
+        VueCookies.remove('refresh');
+        router.replace("/auth/login");
       }
-      return config;
+
     }
   );
 
@@ -93,7 +111,7 @@ const logout = () => {
       // localStorage.removeItem("userToken");
       VueCookies.remove("authorization");
       VueCookies.remove("refresh");
-      router.replace("/pages/landing-pages/basic");
+      router.replace("/auth/login");
     })
     .catch((error) => {
       console.log("실패");
@@ -246,6 +264,7 @@ watch(
                 class="arrow ms-1 d-lg-none d-block ms-auto"
               />
             </a>
+
             <div
               class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
               aria-labelledby="dropdownMenuPages"
@@ -271,6 +290,8 @@ watch(
                       >
                         <span>일지</span>
                       </RouterLink>
+<!--                      숨김 메뉴 표시-->
+                      <div class="navMypage" v-show="isVisible">
                       <div
                         class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1"
                       >
@@ -280,8 +301,9 @@ watch(
                         :to="{ name: 'about' }"
                         class="dropdown-item border-radius-md"
                       >
-                        <span>내 정보</span>
+                        <span>{{ user }} 님의 정보</span>
                       </RouterLink>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -311,7 +333,7 @@ watch(
         </ul>
         <div class="nav-item dropdown dropdown-hover mx-2" v-if="user === null">
           <RouterLink
-            :to="{ name: 'signin-basic' }"
+            :to="{ name: 'login' }"
             class="dropdown-item border-radius-md"
           >
             <span>로그인</span>
