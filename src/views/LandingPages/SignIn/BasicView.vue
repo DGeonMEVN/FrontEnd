@@ -144,7 +144,7 @@ const submitForm = () => {
                   <p class="mt-4 text-sm text-center">
                     회원이 아니신가요?
                     <RouterLink
-                      :to="{ name: 'contactus' }"
+                      :to="{ name: 'signup' }"
                       class="text-success text-gradient font-weight-bold"
                     >
                       회원가입</RouterLink
