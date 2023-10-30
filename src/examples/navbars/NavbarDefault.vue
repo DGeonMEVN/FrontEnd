@@ -298,7 +298,7 @@ watch(
                         마이페이지
                       </div>
                       <RouterLink
-                        :to="{ name: 'about' }"
+                        :to="{ name: 'profile' }"
                         class="dropdown-item border-radius-md"
                       >
                         <span>{{ user }} 님의 정보</span>
