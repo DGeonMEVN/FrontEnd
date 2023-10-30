@@ -160,6 +160,11 @@ const router = createRouter({
       name: "login",
       component: SignInBasicView,
     },
+    {
+      path: "/auth/profile",
+      name: "profile",
+      component: AboutView,
+    },
   ],
 });
 
