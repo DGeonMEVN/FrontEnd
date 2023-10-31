@@ -8,6 +8,7 @@ import DownArrWhite from "@/assets/img/down-arrow-white.svg";
 import axios from "axios";
 import router from "@/router/index.js";
 import VueCookies from "vue-cookies";
+import { userStore } from "@/stores/user.js";
 
 
 const props = defineProps({
@@ -55,12 +56,12 @@ let isVisible = ref();
 onMounted(() => {
   const token = VueCookies.get("authorization");
   user.value = null;
-  console.log(user.value);
   // const accessToken = VueCookies.get("authorization");
   // const secretKey = 'jwtpassword';
   // const decodedPayload = jwt.verify(accessToken, secretKey);
   //
   // console.log(decodedPayload);
+  /* token값 base64로 분석 후 user에 저장
   if(token){
     const payloadBase64 = token.split('.')[1];
     const payload = atob(payloadBase64);
@@ -72,6 +73,16 @@ onMounted(() => {
       isVisible.value = false;
     }
   }
+  /* token값 base64로 분석 후 user에 저장*/
+  /**/
+  if(token && userStore().userId !== null){
+    user.value = userStore().userId;
+    isVisible.value = true;
+  }else{
+    isVisible.value = false;
+  }
+
+
 });
 
 /**
@@ -111,6 +122,7 @@ const logout = () => {
       // localStorage.removeItem("userToken");
       VueCookies.remove("authorization");
       VueCookies.remove("refresh");
+      userStore().logout();
       router.replace("/auth/login");
     })
     .catch((error) => {
