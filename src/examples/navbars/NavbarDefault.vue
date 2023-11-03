@@ -1,15 +1,11 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import { onMounted, ref, watch } from "vue";
-import { useWindowsWidth } from "@/assets/js/useWindowsWidth.js";
+import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
+
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import DownArrWhite from "@/assets/img/down-arrow-white.svg";
-import axios from "axios";
-import router from "@/router/index.js";
-import VueCookies from "vue-cookies";
-import { userStore } from "@/stores/user.js";
-
 
 const props = defineProps({
   action: {
@@ -20,30 +16,35 @@ const props = defineProps({
     default: () => ({
       route: "https://www.creative-tim.com/product/vue-material-kit",
       color: "bg-gradient-success",
-      label: "Free Download",
-    }),
+      label: "Free Download"
+    })
   },
   transparent: {
     type: Boolean,
-    default: false,
+    default: false
   },
   light: {
     type: Boolean,
-    default: false,
+    default: false
   },
   dark: {
     type: Boolean,
-    default: false,
+    default: false
   },
   sticky: {
     type: Boolean,
-    default: false,
+    default: false
   },
   darkText: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 });
+
+import axios from "axios";
+import router from "@/router/index.js";
+import VueCookies from "vue-cookies";
+import { userStore } from "@/stores/user.js";
 
 let user = ref();
 let isVisible = ref();
@@ -163,7 +164,7 @@ const { type } = useWindowsWidth();
 
 if (type.value === "mobile") {
   textDark.value = true;
-} else if (type.value === "desktop" && textDark.value === false) {
+} else if (type.value === "desktop" && textDark.value == false) {
   textDark.value = false;
 }
 
@@ -187,7 +188,7 @@ watch(
       'my-3 blur border-radius-lg z-index-3 py-2 shadow py-2 start-0 end-0 mx-4 position-absolute mt-4':
         props.sticky,
       'navbar-light bg-white py-3': props.light,
-      ' navbar-dark bg-gradient-dark z-index-3 py-3': props.dark,
+      ' navbar-dark bg-gradient-dark z-index-3 py-3': props.dark
     }"
   >
     <div
@@ -202,7 +203,7 @@ watch(
         :class="[
           (props.transparent && textDark.value) || !props.transparent
             ? 'text-dark font-weight-bolder ms-sm-3'
-            : 'text-white font-weight-bolder ms-sm-3',
+            : 'text-white font-weight-bolder ms-sm-3'
         ]"
         :to="{ name: 'presentation' }"
         rel="tooltip"
@@ -211,25 +212,6 @@ watch(
       >
         건강관리일지
       </RouterLink>
-      <RouterLink
-        class="navbar-brand d-block d-md-none"
-        :class="
-          props.transparent || props.dark
-            ? 'text-white'
-            : 'font-weight-bolder ms-sm-3'
-        "
-        to="/"
-        rel="tooltip"
-        title="Designed and Coded by Creative Tim"
-        data-placement="bottom"
-      >
-        Material Design
-      </RouterLink>
-      <!--      <a-->
-      <!--        href="https://www.creative-tim.com/product/vue-material-kit-pro"-->
-      <!--        class="btn btn-sm bg-gradient-success mb-0 ms-auto d-lg-none d-block"-->
-      <!--        >Buy Now</a-->
-      <!--      >-->
       <button
         class="navbar-toggler shadow-none ms-2"
         type="button"
@@ -276,7 +258,6 @@ watch(
                 class="arrow ms-1 d-lg-none d-block ms-auto"
               />
             </a>
-
             <div
               class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
               aria-labelledby="dropdownMenuPages"
@@ -302,10 +283,8 @@ watch(
                       >
                         <span>일지</span>
                       </RouterLink>
-<!--                      숨김 메뉴 표시-->
-                      <div class="navMypage" v-show="isVisible">
                       <div
-                        class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1"
+                        class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0 mt-3"
                       >
                         마이페이지
                       </div>
@@ -315,58 +294,61 @@ watch(
                       >
                         <span>{{ user }} 님의 정보</span>
                       </RouterLink>
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-<!--              <div class="d-lg-none">-->
-<!--                <div-->
-<!--                  class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0"-->
-<!--                >-->
-<!--                  게시판-->
-<!--                </div>-->
-<!--                <RouterLink-->
-<!--                  :to="{ name: 'about' }"-->
-<!--                  class="dropdown-item border-radius-md"-->
-<!--                >-->
-<!--                  <span>공지사항</span>-->
-<!--                </RouterLink>-->
-<!--                <RouterLink-->
-<!--                  :to="{ name: 'contactus' }"-->
-<!--                  class="dropdown-item border-radius-md"-->
-<!--                >-->
-<!--                  <span>일지</span>-->
-<!--                </RouterLink>-->
-<!--              </div>-->
+              <div class="d-lg-none">
+                <div
+                  class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0"
+                >
+                  게시판
+                </div>
+                <RouterLink
+                  :to="{ name: 'about' }"
+                  class="dropdown-item border-radius-md"
+                >
+                  <span>공지사항</span>
+                </RouterLink>
+                <RouterLink
+                  :to="{ name: 'contactus' }"
+                  class="dropdown-item border-radius-md"
+                >
+                  <span>일지</span>
+                </RouterLink>
+                <div
+                  class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0 mt-3"
+                >
+                  마이페이지
+                </div>
+                <RouterLink
+                  :to="{ name: 'profile' }"
+                  class="dropdown-item border-radius-md"
+                >
+                  <span>{{ user }} 님의 정보</span>
+                </RouterLink>
+              </div>
             </div>
           </li>
-
+          <li class="nav-item dropdown dropdown-hover mx-2" >
+            <div
+              class="nav-link d-flex cursor-pointer align-items-center"
+              v-if="user === null"
+            >
+              <RouterLink
+                :to="{ name: 'login' }"
+                class="dropdown-item border-radius-md"
+              >
+                <span>로그인</span>
+              </RouterLink>
+            </div>
+            <div class="nav-item dropdown dropdown-hover mx-2" v-else>
+              <button class="dropdown-item border-radius-md mt-2" @click="logout">
+                로그아웃
+              </button>
+            </div>
+          </li>
         </ul>
-        <div class="nav-item dropdown dropdown-hover mx-2" v-if="user === null">
-          <RouterLink
-            :to="{ name: 'login' }"
-            class="dropdown-item border-radius-md"
-          >
-            <span>로그인</span>
-          </RouterLink>
-        </div>
-        <div class="nav-item dropdown dropdown-hover mx-2" v-else>
-          <button class="dropdown-item border-radius-md" @click="logout">
-            로그아웃
-          </button>
-        </div>
-        <!--        <ul class="navbar-nav d-lg-block d-none">-->
-        <!--          <li class="nav-item">-->
-        <!--            <a-->
-        <!--              :href="action.route"-->
-        <!--              class="btn btn-sm mb-0"-->
-        <!--              :class="action.color"-->
-        <!--              onclick="smoothToPricing('pricing-soft-ui')"-->
-        <!--              >{{ action.label }}</a-->
-        <!--            >-->
-        <!--          </li>-->
-        <!--        </ul>-->
       </div>
     </div>
   </nav>
