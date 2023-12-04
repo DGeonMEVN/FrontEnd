@@ -23,6 +23,8 @@ import ElDropdowns from "../layouts/sections/elements/dropdowns/DropdownsView.vu
 import ElProgressBars from "../layouts/sections/elements/progress-bars/ProgressBarsView.vue";
 import ElToggles from "../layouts/sections/elements/toggles/TogglesView.vue";
 import ElTypography from "../layouts/sections/elements/typography/TypographyView.vue";
+import Table from "../examples/tables/Table.vue"
+import White from "../views/LandingPages/White/BoardWhite.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -162,6 +164,16 @@ const router = createRouter({
       path: "/auth/profile",
       name: "profile",
       component: AboutView,
+    },
+    {
+      path: "/table",
+      name: "table",
+      component: Table,
+    },
+    {
+      path : "/White",
+      name : "white",
+      component : White,
     },
   ],
 });
