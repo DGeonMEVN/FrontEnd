@@ -29,4 +29,5 @@ coverage
 *.sw?
 
 AboutViewCopy.vue
+TableCopy.vue
 .env
