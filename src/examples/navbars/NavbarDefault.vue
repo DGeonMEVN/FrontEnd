@@ -77,8 +77,8 @@ onMounted(() => {
   }
   /* token값 base64로 분석 후 user에 저장*/
   /**/
-  if(token && userStore().userId !== null){
-    user.value = userStore().userId;
+  if(token && localStorage.getItem("userId") !== null){
+    user.value = localStorage.getItem("userId");
     isVisible.value = true;
   }else{
     isVisible.value = false;
@@ -109,7 +109,9 @@ const logout = () => {
       }else{
         VueCookies.remove('authorization');
         VueCookies.remove('refresh');
+        localStorage.clear()
         router.replace("/auth/login");
+        console.log("이동");
       }
 
     }
@@ -124,7 +126,8 @@ const logout = () => {
       // localStorage.removeItem("userToken");
       VueCookies.remove("authorization");
       VueCookies.remove("refresh");
-      userStore().logout();
+      localStorage.clear();
+      // userStore().logout();
       router.replace("/auth/login");
     })
     .catch((error) => {
@@ -273,7 +276,7 @@ watch(
                         게시판
                       </div>
                       <RouterLink
-                        :to="{ name: 'about' }"
+                        :to="{ name: 'table' }"
                         class="dropdown-item border-radius-md"
                       >
                         <span>공지사항</span>
