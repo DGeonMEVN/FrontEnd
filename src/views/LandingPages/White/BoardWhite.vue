@@ -22,8 +22,8 @@ onMounted(() => {
   const token = VueCookies.get("authorization");
   user.value = null;
   //권한으로 변경 해야함
-  if(token && userStore().userId !== null){
-    user.value = userStore().userId;
+  if(token && localStorage.getItem("userId") !== null){
+    user.value = localStorage.getItem("userId");
   }
 });
 
