@@ -6,6 +6,7 @@ import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import DownArrWhite from "@/assets/img/down-arrow-white.svg";
+const { VITE_KEY_APP_URL } = import.meta.env
 
 const props = defineProps({
   action: {
@@ -94,7 +95,7 @@ onMounted(() => {
  */
 const logout = () => {
   const AxiosInst = axios.create({
-    baseURL: 'http://localhost:8080'
+    baseURL: VITE_KEY_APP_URL
   });
 
   AxiosInst.interceptors.request.use(
@@ -280,17 +281,20 @@ watch(
                       <RouterLink
                         :to="{ name: 'contactus' }"
                         class="dropdown-item border-radius-md"
+                        v-if="user != null"
                       >
                         <span>일지</span>
                       </RouterLink>
                       <div
                         class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0 mt-3"
+                        v-if="user != null"
                       >
                         마이페이지
                       </div>
                       <RouterLink
                         :to="{ name: 'profile' }"
                         class="dropdown-item border-radius-md"
+                        v-if="user != null"
                       >
                         <span>{{ user }} 님의 정보</span>
                       </RouterLink>
@@ -298,7 +302,7 @@ watch(
                   </div>
                 </div>
               </div>
-              <div class="d-lg-none">
+              <div class="d-lg-none" >
                 <div
                   class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0"
                 >
@@ -313,17 +317,20 @@ watch(
                 <RouterLink
                   :to="{ name: 'contactus' }"
                   class="dropdown-item border-radius-md"
+                  v-if="user != null"
                 >
                   <span>일지</span>
                 </RouterLink>
                 <div
                   class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0 mt-3"
+                  v-if="user != null"
                 >
                   마이페이지
                 </div>
                 <RouterLink
                   :to="{ name: 'profile' }"
                   class="dropdown-item border-radius-md"
+                  v-if="user != null"
                 >
                   <span>{{ user }} 님의 정보</span>
                 </RouterLink>

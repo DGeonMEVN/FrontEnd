@@ -16,6 +16,7 @@ import setMaterialInput from "@/assets/js/material-input";
 import VueCookies from "vue-cookies";
 import { ref } from "vue";
 import axios from "axios";
+const { VITE_KEY_APP_URL } = import.meta.env
 
 const userId = ref("");
 const userPw = ref("");
@@ -34,7 +35,7 @@ let accessToken = VueCookies.get('authorization');
 let refreshToken = VueCookies.get('refresh');
 
 const AxiosInst = axios.create({
-  baseURL: 'http://localhost:8080'
+  baseURL: VITE_KEY_APP_URL
 });
 
 AxiosInst.interceptors.request.use(
@@ -120,7 +121,7 @@ userName: userName.value,
 let accessToken = VueCookies.get('authorization');
 let refreshToken = VueCookies.get('refresh');
 const AxiosInst = axios.create({
-baseURL: 'http://localhost:8080'
+baseURL: VITE_KEY_APP_URL
 });
 
 AxiosInst.interceptors.request.use(
@@ -174,7 +175,7 @@ const passwordForm = () =>{
   let accessToken = VueCookies.get('authorization');
   let refreshToken = VueCookies.get('refresh');
   const AxiosInst = axios.create({
-    baseURL: 'http://localhost:8080'
+    baseURL: VITE_KEY_APP_URL
   });
 
   AxiosInst.interceptors.request.use(
@@ -252,7 +253,7 @@ const deleteForm = () => {
   let accessToken = VueCookies.get('authorization');
   let refreshToken = VueCookies.get('refresh');
   const AxiosInst = axios.create({
-    baseURL: 'http://localhost:8080'
+    baseURL: VITE_KEY_APP_URL
   });
 
   AxiosInst.interceptors.request.use(
