@@ -14,19 +14,41 @@ import MaterialButton from "@/components/MaterialButton.vue";
 import setMaterialInput from "@/assets/js/material-input";
 import VueCookies from "vue-cookies";
 import { userStore } from "@/stores/user.js";
+import axios from "axios";
 
 
-let user = ref();
+let userId = ref();
 onMounted(() => {
   setMaterialInput();
   const token = VueCookies.get("authorization");
-  user.value = null;
+  userId.value = null;
   //권한으로 변경 해야함
   if(token && localStorage.getItem("userId") !== null){
-    user.value = localStorage.getItem("userId");
+    userId.value = localStorage.getItem("userId");
   }
 });
 
+let title = ref();
+let content = ref();
+
+const submitForm = () => {
+  const board ={
+    userId : userId.value,
+    title : title.value,
+    content : content.value,
+  };
+  axios.post("/api/board/white", board)
+    .then((response)=>{
+
+      console.log(response.data.ok);
+    })
+    .catch((err)=>{
+      console.log(err.response.data.ok);
+      console.log(userId);
+      console.log(title);
+      console.log(content);
+    })
+};
 </script>
 <template>
   <div class="container position-sticky z-index-sticky top-0">
@@ -219,8 +241,8 @@ label: 'Buy Now',
                       <td>
                         <MaterialInput
                           type="text"
-                          :value="user"
-                          @update:value="user = $event"
+                          :value="userId"
+                          @update:value="userId = $event"
                           isDisabled />
                       </td>
                     </tr>
@@ -245,7 +267,7 @@ label: 'Buy Now',
                     </tr>
                     <tr>
                       <td  class="mt-4">
-                        <textarea rows="10" class="container-fluid" />
+                        <textarea rows="10" class="container-fluid" v-model="content" />
                       </td>
                     </tr>
                     <tr>
