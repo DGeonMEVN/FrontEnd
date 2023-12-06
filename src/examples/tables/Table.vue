@@ -4,7 +4,8 @@ import DefaultFooter from "@/examples/footers/FooterDefault.vue";
 import { onMounted, ref } from "vue";
 import VueCookies from "vue-cookies";
 import { userStore } from "@/stores/user.js";
-
+import axios from "axios";
+import dayjs from "dayjs";
 defineProps({
   headers: {
     type: Array,
@@ -21,14 +22,34 @@ defineProps({
 });
 
 let user = ref();
+const boardList = ref([]);
 onMounted(()=>{
   const token = VueCookies.get("authorization");
   user.value = null;
   //권한으로 변경 해야함
-  if(token && userStore().userId !== null){
-    user.value = userStore().userId;
+  if(token && localStorage.getItem("userId") !== null){
+    user.value = localStorage.getItem("userId")
   }
+  axios.get("/api/board")
+    .then((response)=>{
+      console.log(response.data);
+      boardList.value=response.data;
+    })
+    .catch(()=>{
+      console.log("데이터 없음");
+    })
 })
+
+const goToPost= (bno)=>{
+  axios.get(`/api/board/noticeView/${bno}`)
+    .then(()=>{
+      console.log(bno);
+    })
+    .catch(()=>{
+      console.log("실패");
+    })
+
+}
 
 </script>
 <template>
@@ -58,41 +79,51 @@ onMounted(()=>{
                     <th
                       v-for="(header, index) in headers"
                       :key="header"
-                      class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      class="text-center"
                       :class="{ 'ps-2': index === 1, 'text-center': index > 1 }"
                     >
                       {{ header }}
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr
-                    v-for="(
-                      {
-                        no,
-                        title,
-                        id,
-                        date,
-                      },
-                      index
-                    ) of rows"
-                    :key="index"
-                  >
-                    <td>
-                      {{no}}
-                    </td>
-                    <td>
-                      {{title}}
-                    </td>
-                    <td>
-                      {{id}}
-                    </td>
-                    <td>
-                      {{date}}
-                    </td>
-                  </tr>
-                </tbody>
-                <tr>
+<!--                <tbody>-->
+<!--                  <tr-->
+<!--                    v-for="(-->
+<!--                      {-->
+<!--                        no,-->
+<!--                        title,-->
+<!--                        id,-->
+<!--                        date,-->
+<!--                      },-->
+<!--                      index-->
+<!--                    ) of rows"-->
+<!--                    :key="index"-->
+<!--                  >-->
+<!--                    <td class="text-center">-->
+<!--                      {{no}}-->
+<!--                    </td>-->
+<!--                    <td class="text-center">-->
+<!--                      {{title}}-->
+<!--                    </td>-->
+<!--                    <td class="text-center">-->
+<!--                      {{id}}-->
+<!--                    </td>-->
+<!--                    <td class="text-center">-->
+<!--                      {{date}}-->
+<!--                    </td>-->
+<!--                  </tr>-->
+<!--                </tbody>-->
+                <tr v-for="item in boardList" :key="item.title" class="border-0">
+                  <td class="text-center p-2">{{ item.bno }}</td>
+                  <td class="text-center">
+                  <span @click="goToPost(item.bno)" style="cursor: pointer; text-decoration: underline; color: blue;">
+                    {{ item.title }}
+                  </span>
+                  </td>
+                  <td class="text-center">{{ item.userId }}</td>
+                  <td class="text-center">{{ dayjs(item.updateDate).format('YYYY-MM-DD:HH:mm')  }}</td>
+                </tr>
+                <tr class="border-0">
                   <td colspan="4">
                     <div class="col-md-12 text-end" v-if="user !=null">
 <!--                      <button type="button" class="btn bg-gradient-success">글쓰기</button>-->
