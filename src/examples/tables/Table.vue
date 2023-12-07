@@ -6,6 +6,7 @@ import VueCookies from "vue-cookies";
 import { userStore } from "@/stores/user.js";
 import axios from "axios";
 import dayjs from "dayjs";
+import router from "@/router/index.js";
 defineProps({
   headers: {
     type: Array,
@@ -30,7 +31,7 @@ onMounted(()=>{
   if(token && localStorage.getItem("userId") !== null){
     user.value = localStorage.getItem("userId")
   }
-  axios.get("/api/board")
+  axios.get("/api/noticeBoard")
     .then((response)=>{
       console.log(response.data);
       boardList.value=response.data;
@@ -40,16 +41,18 @@ onMounted(()=>{
     })
 })
 
-const goToPost= (bno)=>{
-  axios.get(`/api/board/noticeView/${bno}`)
-    .then(()=>{
-      console.log(bno);
-    })
-    .catch(()=>{
-      console.log("실패");
-    })
-
-}
+// const noticeView= (bno)=>{
+//   axios.get(`/api/noticeBoard/noticeView/${bno}`)
+//     .then((response)=>{
+//       router.replace({ path: '/api/noticeBoard/noticeView', query: { bno: bno } });
+//
+//       console.log(response.data.Board);
+//     })
+//     .catch(()=>{
+//       console.log("실패");
+//     })
+//
+// }
 
 </script>
 <template>
@@ -116,12 +119,15 @@ const goToPost= (bno)=>{
                 <tr v-for="item in boardList" :key="item.title" class="border-0">
                   <td class="text-center p-2">{{ item.bno }}</td>
                   <td class="text-center">
-                  <span @click="goToPost(item.bno)" style="cursor: pointer; text-decoration: underline; color: blue;">
-                    {{ item.title }}
-                  </span>
+<!--                  <span @click="noticeView(item.bno)" style="cursor: pointer; text-decoration: none;">-->
+<!--                    {{ item.title }}-->
+<!--                  </span>-->
+                    <router-link :to="'/api/noticeBoard/noticeView/' + item.bno" style="cursor: pointer; text-decoration: none;">
+                      {{ item.title }}
+                    </router-link>
                   </td>
                   <td class="text-center">{{ item.userId }}</td>
-                  <td class="text-center">{{ dayjs(item.updateDate).format('YYYY-MM-DD:HH:mm')  }}</td>
+                  <td class="text-center">{{ dayjs(item.updateDate).format('YYYY-MM-DD HH:mm')  }}</td>
                 </tr>
                 <tr class="border-0">
                   <td colspan="4">
