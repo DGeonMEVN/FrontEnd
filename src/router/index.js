@@ -24,7 +24,9 @@ import ElProgressBars from "../layouts/sections/elements/progress-bars/ProgressB
 import ElToggles from "../layouts/sections/elements/toggles/TogglesView.vue";
 import ElTypography from "../layouts/sections/elements/typography/TypographyView.vue";
 import Table from "../examples/tables/Table.vue"
-import White from "../views/LandingPages/White/BoardWhite.vue"
+import White from "../views/LandingPages/Board/NoticeBoardWhite.vue"
+import NoticeBoardView from "../views/LandingPages/Board/NoticeBoardView.vue"
+import NoticeBoardUpdate from "@/views/LandingPages/Board/NoticeBoardUpdate.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -174,6 +176,18 @@ const router = createRouter({
       path : "/White",
       name : "white",
       component : White,
+    },
+    {
+      path: '/api/noticeBoard/noticeView/:bno',  // :bno는 동적 세그먼트로 정의됩니다
+      name: 'NoticeBoardView',
+      component: NoticeBoardView,
+      props: true,  // 이 옵션을 설정하면 URL 파라미터를 컴포넌트의 props로 전달합니다
+    },
+    {
+      path: '/api/noticeBoard/noticeUpdate/:bno',  // :bno는 동적 세그먼트로 정의됩니다
+      name: 'NoticeBoardUpdate',
+      component: NoticeBoardUpdate,
+      props: true,  // 이 옵션을 설정하면 URL 파라미터를 컴포넌트의 props로 전달합니다
     },
   ],
 });
