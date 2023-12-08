@@ -134,15 +134,15 @@ label: 'Buy Now',
                           글 목록
                         </router-link>
                         <router-link :to="{ name: 'NoticeBoardUpdate' }"
-                                     class="btn bg-gradient-success me-3"
+                                     class="btn bg-gradient-success"
                                       v-if="localUserId === userId">
                           글 수정
                         </router-link>
-                        <router-link :to="{ name: 'table' }"
-                                     class="btn bg-gradient-success"
-                                     v-if="localUserId === userId">
-                          글 삭제
-                        </router-link>
+<!--                        <router-link :to="{ name: 'table' }"-->
+<!--                                     class="btn bg-gradient-success"-->
+<!--                                     v-if="localUserId === userId">-->
+<!--                          글 삭제-->
+<!--                        </router-link>-->
                       </td>
                     </tr>
                   </table>
