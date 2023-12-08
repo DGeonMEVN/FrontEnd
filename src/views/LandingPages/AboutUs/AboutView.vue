@@ -152,13 +152,13 @@ const submitForm = () => {
       router.replace("/auth/login");
     })
     .catch((error) => {
-      if (!error.response.data.ok) {
-        errormsg.value = "비밀번호가 다릅니다.";
-      } else {
-        VueCookies.remove("authorization");
-        VueCookies.remove("refresh");
-        router.replace("/auth/login");
-      }
+      // if (!error.response.data.ok) {
+      //   errormsg.value = "비밀번호가 다릅니다.";
+      // } else {
+      //   VueCookies.remove("authorization");
+      //   VueCookies.remove("refresh");
+      //   router.replace("/auth/login");
+      // }
     });
 
 };
@@ -229,12 +229,10 @@ const passwordForm = () => {
               // }
               // parentElement.remove();
 
-              document.getElementById("closeButton").click();
+              // document.getElementById("closeButton").click();
               VueCookies.remove("authorization");
               VueCookies.remove("refresh");
-              this.$nextTick(function() {
                 router.replace("/auth/login");
-              });
             })
             .catch(() => {
               router.replace("/auth/login");
@@ -250,52 +248,99 @@ const passwordForm = () => {
   }
 };
 
-const deleteForm = () => {
+// const deleteForm = () => {
+//   const user = {
+//     userId: userId.value,
+//     userPw: userDeletePw.value
+//   };
+//   let accessToken = VueCookies.get("authorization");
+//   let refreshToken = VueCookies.get("refresh");
+//   const AxiosInst = axios.create({
+//     baseURL: VITE_KEY_APP_URL
+//   });
+//
+//   AxiosInst.interceptors.request.use(
+//     (config) => {
+//
+//       if (accessToken && refreshToken) {
+//         config.headers.Authorization = accessToken;
+//         config.headers.Refresh = refreshToken;
+//         return config;
+//       } else {
+//         VueCookies.remove("authorization");
+//         VueCookies.remove("refresh");
+//         router.replace("/auth/login");
+//       }
+//
+//     }
+//   );
+//   AxiosInst
+//     .post("/api/auth/deleteUser", user)
+//     .then((response) => {
+//       // document.getElementById("closeDeleteButton").click();
+//       VueCookies.remove("authorization");
+//       VueCookies.remove("refresh");
+//       this.$nextTick(function() {
+//         router.replace("/auth/login");
+//       });
+//
+//       console.log("삭제하고 왔어");
+//     })
+//     .catch((error) => {
+//       console.log("error로그 " + error);
+//       // if (!error.response.data.ok) {
+//       //   errormsg.value = "비밀번호가 다릅니다.";
+//       // } else {
+//       //   VueCookies.remove("authorization");
+//       //   VueCookies.remove("refresh");
+//       //   router.replace("/auth/login");
+//       // }
+//     });
+//
+// };
+
+const deleteForm = function () {
   const user = {
     userId: userId.value,
-    userPw: userDeletePw.value
+    userPw: userDeletePw.value,
   };
   let accessToken = VueCookies.get("authorization");
   let refreshToken = VueCookies.get("refresh");
   const AxiosInst = axios.create({
-    baseURL: VITE_KEY_APP_URL
+    baseURL: VITE_KEY_APP_URL,
   });
 
-  AxiosInst.interceptors.request.use(
-    (config) => {
-
-      if (accessToken && refreshToken) {
-        config.headers.Authorization = accessToken;
-        config.headers.Refresh = refreshToken;
-        return config;
-      } else {
-        VueCookies.remove("authorization");
-        VueCookies.remove("refresh");
-        router.replace("/auth/login");
-      }
-
-    }
-  );
-  AxiosInst
-    .post("/api/auth/deleteUser", user)
-    .then(() => {
-      document.getElementById("closeDeleteButton").click();
+  AxiosInst.interceptors.request.use((config) => {
+    if (accessToken && refreshToken) {
+      config.headers.Authorization = accessToken;
+      config.headers.Refresh = refreshToken;
+      return config;
+    } else {
       VueCookies.remove("authorization");
       VueCookies.remove("refresh");
-      this.$nextTick(function() {
-        router.replace("/auth/login");
-      });
+      router.replace("/auth/login");
+    }
+  });
+
+  AxiosInst.post("/api/auth/deleteUser", user)
+    .then((response) => {
+      VueCookies.remove("authorization");
+      VueCookies.remove("refresh");
+      router.replace("/auth/login");
+      console.log("삭제하고 왔어");
     })
     .catch((error) => {
-      if (!error.response.data.ok) {
-        errormsg.value = "비밀번호가 다릅니다.";
+      console.error("Error:", error);
+
+      if (error.response && error.response.status === 401) {
+        // Handle authentication-related errors
+        console.log("회원이 없거나 회원정보가 다릅니다");
+        // Handle other specific error cases if needed
       } else {
-        VueCookies.remove("authorization");
-        VueCookies.remove("refresh");
-        router.replace("/auth/login");
+        // Handle general errors
+        console.log("일반적인 에러");
       }
     });
-
 };
 </script>
 <template>
@@ -531,7 +576,7 @@ backgroundSize: 'cover',
               <button id="closeButton" class="btn bg-gradient-dark mb-0" data-bs-dismiss="modal" type="button"
                       @click="close()">닫기
               </button>
-              <button class="btn bg-gradient-primary mb-0" type="submit">확인</button>
+              <button class="btn bg-gradient-primary mb-0" type="submit" data-bs-dismiss="modal">확인</button>
             </div>
           </div>
         </form>
@@ -570,7 +615,7 @@ backgroundSize: 'cover',
               <button id="closeDeleteButton" class="btn bg-gradient-dark mb-0" data-bs-dismiss="modal" type="button"
                       @click="close()">닫기
               </button>
-              <button class="btn bg-gradient-primary mb-0" type="submit">지금 탈퇴</button>
+              <button class="btn bg-gradient-primary mb-0" data-bs-dismiss="modal" type="submit">지금 탈퇴</button>
             </div>
           </div>
         </form>
