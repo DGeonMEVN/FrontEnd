@@ -59,8 +59,9 @@ const submitForm = () => {
 
 const noticeBoardDelete = () =>{
   const bno = `${props.bno}`;
-   axios.delete("/api/noticeBoard/delete", bno)
+   axios.delete("/api/noticeBoard/delete", { data : { bno: bno, userId : userId.value } })
      .then(()=>{
+       console.log(bno);
        router.replace("/table");
      })
      .catch((err) => {
@@ -202,7 +203,6 @@ label: 'Buy Now',
             </div>
             <div class="modal-body">
               해당 글을 삭제 하시겠습니까?
-              <input type="hidden" value="userId" />
             </div>
             <div>
               <p class="text-danger mx-4">{{ errorModal }}</p>
@@ -210,7 +210,7 @@ label: 'Buy Now',
             <div class="modal-footer justify-content-between">
               <button id="closeDeleteButton" class="btn bg-gradient-dark mb-0" data-bs-dismiss="modal" type="button">닫기
               </button>
-              <button class="btn bg-gradient-primary mb-0" type="submit">글 삭제</button>
+              <button class="btn bg-gradient-primary mb-0" type="submit" data-bs-dismiss="modal">글 삭제</button>
             </div>
           </div>
         </form>
