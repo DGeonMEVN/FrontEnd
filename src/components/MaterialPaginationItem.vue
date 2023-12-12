@@ -20,6 +20,14 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  doublePrev: {
+    type: Boolean,
+    default: false,
+  },
+  doubleNext: {
+    type: Boolean,
+    default: false,
+  },
 });
 function getClasses(active, disabled) {
   let activeValue, disabledValue;
@@ -34,9 +42,11 @@ function getClasses(active, disabled) {
   <li class="page-item" :class="getClasses(active, disabled)">
     <a class="page-link" href="javascript:;">
       <span aria-hidden="true" :class="active ? 'text-white' : ''">
-        {{ prev || next ? null : label }}
-        <i v-if="prev" class="fa fa-angle-double-left"></i>
-        <i v-if="next" class="fa fa-angle-double-right"></i>
+        {{ prev || next || doublePrev || doubleNext? null : label }}
+        <i v-if="prev" class="fa fa-angle-left"></i>
+        <i v-if="next" class="fa fa-angle-right"></i>
+        <i v-if="doublePrev" class="fa fa-angle-double-left"></i>
+        <i v-if="doubleNext" class="fa fa-angle-double-right"></i>
       </span>
     </a>
   </li>
