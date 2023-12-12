@@ -30,6 +30,10 @@ const boardList = ref([]);
 let pageNum = ref(1);
 let totalPageNum = ref();
 let currentPage = ref(1);
+
+const itemsPerPage = 3; // 페이지당 아이템 수
+const pagesPerGroup = 10; // 그룹당 페이지 수
+
 onMounted(() => {
   const token = VueCookies.get("authorization");
   user.value = null;
@@ -40,35 +44,61 @@ onMounted(() => {
   getBoardList(pageNum);
 });
 
-const getBoardList = (pageNum) => {
-  axios.get(`/api/noticeBoard/${pageNum}`)
-    .then((response) => {
-      boardList.value = response.data.boards;
-      totalPageNum.value = response.data.pageCount;
-      console.log(response.data.pageCount);
-    })
-    .catch(() => {
-      console.log("데이터 없음");
-    });
+const getBoardList = async (pageNum) => {
+  try {
+    const response = await axios.get(`/api/noticeBoard/${pageNum}`);
+    boardList.value = response.data.boards;
+    totalPageNum.value = response.data.pageCount;
+    console.log(response.data.pageCount);
+  } catch (error) {
+    console.error("데이터 로드 중 오류:", error);
+  }
 };
 
 const onPageChange = (page) => {
   currentPage.value = page;
-  getBoardList(page);
+  // getBoardList((page - 1) * itemsPerPage + 1);
+  getBoardList(page)
 };
 
-const prevPage = () => {
-  onPageChange(1);
-  //이전 버튼 할때 활성화 할 것
-  // if (currentPage.value > 1) {
-  //    onPageChange(currentPage.value - 1);
-  // }
-};
+const doublePrevPage = () => {
+  const currentGroup = Math.ceil(currentPage.value / pagesPerGroup);
+  const newPage = (currentGroup - 1) * pagesPerGroup;
 
-const nextPage = () => {
-  if (currentPage.value < totalPageNum.value) {
+  if (newPage >= 1) {
+    onPageChange(newPage);
+  }
+};
+const prevPage = () =>{
+  console.log("페이지 번호 ", currentPage.value);
+  if (currentPage.value > 1) {
+       onPageChange(currentPage.value - 1);
+    }
+}
+
+const nextPage = () =>{
+  console.log("페이지 번호 ", currentPage.value);
+  if(totalPageNum.value > currentPage.value) {
     onPageChange(currentPage.value + 1);
   }
+}
+
+const doubleNextPage = () => {
+  const currentGroup = Math.ceil(currentPage.value / pagesPerGroup);
+  const lastPageOfGroup = currentGroup * pagesPerGroup;
+  const newPage = lastPageOfGroup + 1;
+
+  if (newPage <= totalPageNum.value) {
+    onPageChange(newPage);
+  }
+};
+
+const getVisiblePages = (totalPages, currentPage, pagesPerGroup) => {
+  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
+  const startPage = (currentGroup - 1) * pagesPerGroup + 1;
+  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+
+  return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 };
 </script>
 <template>
@@ -132,12 +162,15 @@ const nextPage = () => {
                 <tr class="border-0">
                   <td  colspan="4">
                     <MaterialPagination class="justify-content-center">
+                      <MaterialPaginationItem doublePrev @click="doublePrevPage" />
                       <MaterialPaginationItem prev @click="prevPage" />
-                      <MaterialPaginationItem v-for="page in totalPageNum" :key="page"
+                      <MaterialPaginationItem v-for="page in getVisiblePages(totalPageNum, currentPage, pagesPerGroup)"
+                                              :key="page"
                                               :active="page === currentPage"
                                               :label="page.toString()"
                                               @click="onPageChange(page)" />
                       <MaterialPaginationItem next @click="nextPage" />
+                      <MaterialPaginationItem doubleNext @click="doubleNextPage" />
                     </MaterialPagination>
                   </td>
                 </tr>
