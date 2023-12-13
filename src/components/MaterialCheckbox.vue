@@ -20,10 +20,15 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  modelValue:{
+    type : Boolean,
+    default : false,
+  }
+
 });
 </script>
 <template>
-  <div class="form-check">
+  <div class="form-check form-check-inline">
     <input
       class="form-check-input"
       :class="`bg-${color} border-${color} ${inputClass}`"
@@ -31,6 +36,7 @@ defineProps({
       value=""
       :id="id"
       :checked="checked"
+      @change="$emit('update:checked', $event.target.checked)"
     />
     <label class="form-check-label" :class="labelClass" :for="id">
       <slot />
