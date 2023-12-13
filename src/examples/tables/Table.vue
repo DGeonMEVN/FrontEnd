@@ -9,6 +9,10 @@ import dayjs from "dayjs";
 import router from "@/router/index.js";
 import MaterialPagination from "@/components/MaterialPagination.vue";
 import MaterialPaginationItem from "@/components/MaterialPaginationItem.vue";
+import MaterialInput from "@/components/MaterialInput.vue";
+import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
+import MaterialButton from "@/components/MaterialButton.vue";
+
 
 defineProps({
   headers: {
@@ -22,6 +26,10 @@ defineProps({
     title: String,
     id: String,
     date: String
+  },
+  icon: {
+    type: String,
+    default: ""
   }
 });
 
@@ -33,6 +41,11 @@ let currentPage = ref(userStore().currentPage);
 
 const itemsPerPage = 3; // 페이지당 아이템 수
 const pagesPerGroup = 10; // 그룹당 페이지 수
+
+let titleCheck = ref(false);
+let contentCheck = ref(false);
+let userCheck = ref(false);
+let search = ref("");
 
 onMounted(() => {
   const token = VueCookies.get("authorization");
@@ -58,7 +71,7 @@ const onPageChange = (page) => {
   currentPage.value = page;
   userStore().setCurrentPage(page);
   // getBoardList((page - 1) * itemsPerPage + 1);
-  getBoardList(page)
+  getBoardList(page);
 };
 
 const doublePrevPage = () => {
@@ -69,17 +82,17 @@ const doublePrevPage = () => {
     onPageChange(newPage);
   }
 };
-const prevPage = () =>{
+const prevPage = () => {
   if (currentPage.value > 1) {
-       onPageChange(currentPage.value - 1);
-    }
-}
+    onPageChange(currentPage.value - 1);
+  }
+};
 
-const nextPage = () =>{
-  if(totalPageNum.value > currentPage.value) {
+const nextPage = () => {
+  if (totalPageNum.value > currentPage.value) {
     onPageChange(currentPage.value + 1);
   }
-}
+};
 
 const doubleNextPage = () => {
   const currentGroup = Math.ceil(currentPage.value / pagesPerGroup);
@@ -98,7 +111,23 @@ const getVisiblePages = (totalPages, currentPage, pagesPerGroup) => {
 
   return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 };
+
+const searchForm = () =>{
+  console.log(titleCheck.value);
+  console.log(contentCheck.value);
+  console.log(userCheck.value);
+  console.log(search.value);
+
+}
 </script>
+<style scoped>
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
+
 <template>
   <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
@@ -119,68 +148,77 @@ const getVisiblePages = (totalPages, currentPage, pagesPerGroup) => {
       <div class="row justify-content-center">
         <div class="col-lg-10">
           <div class="card">
-            <div class="table-responsive">
-              <table class="table align-items-center mb-0">
-                <thead>
-                <tr>
-                  <th
-                    v-for="(header, index) in headers"
-                    :key="header"
-                    :class="{ 'ps-2': index === 1, 'text-center': index > 1 }"
-                    class="text-center"
-                  >
-                    {{ header }}
-                  </th>
-                </tr>
-                </thead>
-                <tr v-for="item in boardList" :key="item.bno" class="border-0">
-                  <td class="text-center p-2">{{ item.bno }}</td>
-                  <td class="text-center">
+            <div>
+              <div class="row">
+                <div v-for="header in headers" :key="header" class="col-3 text-center mb-4 fs-5 bold">
+                  {{ header }}
+                </div>
+              </div>
+              <div v-for="item in boardList" :key="item.bno" class="row mb-4">
+                <div class="col-3 text-center">{{ item.bno }}</div>
+                <div class="col-3 text-center">
+                  <router-link :to="'/api/noticeBoard/noticeView/' + item.bno"
+                               style="cursor: pointer; text-decoration: none;">
+                    <div class="ellipsis">{{ item.title }}</div>
+                  </router-link>
+                </div>
+                <div class="col-3 text-center">{{ item.userId }}</div>
+                <div class="col-3 text-center">{{ dayjs(item.updateDate).format("YYYY-MM-DD HH:mm") }}</div>
+              </div>
+              <div class="row border-0">
+                <div v-if="user !=null" class="col-md-12 text-end">
+                  <RouterLink :to="{ name : 'white' }" class="btn bg-gradient-success me-5 mt-5">
+                    글 작성
+                  </RouterLink>
+                </div>
+              </div>
+              <div class="row">
+                <div>
+                  <MaterialPagination :max-items="paginationMaxItems" class="justify-content-center mt-5">
+                    <MaterialPaginationItem doublePrev @click="doublePrevPage" />
+                    <MaterialPaginationItem prev @click="prevPage" />
+                    <MaterialPaginationItem
+                      v-for="page in getVisiblePages(totalPageNum, currentPage, pagesPerGroup)"
+                      :key="page"
+                      :active="page === currentPage"
+                      :label="page.toString()"
+                      @click="onPageChange(page)"
+                    />
+                    <MaterialPaginationItem next @click="nextPage" />
+                    <MaterialPaginationItem doubleNext @click="doubleNextPage" />
+                  </MaterialPagination>
 
-                    <router-link :to="'/api/noticeBoard/noticeView/' + item.bno"
-                                 style="cursor: pointer; text-decoration: none;">
-                      {{ item.title }}
-                    </router-link>
-                  </td>
-                  <td class="text-center">{{ item.userId }}</td>
-                  <td class="text-center">{{ dayjs(item.updateDate).format("YYYY-MM-DD HH:mm") }}</td>
-                </tr>
-                <tr class="border-0">
-                  <td colspan="4">
-                    <div v-if="user !=null" class="col-md-12 text-end">
-                      <!--                      <button type="button" class="btn bg-gradient-success">글쓰기</button>-->
-                      <RouterLink
-                        :to="{ name : 'white' }"
-                        class="btn bg-gradient-success me-5 mt-5">
-                        글 작성
-                      </RouterLink>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="border-0">
-                  <td  colspan="4">
-                    <MaterialPagination class="justify-content-center mt-5">
-                      <MaterialPaginationItem doublePrev @click="doublePrevPage" />
-                      <MaterialPaginationItem prev @click="prevPage" />
-                      <MaterialPaginationItem v-for="page in getVisiblePages(totalPageNum, currentPage, pagesPerGroup)"
-                                              :key="page"
-                                              :active="page === currentPage"
-                                              :label="page.toString()"
-                                              @click="onPageChange(page)" />
-                      <MaterialPaginationItem next @click="nextPage" />
-                      <MaterialPaginationItem doubleNext @click="doubleNextPage" />
-                    </MaterialPagination>
-                  </td>
-                </tr>
-              </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="text-center">
+                  <form
+                    id="contact-form"
+                    method="post"
+                    autocomplete="off"
+                    v-on:submit.prevent="searchForm">
+                    <MaterialCheckbox id="titleCheck"  @update:checked="titleCheck = $event">제목</MaterialCheckbox>
+                    <MaterialCheckbox id="contentCheck"  @update:checked="contentCheck = $event">내용</MaterialCheckbox>
+                    <MaterialCheckbox id="userCheck"  @update:checked="userCheck = $event">작성자</MaterialCheckbox>
+                    <input
+                      v-model="search"
+                      placeholder="Search"
+                      type="text"
+                    />
+                    <MaterialButton class="btn btn-success ms-3 mt-2">
+                      검색
+                    </MaterialButton>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
   </section>
+
 
   <DefaultFooter />
 </template>
+
