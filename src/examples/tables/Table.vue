@@ -29,7 +29,7 @@ let user = ref();
 const boardList = ref([]);
 let pageNum = ref(1);
 let totalPageNum = ref();
-let currentPage = ref(1);
+let currentPage = ref(userStore().currentPage);
 
 const itemsPerPage = 3; // 페이지당 아이템 수
 const pagesPerGroup = 10; // 그룹당 페이지 수
@@ -49,7 +49,6 @@ const getBoardList = async (pageNum) => {
     const response = await axios.get(`/api/noticeBoard/${pageNum}`);
     boardList.value = response.data.boards;
     totalPageNum.value = response.data.pageCount;
-    console.log(response.data.pageCount);
   } catch (error) {
     console.error("데이터 로드 중 오류:", error);
   }
@@ -57,6 +56,7 @@ const getBoardList = async (pageNum) => {
 
 const onPageChange = (page) => {
   currentPage.value = page;
+  userStore().setCurrentPage(page);
   // getBoardList((page - 1) * itemsPerPage + 1);
   getBoardList(page)
 };
@@ -70,14 +70,12 @@ const doublePrevPage = () => {
   }
 };
 const prevPage = () =>{
-  console.log("페이지 번호 ", currentPage.value);
   if (currentPage.value > 1) {
        onPageChange(currentPage.value - 1);
     }
 }
 
 const nextPage = () =>{
-  console.log("페이지 번호 ", currentPage.value);
   if(totalPageNum.value > currentPage.value) {
     onPageChange(currentPage.value + 1);
   }
@@ -161,7 +159,7 @@ const getVisiblePages = (totalPages, currentPage, pagesPerGroup) => {
                 </tr>
                 <tr class="border-0">
                   <td  colspan="4">
-                    <MaterialPagination class="justify-content-center">
+                    <MaterialPagination class="justify-content-center mt-5">
                       <MaterialPaginationItem doublePrev @click="doublePrevPage" />
                       <MaterialPaginationItem prev @click="prevPage" />
                       <MaterialPaginationItem v-for="page in getVisiblePages(totalPageNum, currentPage, pagesPerGroup)"
