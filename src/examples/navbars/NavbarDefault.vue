@@ -182,6 +182,10 @@ watch(
     }
   }
 );
+
+const currentPageStore = () => {
+ userStore().setCurrentPage(1);
+}
 </script>
 <template>
   <nav
@@ -278,6 +282,7 @@ watch(
                       <RouterLink
                         :to="{ name: 'table' }"
                         class="dropdown-item border-radius-md"
+                        @click="currentPageStore"
                       >
                         <span>공지사항</span>
                       </RouterLink>
