@@ -16,7 +16,7 @@ import VueCookies from "vue-cookies";
 import { userStore } from "@/stores/user.js";
 import axios from "axios";
 import router from "@/router/index.js";
-
+const { VITE_KEY_APP_URL } = import.meta.env;
 
 let userId = ref();
 onMounted(() => {
@@ -38,7 +38,24 @@ const submitForm = () => {
     title: title.value,
     content: content.value
   };
-  axios.post("/api/noticeBoard/white", board)
+  let accessToken = VueCookies.get("authorization");
+  let refreshToken = VueCookies.get("refresh");
+  const AxiosInst = axios.create({
+    baseURL: VITE_KEY_APP_URL,
+  });
+
+  AxiosInst.interceptors.request.use((config) => {
+    if (accessToken && refreshToken) {
+      config.headers.Authorization = accessToken;
+      config.headers.Refresh = refreshToken;
+      return config;
+    } else {
+      VueCookies.remove("authorization");
+      VueCookies.remove("refresh");
+      router.replace("/auth/login");
+    }
+  });
+  AxiosInst.post("/api/noticeBoard/white", board)
     .then(() => {
       router.replace("/table");
     })
