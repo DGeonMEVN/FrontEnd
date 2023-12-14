@@ -55,7 +55,7 @@ onUnmounted(() => {
     </div>
   </Header>
 
-  <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6">
+<!--  <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6">-->
     <!--    <PresentationCounter />-->
     <!--    <PresentationInformation />-->
     <!--    <PresentationExample :data="data" />-->
@@ -273,6 +273,6 @@ onUnmounted(() => {
     <!--        </div>-->
     <!--      </div>-->
     <!--    </div>-->
-  </div>
+<!--  </div>-->
   <DefaultFooter />
 </template>
