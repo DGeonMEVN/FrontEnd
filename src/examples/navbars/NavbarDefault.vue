@@ -46,6 +46,7 @@ import axios from "axios";
 import router from "@/router/index.js";
 import VueCookies from "vue-cookies";
 import { userStore } from "@/stores/user.js";
+import { noticeBoardStore } from "@/stores/noticeBoard.js";
 
 let user = ref();
 let isVisible = ref();
@@ -184,7 +185,11 @@ watch(
 );
 
 const currentPageStore = () => {
- userStore().setCurrentPage(1);
+  noticeBoardStore().setTitle(true);
+  noticeBoardStore().setContent(false);
+  noticeBoardStore().setUser(false);
+  noticeBoardStore().setSearch("");
+  noticeBoardStore().setCurrentPage(1);
 }
 </script>
 <template>
@@ -260,11 +265,11 @@ const currentPageStore = () => {
                 alt="down-arrow"
                 class="arrow ms-2 d-lg-block d-none"
               />
-              <img
-                :src="getArrowColor()"
-                alt="down-arrow"
-                class="arrow ms-1 d-lg-none d-block ms-auto"
-              />
+<!--              <img-->
+<!--                :src="getArrowColor()"-->
+<!--                alt="down-arrow"-->
+<!--                class="arrow ms-1 d-lg-none d-block ms-auto"-->
+<!--              />-->
             </a>
             <div
               class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
@@ -317,8 +322,9 @@ const currentPageStore = () => {
                   게시판
                 </div>
                 <RouterLink
-                  :to="{ name: 'about' }"
+                  :to="{ name: 'table' }"
                   class="dropdown-item border-radius-md"
+                  @click="currentPageStore"
                 >
                   <span>공지사항</span>
                 </RouterLink>
