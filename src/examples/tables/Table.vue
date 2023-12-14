@@ -3,7 +3,6 @@ import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "@/examples/footers/FooterDefault.vue";
 import { onMounted, ref } from "vue";
 import VueCookies from "vue-cookies";
-import { userStore } from "@/stores/user.js";
 import axios from "axios";
 import dayjs from "dayjs";
 import router from "@/router/index.js";
@@ -12,6 +11,7 @@ import MaterialPaginationItem from "@/components/MaterialPaginationItem.vue";
 import MaterialInput from "@/components/MaterialInput.vue";
 import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
+import { noticeBoardStore } from "@/stores/noticeBoard.js";
 
 
 defineProps({
@@ -34,34 +34,53 @@ defineProps({
 });
 
 let user = ref();
-const boardList = ref([]);
+let boardList = ref([]);
 let pageNum = ref(1);
 let totalPageNum = ref();
-let currentPage = ref(userStore().currentPage);
+let currentPage = ref(noticeBoardStore().currentPage);
 
 const itemsPerPage = 3; // 페이지당 아이템 수
-const pagesPerGroup = 10; // 그룹당 페이지 수
-
-let titleCheck = ref(false);
-let contentCheck = ref(false);
-let userCheck = ref(false);
-let search = ref("");
-
+let pagesPerGroup = 10; // 그룹당 페이지 수
+const windowWidth = ref(window.innerWidth);
+let titleCheck = ref(noticeBoardStore().title);
+let contentCheck = ref(noticeBoardStore().content);
+let userCheck = ref(noticeBoardStore().user);
+let search = ref(noticeBoardStore().search);
+if(windowWidth.value<=500){
+  pagesPerGroup=3;
+}else{
+  pagesPerGroup=10;
+}
 onMounted(() => {
+
   const token = VueCookies.get("authorization");
   user.value = null;
   //권한으로 변경 해야함
   if (token && localStorage.getItem("userId") !== null) {
     user.value = localStorage.getItem("userId");
   }
-  getBoardList(pageNum);
+  getBoardList(noticeBoardStore().currentPage);
 });
 
 const getBoardList = async (pageNum) => {
   try {
-    const response = await axios.get(`/api/noticeBoard/${pageNum}`);
+    console.log("pageNum", pageNum);
+    const searchData = {
+      titleCheck : titleCheck.value,
+      contentCheck : contentCheck.value,
+      userCheck : userCheck.value,
+      search : search.value,
+      pageNum : pageNum,
+    }
+    const response = await axios.post(`/api/noticeBoard/search`, searchData);
     boardList.value = response.data.boards;
     totalPageNum.value = response.data.pageCount;
+    console.log("totalPageNum.value", totalPageNum.value);
+    console.log("boardList.value", boardList.value);
+    noticeBoardStore().setTitle(titleCheck.value);
+    noticeBoardStore().setContent(contentCheck.value);
+    noticeBoardStore().setUser(userCheck.value);
+    noticeBoardStore().setSearch(search.value);
   } catch (error) {
     console.error("데이터 로드 중 오류:", error);
   }
@@ -69,7 +88,7 @@ const getBoardList = async (pageNum) => {
 
 const onPageChange = (page) => {
   currentPage.value = page;
-  userStore().setCurrentPage(page);
+  noticeBoardStore().setCurrentPage(page);
   // getBoardList((page - 1) * itemsPerPage + 1);
   getBoardList(page);
 };
@@ -113,11 +132,17 @@ const getVisiblePages = (totalPages, currentPage, pagesPerGroup) => {
 };
 
 const searchForm = () =>{
-  console.log(titleCheck.value);
-  console.log(contentCheck.value);
-  console.log(userCheck.value);
-  console.log(search.value);
-
+  if(titleCheck.value || contentCheck.value || userCheck.value) {
+    getBoardList(pageNum);
+    noticeBoardStore().setCurrentPage(1);
+    onPageChange(1);
+  }else{
+    titleCheck.value = noticeBoardStore().title;
+    contentCheck.value = noticeBoardStore().content;
+    userCheck.value = noticeBoardStore().user;
+    search.value = noticeBoardStore().search;
+    alert("하나라도 선택해야 합니다")
+  }
 }
 </script>
 <style scoped>
@@ -174,7 +199,8 @@ const searchForm = () =>{
               </div>
               <div class="row">
                 <div>
-                  <MaterialPagination :max-items="paginationMaxItems" class="justify-content-center mt-5">
+<!--                  :max-items="paginationMaxItems"-->
+                  <MaterialPagination  class="justify-content-center mt-5">
                     <MaterialPaginationItem doublePrev @click="doublePrevPage" />
                     <MaterialPaginationItem prev @click="prevPage" />
                     <MaterialPaginationItem
@@ -197,15 +223,17 @@ const searchForm = () =>{
                     method="post"
                     autocomplete="off"
                     v-on:submit.prevent="searchForm">
-                    <MaterialCheckbox id="titleCheck"  @update:checked="titleCheck = $event">제목</MaterialCheckbox>
-                    <MaterialCheckbox id="contentCheck"  @update:checked="contentCheck = $event">내용</MaterialCheckbox>
-                    <MaterialCheckbox id="userCheck"  @update:checked="userCheck = $event">작성자</MaterialCheckbox>
+                    <MaterialCheckbox id="titleCheck"  @update:checked="titleCheck = $event" :checked="titleCheck">제목</MaterialCheckbox>
+                    <MaterialCheckbox id="contentCheck"  @update:checked="contentCheck = $event" :checked="contentCheck">내용</MaterialCheckbox>
+                    <MaterialCheckbox id="userCheck"  @update:checked="userCheck = $event" :checked="userCheck">작성자</MaterialCheckbox>
                     <input
+                      id="search"
+                      name="search"
                       v-model="search"
                       placeholder="Search"
                       type="text"
                     />
-                    <MaterialButton class="btn btn-success ms-3 mt-2">
+                    <MaterialButton class="ms-3 mt-2" variant="gradient" color="success">
                       검색
                     </MaterialButton>
                   </form>
