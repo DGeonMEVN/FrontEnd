@@ -15,10 +15,8 @@ import MaterialButton from "@/components/MaterialButton.vue";
 import setMaterialInput from "@/assets/js/material-input";
 import VueCookies from "vue-cookies";
 import { ref } from "vue";
-import axios from "axios";
-import { userStore } from "@/stores/user.js";
-
-const { VITE_KEY_APP_URL } = import.meta.env;
+import AxiosInst from "../../../Module/JS/axiosInstance.js"
+import { createRouter as $router } from "vue-router";
 
 const userId = ref("");
 const userPw = ref("");
@@ -32,27 +30,6 @@ const newUserPw = ref("");
 const userDeletePw = ref("");
 onMounted(() => {
   setMaterialInput();
-
-  let accessToken = VueCookies.get("authorization");
-  let refreshToken = VueCookies.get("refresh");
-
-  const AxiosInst = axios.create({
-    baseURL: VITE_KEY_APP_URL
-  });
-
-  AxiosInst.interceptors.request.use(
-    (config) => {
-      if (accessToken && refreshToken) {
-        config.headers.Authorization = accessToken;
-        config.headers.Refresh = refreshToken;
-        return config;
-      } else {
-        VueCookies.remove("authorization");
-        VueCookies.remove("refresh");
-        router.replace("/auth/login");
-      }
-    }
-  );
 
   AxiosInst
     .get("/api/auth/profile")
@@ -68,7 +45,6 @@ onMounted(() => {
       console.log("profile = response.data", response.data);
       userId.value = response.data.data.userId;
       userName.value = response.data.data.userName;
-      // btnradio.value = response.data.data.gender;
       console.log(response.data.data.gender);
       if (response.data.data.gender) {
         btnradio.value = 1;
@@ -123,27 +99,7 @@ const submitForm = () => {
     userPw: userPw.value,
     userName: userName.value
   };
-  let accessToken = VueCookies.get("authorization");
-  let refreshToken = VueCookies.get("refresh");
-  const AxiosInst = axios.create({
-    baseURL: VITE_KEY_APP_URL
-  });
 
-  AxiosInst.interceptors.request.use(
-    (config) => {
-
-      if (accessToken && refreshToken) {
-        config.headers.Authorization = accessToken;
-        config.headers.Refresh = refreshToken;
-        return config;
-      } else {
-        VueCookies.remove("authorization");
-        VueCookies.remove("refresh");
-        router.replace("/auth/login");
-      }
-
-    }
-  );
   AxiosInst
     .put("/api/auth/modify", user)
     .then(() => {
@@ -152,13 +108,6 @@ const submitForm = () => {
       router.replace("/auth/login");
     })
     .catch((error) => {
-      // if (!error.response.data.ok) {
-      //   errormsg.value = "비밀번호가 다릅니다.";
-      // } else {
-      //   VueCookies.remove("authorization");
-      //   VueCookies.remove("refresh");
-      //   router.replace("/auth/login");
-      // }
     });
 
 };
@@ -177,25 +126,7 @@ const passwordForm = () => {
     userPw: userPwCheck.value,
     newUserPw: newUserPw.value
   };
-  let accessToken = VueCookies.get("authorization");
-  let refreshToken = VueCookies.get("refresh");
-  const AxiosInst = axios.create({
-    baseURL: VITE_KEY_APP_URL
-  });
 
-  AxiosInst.interceptors.request.use(
-    (config) => {
-
-      if (accessToken && refreshToken) {
-        config.headers.Authorization = accessToken;
-        config.headers.Refresh = refreshToken;
-        return config;
-      } else {
-        VueCookies.remove("authorization");
-        VueCookies.remove("refresh");
-        router.replace("/auth/login");
-      }
-    });
   if (newUserPwCheck.value === newUserPw.value) {
     AxiosInst
       .post("/api/auth/passwordCheck", checkUser)
@@ -248,80 +179,11 @@ const passwordForm = () => {
   }
 };
 
-// const deleteForm = () => {
-//   const user = {
-//     userId: userId.value,
-//     userPw: userDeletePw.value
-//   };
-//   let accessToken = VueCookies.get("authorization");
-//   let refreshToken = VueCookies.get("refresh");
-//   const AxiosInst = axios.create({
-//     baseURL: VITE_KEY_APP_URL
-//   });
-//
-//   AxiosInst.interceptors.request.use(
-//     (config) => {
-//
-//       if (accessToken && refreshToken) {
-//         config.headers.Authorization = accessToken;
-//         config.headers.Refresh = refreshToken;
-//         return config;
-//       } else {
-//         VueCookies.remove("authorization");
-//         VueCookies.remove("refresh");
-//         router.replace("/auth/login");
-//       }
-//
-//     }
-//   );
-//   AxiosInst
-//     .post("/api/auth/deleteUser", user)
-//     .then((response) => {
-//       // document.getElementById("closeDeleteButton").click();
-//       VueCookies.remove("authorization");
-//       VueCookies.remove("refresh");
-//       this.$nextTick(function() {
-//         router.replace("/auth/login");
-//       });
-//
-//       console.log("삭제하고 왔어");
-//     })
-//     .catch((error) => {
-//       console.log("error로그 " + error);
-//       // if (!error.response.data.ok) {
-//       //   errormsg.value = "비밀번호가 다릅니다.";
-//       // } else {
-//       //   VueCookies.remove("authorization");
-//       //   VueCookies.remove("refresh");
-//       //   router.replace("/auth/login");
-//       // }
-//     });
-//
-// };
-
 const deleteForm = function () {
   const user = {
     userId: userId.value,
     userPw: userDeletePw.value,
   };
-  let accessToken = VueCookies.get("authorization");
-  let refreshToken = VueCookies.get("refresh");
-  const AxiosInst = axios.create({
-    baseURL: VITE_KEY_APP_URL,
-  });
-
-  AxiosInst.interceptors.request.use((config) => {
-    if (accessToken && refreshToken) {
-      config.headers.Authorization = accessToken;
-      config.headers.Refresh = refreshToken;
-      return config;
-    } else {
-      VueCookies.remove("authorization");
-      VueCookies.remove("refresh");
-      router.replace("/auth/login");
-    }
-  });
-
   AxiosInst.post("/api/auth/deleteUser", user)
     .then((response) => {
       VueCookies.remove("authorization");
