@@ -16,6 +16,7 @@
     "i": "^0.3.7",
     "npm-check-updates": "^16.12.2",
     "pinia": "2.0.14",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "prismjs": "1.28.0",
     "typed.js": "2.0.12",
     "vue": "3.2.36",

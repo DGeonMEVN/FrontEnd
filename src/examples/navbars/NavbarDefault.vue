@@ -78,13 +78,12 @@ onMounted(() => {
   }
   /* token값 base64로 분석 후 user에 저장*/
   /**/
-  if(token && localStorage.getItem("userId") !== null){
-    user.value = localStorage.getItem("userId");
+  if(token && userStore().userId !== null){
+    user.value = userStore().userId;
     isVisible.value = true;
   }else{
     isVisible.value = false;
   }
-
 
 });
 
@@ -110,7 +109,7 @@ const logout = () => {
       }else{
         VueCookies.remove('authorization');
         VueCookies.remove('refresh');
-        localStorage.clear()
+        userStore().logout();
         router.replace("/auth/login");
         console.log("이동");
       }
@@ -127,8 +126,8 @@ const logout = () => {
       // localStorage.removeItem("userToken");
       VueCookies.remove("authorization");
       VueCookies.remove("refresh");
-      localStorage.clear();
-      // userStore().logout();
+      // localStorage.clear();
+      userStore().logout();
       router.replace("/auth/login");
     })
     .catch((error) => {

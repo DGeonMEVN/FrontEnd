@@ -24,8 +24,8 @@ onMounted(() => {
   const token = VueCookies.get("authorization");
   userId.value = null;
   //권한으로 변경 해야함
-  if (token && localStorage.getItem("userId") !== null) {
-    userId.value = localStorage.getItem("userId");
+  if (token && userStore().userId !== null) {
+    userId.value = userStore().userId;
   }
 });
 
@@ -52,6 +52,7 @@ const submitForm = () => {
     } else {
       VueCookies.remove("authorization");
       VueCookies.remove("refresh");
+      userStore().logout();
       router.replace("/auth/login");
     }
   });
