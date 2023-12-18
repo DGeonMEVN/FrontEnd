@@ -17,6 +17,7 @@ import VueCookies from "vue-cookies";
 import { ref } from "vue";
 import AxiosInst from "../../../Module/JS/axiosInstance.js"
 import { createRouter as $router } from "vue-router";
+import { userStore } from "@/stores/user.js";
 
 const userId = ref("");
 const userPw = ref("");
@@ -66,12 +67,12 @@ onMounted(() => {
           if (!response.data.ok) {
             VueCookies.remove("authorization");
             VueCookies.remove("refresh");
-            localStorage.clear();
+            userStore().logout();
             router.replace("/auth/login");
           } else if (response.data.data.accessToken) {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
-            localStorage.setItem("userId", response.data.data.userId);
+            userStore().setUserId(response.data.data.userId);
           } else {
             router.replace("/");
           }
@@ -80,7 +81,7 @@ onMounted(() => {
           console.log("아무겂도 없어");
           VueCookies.remove("authorization");
           VueCookies.remove("refresh");
-          localStorage.clear();
+          userStore().logout();
           router.replace("/auth/login");
         });
     });
@@ -105,6 +106,7 @@ const submitForm = () => {
     .then(() => {
       VueCookies.remove("authorization");
       VueCookies.remove("refresh");
+      userStore().logout();
       router.replace("/auth/login");
     })
     .catch((error) => {
@@ -163,7 +165,8 @@ const passwordForm = () => {
               // document.getElementById("closeButton").click();
               VueCookies.remove("authorization");
               VueCookies.remove("refresh");
-                router.replace("/auth/login");
+              userStore().logout();
+              router.replace("/auth/login");
             })
             .catch(() => {
               router.replace("/auth/login");
@@ -188,6 +191,7 @@ const deleteForm = function () {
     .then((response) => {
       VueCookies.remove("authorization");
       VueCookies.remove("refresh");
+      userStore().logout();
       router.replace("/auth/login");
       console.log("삭제하고 왔어");
     })

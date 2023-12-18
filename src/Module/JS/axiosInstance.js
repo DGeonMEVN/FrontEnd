@@ -1,6 +1,7 @@
 import VueCookies from "vue-cookies";
 import axios from "axios";
 import router from "@/router/index.js";
+import { userStore } from "@/stores/user.js";
 
 
 const { VITE_KEY_APP_URL } = import.meta.env;
@@ -25,6 +26,7 @@ AxiosInst.interceptors.request.use(
     } else {
       VueCookies.remove("authorization");
       VueCookies.remove("refresh");
+      userStore().logout();
       router.replace("/auth/login");
     }
   }

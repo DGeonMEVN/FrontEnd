@@ -59,8 +59,7 @@ const submitForm = () => {
       VueCookies.set("authorization", response.data.data.accessToken);
       VueCookies.set("refresh", response.data.data.refreshToken);
       // console.log(response.data.data.userId);
-      // userStore().setUserId(response.data.data.userId);
-      localStorage.setItem("userId", response.data.data.userId);
+      userStore().setUserId(response.data.data.userId);
       // console.log(userStore.get());
       router.replace("/");
     })

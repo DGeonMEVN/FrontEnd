@@ -28,7 +28,7 @@ let updateDate = ref();
 let localUserId = ref();
 const props = defineProps(['bno']);
 onMounted(() => {
-  localUserId.value = localStorage.getItem("userId");
+  localUserId.value = userStore().userId;
   // 라우터에서 bno를 읽어옴
   axios.get(`/api/noticeBoard/noticeView/${props.bno}`)
     .then((response) => {

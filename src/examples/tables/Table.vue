@@ -12,6 +12,7 @@ import MaterialInput from "@/components/MaterialInput.vue";
 import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
 import { noticeBoardStore } from "@/stores/noticeBoard.js";
+import { userStore } from "@/stores/user.js";
 
 
 defineProps({
@@ -56,8 +57,8 @@ onMounted(() => {
   const token = VueCookies.get("authorization");
   user.value = null;
   //권한으로 변경 해야함
-  if (token && localStorage.getItem("userId") !== null) {
-    user.value = localStorage.getItem("userId");
+  if (token && userStore().userId !== null) {
+    user.value = userStore().userId
   }
   getBoardList(noticeBoardStore().currentPage);
 });
