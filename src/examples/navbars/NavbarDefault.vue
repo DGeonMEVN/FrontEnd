@@ -47,6 +47,7 @@ import router from "@/router/index.js";
 import VueCookies from "vue-cookies";
 import { userStore } from "@/stores/user.js";
 import { noticeBoardStore } from "@/stores/noticeBoard.js";
+import AxiosInst from "@/Module/JS/axiosInstance.js";
 
 let user = ref();
 let isVisible = ref();
@@ -94,30 +95,6 @@ onMounted(() => {
  * @description {로그아웃} 버튼 눌렀을 때 동작 하는 함수로써 express와 통신하여 Cookie의 값과 localstorage의 값을 삭제하고 로그인 페이지로 이동 한다
  */
 const logout = () => {
-  const AxiosInst = axios.create({
-    baseURL: VITE_KEY_APP_URL
-  });
-
-  AxiosInst.interceptors.request.use(
-    (config) => {
-      let accessToken = VueCookies.get('authorization');
-      let refreshToken = VueCookies.get('refresh');
-      if (accessToken && refreshToken) {
-        config.headers.Authorization = accessToken;
-        config.headers.Refresh = refreshToken;
-        return config;
-      }else{
-        VueCookies.remove('authorization');
-        VueCookies.remove('refresh');
-        userStore().logout();
-        router.replace("/auth/login");
-        console.log("이동");
-      }
-
-    }
-  );
-
-  console.log("로그아웃 호출");
   AxiosInst
     .post("/api/auth/logout") // 헤더는 위의 인터셉터에서 설정됩니다.
     .then(() => {
