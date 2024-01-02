@@ -116,12 +116,21 @@ const submitForm = () => {
 const back = () => {
   router.back();
 };
-
+/**
+ * @author ovmkas
+ * @data 2023-11-03
+ * @description 비밀번호 변경 Modal 초기화
+ */
 const close = () => {
   userPwCheck.value = null;
   newUserPw.value = null;
   newUserPwCheck.value = null;
 };
+/**
+ * @author ovmkas
+ * @data 2023-11-03
+ * @description 비밀번호 변경 modal
+ */
 const passwordForm = () => {
   const checkUser = {
     userId: userId.value,

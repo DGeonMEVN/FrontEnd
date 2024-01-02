@@ -1,4 +1,12 @@
 import {defineStore} from "pinia";
+
+/**
+ * @author ovmkas
+ * @created  2023-10-31
+ * @description store에 userId 저장
+ * @modified 2023-12-18
+ * @modification persist 추가 session에 저장될 key값 및 저장소 지정
+ */
 export const userStore = defineStore("user", {
   state : () =>({
     userId : null,

@@ -60,9 +60,15 @@ onMounted(() => {
   if (token && userStore().userId !== null) {
     user.value = userStore().userId
   }
-  getBoardList(noticeBoardStore().currentPage);
+  getBoardList(noticeBoardStore().currentPage);//페이지 로드 시 공지사항 게시판 조회
 });
 
+
+/**
+ * @author ovmkas
+ * @created  2023-12-12
+ * @description 공지사항 게시판 조회
+ */
 const getBoardList = async (pageNum) => {
   try {
     console.log("pageNum", pageNum);
@@ -87,6 +93,11 @@ const getBoardList = async (pageNum) => {
   }
 };
 
+/**
+ * @author ovmkas
+ * @created  2023-12-12
+ * @description 페이지 번호 클릭 시 게시판 조회
+ */
 const onPageChange = (page) => {
   currentPage.value = page;
   noticeBoardStore().setCurrentPage(page);
@@ -94,6 +105,11 @@ const onPageChange = (page) => {
   getBoardList(page);
 };
 
+/**
+ * @author ovmkas
+ * @created  2023-12-12
+ * @description 이전 페이지 목록 호출
+ */
 const doublePrevPage = () => {
   const currentGroup = Math.ceil(currentPage.value / pagesPerGroup);
   const newPage = (currentGroup - 1) * pagesPerGroup;
@@ -102,18 +118,31 @@ const doublePrevPage = () => {
     onPageChange(newPage);
   }
 };
+/**
+ * @author ovmkas
+ * @created  2023-12-12
+ * @description 이전 페이지 호출
+ */
 const prevPage = () => {
   if (currentPage.value > 1) {
     onPageChange(currentPage.value - 1);
   }
 };
-
+/**
+ * @author ovmkas
+ * @created  2023-12-12
+ * @description 다음 페이지 호출
+ */
 const nextPage = () => {
   if (totalPageNum.value > currentPage.value) {
     onPageChange(currentPage.value + 1);
   }
 };
-
+/**
+ * @author ovmkas
+ * @created  2023-12-12
+ * @description 다음 페이지 목록 호출
+ */
 const doubleNextPage = () => {
   const currentGroup = Math.ceil(currentPage.value / pagesPerGroup);
   const lastPageOfGroup = currentGroup * pagesPerGroup;
@@ -123,7 +152,11 @@ const doubleNextPage = () => {
     onPageChange(newPage);
   }
 };
-
+/**
+ * @author ovmkas
+ * @created  2023-12-12
+ * @description 보여줄 페이지 번호
+ */
 const getVisiblePages = (totalPages, currentPage, pagesPerGroup) => {
   const currentGroup = Math.ceil(currentPage / pagesPerGroup);
   const startPage = (currentGroup - 1) * pagesPerGroup + 1;
@@ -132,6 +165,11 @@ const getVisiblePages = (totalPages, currentPage, pagesPerGroup) => {
   return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 };
 
+/**
+ * @author ovmkas
+ * @created  2023-12-14
+ * @description 글제목, 글내용, 글작성자 기준으로 검색 
+ */
 const searchForm = () =>{
   if(titleCheck.value || contentCheck.value || userCheck.value) {
     getBoardList(pageNum);

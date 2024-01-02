@@ -41,6 +41,11 @@ onMounted(() => {
     console.log(err);
   })
 });
+/**
+ * @author ovmkas
+ * @created  2023-12-07
+ * @description 공지사항 글 수정 전송
+ */
 const submitForm = () => {
   const board = {
     userId: userId.value,
@@ -57,6 +62,12 @@ const submitForm = () => {
     });
 };
 
+/**
+ * @author ovmkas
+ * @created  2023-12-07
+ * @description 공지사항 글 삭제
+ *
+ */
 const noticeBoardDelete = () =>{
   const bno = `${props.bno}`;
    axios.delete("/api/noticeBoard/delete", { data : { bno: bno, userId : userId.value } })

@@ -31,7 +31,13 @@ onMounted(() => {
 
 let title = ref();
 let content = ref();
-
+/**
+ * @author ovmkas
+ * @created  2023-12-07
+ * @description 공지사항 글 작성
+ * @modified 2023-12-14
+ * @modification aixos 모듈화 작업으로 인한 수정
+ */
 const submitForm = () => {
   const board = {
     userId: userId.value,

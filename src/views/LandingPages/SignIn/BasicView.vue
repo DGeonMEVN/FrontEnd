@@ -10,7 +10,7 @@ import MaterialInput from "@/components/MaterialInput.vue";
 import MaterialSwitch from "@/components/MaterialSwitch.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
 
-// material-input
+// material-inputㅑ
 import setMaterialInput from "@/assets/js/material-input";
 import axios from "axios";
 import router from "@/router/index.js";
