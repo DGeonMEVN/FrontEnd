@@ -16,6 +16,7 @@ import VueCookies from "vue-cookies";
 import { userStore } from "@/stores/user.js";
 import axios from "axios";
 import router from "@/router/index.js";
+import AxiosInst from "@/Module/JS/axiosInstance.js";
 const { VITE_KEY_APP_URL } = import.meta.env;
 
 let userId = ref();
@@ -31,6 +32,7 @@ onMounted(() => {
 
 let title = ref();
 let content = ref();
+let userDeletePw = ref();
 /**
  * @author ovmkas
  * @created  2023-12-07
@@ -44,30 +46,41 @@ const submitForm = () => {
     title: title.value,
     content: content.value
   };
-  let accessToken = VueCookies.get("authorization");
-  let refreshToken = VueCookies.get("refresh");
-  const AxiosInst = axios.create({
-    baseURL: VITE_KEY_APP_URL,
-  });
 
-  AxiosInst.interceptors.request.use((config) => {
-    if (accessToken && refreshToken) {
-      config.headers.Authorization = accessToken;
-      config.headers.Refresh = refreshToken;
-      return config;
-    } else {
-      VueCookies.remove("authorization");
-      VueCookies.remove("refresh");
-      userStore().logout();
-      router.replace("/auth/login");
-    }
-  });
   AxiosInst.post("/api/noticeBoard/white", board)
     .then(() => {
+      alert("작성이 완료 되었습니다");
       router.replace("/table");
     })
     .catch((err) => {
-      // console.log(err.response.data.ok);
+      AxiosInst
+        .get("/api/auth/refresh")
+        .then((response) => {
+          if (!response.data.ok) {
+            alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+            VueCookies.remove("authorization");
+            VueCookies.remove("refresh");
+            userStore().logout();
+            router.replace("/auth/login");
+          } else if (response.data.data.accessToken) {
+            VueCookies.set("authorization", response.data.data.accessToken);
+            VueCookies.set("refresh", response.data.data.refreshToken);
+            userStore().setUserId(response.data.data.userId);
+            userDeletePw.value="";
+            alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
+          }
+          else {
+            router.replace("/");
+          }
+        })
+        .catch(() => {
+          alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+          // console.log("아무겂도 없어");
+          VueCookies.remove("authorization");
+          VueCookies.remove("refresh");
+          userStore().logout();
+          router.replace("/auth/login");
+        });
     });
 };
 </script>
