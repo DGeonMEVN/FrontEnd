@@ -12,12 +12,11 @@ const AxiosInst = axios.create({
 
 AxiosInst.interceptors.request.use(
   (config) => {
-    console.log("axiosInstance 호출", VITE_KEY_APP_URL);
 
     let accessToken = VueCookies.get("authorization");
     let refreshToken = VueCookies.get("refresh");
-    console.log("accessToken", accessToken);
-    console.log("refreshToken", refreshToken);
+    // console.log("accessToken", accessToken);
+    // console.log("refreshToken", refreshToken);
 
     if (accessToken && refreshToken) {
       config.headers.Authorization = accessToken;

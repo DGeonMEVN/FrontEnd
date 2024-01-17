@@ -33,7 +33,7 @@ const submitForm = () => {
     userId: userId.value,
     userPw: userPw.value,
   };
-  console.log(user);
+  // console.log(user);
   axios
     .post("/api/auth/login", user)
     // eslint-disable-next-line no-unused-vars
@@ -64,9 +64,9 @@ const submitForm = () => {
       router.replace("/");
     })
     .catch((error) => {
-      console.error(error);
+      // console.error(error);
       errormsg.value = "회원정보와 일치 하지 않습니다.";
-      console.log(errormsg);
+      // console.log(errormsg);
     });
 };
 </script>

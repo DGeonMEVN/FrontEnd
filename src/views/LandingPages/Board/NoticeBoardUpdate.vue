@@ -38,7 +38,7 @@ onMounted(() => {
        content.value = data.content;
        updateDate.value = data.updateDate;
     }).catch((err)=>{
-    console.log(err);
+    // console.log(err);
   })
 });
 /**
@@ -58,7 +58,7 @@ const submitForm = () => {
       router.replace("/table");
     })
     .catch((err) => {
-      console.log(err.response.data.ok);
+      // console.log(err.response.data.ok);
     });
 };
 
@@ -72,11 +72,11 @@ const noticeBoardDelete = () =>{
   const bno = `${props.bno}`;
    axios.delete("/api/noticeBoard/delete", { data : { bno: bno, userId : userId.value } })
      .then(()=>{
-       console.log(bno);
+       // console.log(bno);
        router.replace("/table");
      })
      .catch((err) => {
-       console.log(err.response.data.ok);
+       // console.log(err.response.data.ok);
      });
 }
 </script>
