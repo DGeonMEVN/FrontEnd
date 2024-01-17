@@ -43,7 +43,7 @@ const submitForm = () => {
     userName: userName.value,
     gender: btnradio.value,
   };
-  console.log(user);
+  // console.log(user);
   if (userPw.value === userPwCheck.value) {
     axios
       .post("/api/auth/signup", user)
@@ -51,11 +51,11 @@ const submitForm = () => {
         router.replace("/pages/landing-pages/basic");
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
       });
   } else {
     errormsg.value = "비밀번호가 서로 다릅니다";
-    console.log(errormsg);
+    // console.log(errormsg);
   }
 };
 
@@ -68,11 +68,11 @@ const submitForm = () => {
 const userIdCehck=(e)=>{
   e.preventDefault();
   const id = { userId : userId.value}
-  console.log(id);
+  // console.log(id);
   axios
     .post("/api/auth/idcheck", id)
     .then((res)=>{
-      console.log(res.data.checkId);
+      // console.log(res.data.checkId);
       if(res.data.checkId){
         errormsg.value = "중복된 ID입니다."
       }else{

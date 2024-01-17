@@ -67,7 +67,7 @@ const submitForm = () => {
       router.replace("/table");
     })
     .catch((err) => {
-      console.log(err.response.data.ok);
+      // console.log(err.response.data.ok);
     });
 };
 </script>

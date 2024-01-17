@@ -37,7 +37,7 @@ onMounted(() => {
        content.value = data.content;
        updateDate.value = data.updateDate;
     }).catch((err)=>{
-    console.log(err);
+    // console.log(err);
   })
 });
 

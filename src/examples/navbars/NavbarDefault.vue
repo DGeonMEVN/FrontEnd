@@ -98,7 +98,7 @@ const logout = () => {
   AxiosInst
     .post("/api/auth/logout") // 헤더는 위의 인터셉터에서 설정됩니다.
     .then(() => {
-      console.log("로그아웃 완료");
+      // console.log("로그아웃 완료");
       // 로그아웃 성공 시 필요한 로직을 추가할 수 있습니다.
       // localStorage.removeItem("userToken");
       VueCookies.remove("authorization");
@@ -108,8 +108,8 @@ const logout = () => {
       router.replace("/auth/login");
     })
     .catch((error) => {
-      console.log("실패");
-      console.error(error);
+      // console.log("실패");
+      // console.error(error);
     });
 };
 

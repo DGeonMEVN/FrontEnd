@@ -71,7 +71,7 @@ onMounted(() => {
  */
 const getBoardList = async (pageNum) => {
   try {
-    console.log("pageNum", pageNum);
+    // console.log("pageNum", pageNum);
     const searchData = {
       titleCheck : titleCheck.value,
       contentCheck : contentCheck.value,
@@ -82,14 +82,14 @@ const getBoardList = async (pageNum) => {
     const response = await axios.post(`/api/noticeBoard/search`, searchData);
     boardList.value = response.data.boards;
     totalPageNum.value = response.data.pageCount;
-    console.log("totalPageNum.value", totalPageNum.value);
-    console.log("boardList.value", boardList.value);
+    // console.log("totalPageNum.value", totalPageNum.value);
+    // console.log("boardList.value", boardList.value);
     noticeBoardStore().setTitle(titleCheck.value);
     noticeBoardStore().setContent(contentCheck.value);
     noticeBoardStore().setUser(userCheck.value);
     noticeBoardStore().setSearch(search.value);
   } catch (error) {
-    console.error("데이터 로드 중 오류:", error);
+    // console.error("데이터 로드 중 오류:", error);
   }
 };
 
