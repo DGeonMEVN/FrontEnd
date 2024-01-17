@@ -21,7 +21,7 @@ import { userStore } from "@/stores/user.js";
 
 const userId = ref("");
 const userPw = ref("");
-const userName = ref("");
+let userName = ref("");
 const btnradio = ref("");
 const errormsg = ref("");
 const userPwCheck = ref("");
@@ -43,10 +43,8 @@ onMounted(() => {
 //   VueCookies.set("authorization", response.data.data.accessToken);
 //   VueCookies.set("refresh", response.data.data.refreshToken);
 // }
-      console.log("profile = response.data", response.data);
       userId.value = response.data.data.userId;
       userName.value = response.data.data.userName;
-      console.log(response.data.data.gender);
       if (response.data.data.gender) {
         btnradio.value = 1;
       } else {
@@ -73,12 +71,12 @@ onMounted(() => {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
-          } else {
+          }
+          else {
             router.replace("/");
           }
         })
         .catch(() => {
-          console.log("아무겂도 없어");
           VueCookies.remove("authorization");
           VueCookies.remove("refresh");
           userStore().logout();
@@ -103,13 +101,47 @@ const submitForm = () => {
 
   AxiosInst
     .put("/api/auth/modify", user)
-    .then(() => {
-      VueCookies.remove("authorization");
-      VueCookies.remove("refresh");
-      userStore().logout();
-      router.replace("/auth/login");
+    .then((response) => {
+      if(response.data.ok) {
+        VueCookies.remove("authorization");
+        VueCookies.remove("refresh");
+        userStore().logout();
+        router.replace("/auth/login");
+      }else if(!response.data.passCheck){
+        errormsg.value = "비밀번호가 틀렸습니다.";
+      }
     })
     .catch((error) => {
+      // if (!error.response.ok) {
+      //   setTimeout(function() {
+      //     router.go(0)
+      //   }, 50);
+      // }
+      AxiosInst
+        .get("/api/auth/refresh")
+        .then((response) => {
+          if (!response.data.ok) {
+            VueCookies.remove("authorization");
+            VueCookies.remove("refresh");
+            userStore().logout();
+            router.replace("/auth/login");
+          } else if (response.data.data.accessToken) {
+            VueCookies.set("authorization", response.data.data.accessToken);
+            VueCookies.set("refresh", response.data.data.refreshToken);
+            userStore().setUserId(response.data.data.userId);
+            alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
+          }
+          else {
+            router.replace("/");
+          }
+        })
+        .catch(() => {
+          // console.log("아무겂도 없어");
+          VueCookies.remove("authorization");
+          VueCookies.remove("refresh");
+          userStore().logout();
+          router.replace("/auth/login");
+        });
     });
 
 };
@@ -142,11 +174,10 @@ const passwordForm = () => {
     AxiosInst
       .post("/api/auth/passwordCheck", checkUser)
       .then((response) => {
-        if (response.data.ok) {
+        if (response.data.ok && response.data.passCheck) {
           AxiosInst
             .post("/api/auth/logout")
             .then(() => {
-
               /*지우지 말 것 */
               // const myModal = new bootstrap.Modal('#exampleModal', {})
               // console.log(myModal)
@@ -170,21 +201,53 @@ const passwordForm = () => {
               //   parentElement.firstChild.remove(); // 부모 요소의 모든 자식 요소 삭제
               // }
               // parentElement.remove();
-
-              // document.getElementById("closeButton").click();
               VueCookies.remove("authorization");
               VueCookies.remove("refresh");
               userStore().logout();
               router.replace("/auth/login");
             })
-            .catch(() => {
-              router.replace("/auth/login");
+            .catch((error) => {
+              // router.replace("/auth/login");
             });
-          console.log("회원이 맞습니다");
+          // console.log("회원이 맞습니다");
+          // eslint-disable-next-line no-dupe-else-if
+        }else if(!response.data.ok && !response.data.passCheck){
+          alert("비밀번호가 다릅니다.");
+          newUserPwCheck.value = "";
+          newUserPw.value = "";
+          userPwCheck.value = "";
         }
       })
-      .catch(() => {
-        errorModal.value = "회원이 아니거나, 입력하신 정보가 다릅니다.";
+      .catch((error) => {
+        // console.log(error.response.data.message);
+        if(!error.response.data.ok) {
+          errorModal.value = "회원이 아니거나, 입력하신 정보가 다릅니다.";
+        }
+          AxiosInst
+            .get("/api/auth/refresh")
+            .then((response) => {
+              if (!response.data.ok) {
+                VueCookies.remove("authorization");
+                VueCookies.remove("refresh");
+                userStore().logout();
+                router.replace("/auth/login");
+              } else if (response.data.data.accessToken) {
+                VueCookies.set("authorization", response.data.data.accessToken);
+                VueCookies.set("refresh", response.data.data.refreshToken);
+                userStore().setUserId(response.data.data.userId);
+                newUserPwCheck.value = "";
+                newUserPw.value = "";
+                userPwCheck.value = "";
+                alert("세션정보가 만료 되었습니다. 다시 시도해 주세요");
+              }
+            })
+            .catch(() => {
+              VueCookies.remove("authorization");
+              VueCookies.remove("refresh");
+              userStore().logout();
+              router.replace("/auth/login");
+            });
+
       });
   } else {
     errorModal.value = "입력하신 비밀번호가 다릅니다";
@@ -198,23 +261,44 @@ const deleteForm = function () {
   };
   AxiosInst.post("/api/auth/deleteUser", user)
     .then((response) => {
-      VueCookies.remove("authorization");
-      VueCookies.remove("refresh");
-      userStore().logout();
-      router.replace("/auth/login");
-      console.log("삭제하고 왔어");
+      if(response.data.ok) {
+        alert("회원탈퇴가 완료 되었습니다.");
+        VueCookies.remove("authorization");
+        VueCookies.remove("refresh");
+        userStore().logout();
+        router.replace("/auth/login");
+        // console.log("삭제하고 왔어");
+      }else if(!response.data.ok){
+        alert("회원 정보가 맞지 않습니다");
+      }
     })
     .catch((error) => {
-      console.error("Error:", error);
-
-      if (error.response && error.response.status === 401) {
-        // Handle authentication-related errors
-        console.log("회원이 없거나 회원정보가 다릅니다");
-        // Handle other specific error cases if needed
-      } else {
-        // Handle general errors
-        console.log("일반적인 에러");
-      }
+      AxiosInst
+        .get("/api/auth/refresh")
+        .then((response) => {
+          if (!response.data.ok) {
+            VueCookies.remove("authorization");
+            VueCookies.remove("refresh");
+            userStore().logout();
+            router.replace("/auth/login");
+          } else if (response.data.data.accessToken) {
+            VueCookies.set("authorization", response.data.data.accessToken);
+            VueCookies.set("refresh", response.data.data.refreshToken);
+            userStore().setUserId(response.data.data.userId);
+            userDeletePw.value="";
+            alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
+          }
+          else {
+            router.replace("/");
+          }
+        })
+        .catch(() => {
+          // console.log("아무겂도 없어");
+          VueCookies.remove("authorization");
+          VueCookies.remove("refresh");
+          userStore().logout();
+          router.replace("/auth/login");
+        });
     });
 };
 </script>
