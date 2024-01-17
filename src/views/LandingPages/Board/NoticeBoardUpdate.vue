@@ -18,6 +18,7 @@ import axios from "axios";
 import { isDisabled } from "bootstrap/js/src/util/index.js";
 import dayjs from "dayjs";
 import router from "@/router/index.js";
+import AxiosInst from "@/Module/JS/axiosInstance.js";
 
 
 let userId = ref();
@@ -47,18 +48,46 @@ onMounted(() => {
  * @description 공지사항 글 수정 전송
  */
 const submitForm = () => {
+  console.log("수정 눌림");
   const board = {
     userId: userId.value,
     title: title.value,
     content: content.value,
     bno : `${props.bno}`
   };
-  axios.put("/api/noticeBoard/update", board)
+  AxiosInst.put("/api/noticeBoard/update", board)
     .then(() => {
+      alert("수정이 완료 되었습니다");
       router.replace("/table");
     })
     .catch((err) => {
-      // console.log(err.response.data.ok);
+      AxiosInst
+        .get("/api/auth/refresh")
+        .then((response) => {
+          if (!response.data.ok) {
+            alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+            VueCookies.remove("authorization");
+            VueCookies.remove("refresh");
+            userStore().logout();
+            router.replace("/auth/login");
+          } else if (response.data.data.accessToken) {
+            VueCookies.set("authorization", response.data.data.accessToken);
+            VueCookies.set("refresh", response.data.data.refreshToken);
+            userStore().setUserId(response.data.data.userId);
+            alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
+          }
+          else {
+            router.replace("/");
+          }
+        })
+        .catch(() => {
+          alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+          // console.log("아무겂도 없어");
+          VueCookies.remove("authorization");
+          VueCookies.remove("refresh");
+          userStore().logout();
+          router.replace("/auth/login");
+        });
     });
 };
 
@@ -70,13 +99,39 @@ const submitForm = () => {
  */
 const noticeBoardDelete = () =>{
   const bno = `${props.bno}`;
-   axios.delete("/api/noticeBoard/delete", { data : { bno: bno, userId : userId.value } })
+   AxiosInst.delete("/api/noticeBoard/delete", { data : { bno: bno, userId : userId.value } })
      .then(()=>{
-       // console.log(bno);
+       alert("삭제가 완료 되었습니다");
        router.replace("/table");
      })
      .catch((err) => {
-       // console.log(err.response.data.ok);
+       AxiosInst
+         .get("/api/auth/refresh")
+         .then((response) => {
+           if (!response.data.ok) {
+             alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+             VueCookies.remove("authorization");
+             VueCookies.remove("refresh");
+             userStore().logout();
+             router.replace("/auth/login");
+           } else if (response.data.data.accessToken) {
+             VueCookies.set("authorization", response.data.data.accessToken);
+             VueCookies.set("refresh", response.data.data.refreshToken);
+             userStore().setUserId(response.data.data.userId);
+             alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
+           }
+           else {
+             router.replace("/");
+           }
+         })
+         .catch(() => {
+           // console.log("아무겂도 없어");
+           alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+           VueCookies.remove("authorization");
+           VueCookies.remove("refresh");
+           userStore().logout();
+           router.replace("/auth/login");
+         });
      });
 }
 </script>
@@ -214,9 +269,6 @@ label: 'Buy Now',
             </div>
             <div class="modal-body">
               해당 글을 삭제 하시겠습니까?
-            </div>
-            <div>
-              <p class="text-danger mx-4">{{ errorModal }}</p>
             </div>
             <div class="modal-footer justify-content-between">
               <button id="closeDeleteButton" class="btn bg-gradient-dark mb-0" data-bs-dismiss="modal" type="button">닫기
