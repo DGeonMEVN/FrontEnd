@@ -268,7 +268,7 @@ const currentPageStore = () => {
                         <span>공지사항</span>
                       </RouterLink>
                       <RouterLink
-                        :to="{ name: 'contactus' }"
+                        :to="{ name: 'diaryTable' }"
                         class="dropdown-item border-radius-md"
                         v-if="user != null"
                       >
@@ -305,7 +305,7 @@ const currentPageStore = () => {
                   <span>공지사항</span>
                 </RouterLink>
                 <RouterLink
-                  :to="{ name: 'contactus' }"
+                  :to="{ name: 'diaryTable' }"
                   class="dropdown-item border-radius-md"
                   v-if="user != null"
                 >
