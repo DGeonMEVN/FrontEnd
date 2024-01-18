@@ -31,15 +31,58 @@ const props = defineProps(['bno']);
 onMounted(() => {
   localUserId.value = userStore().userId;
   // 라우터에서 bno를 읽어옴
-  axios.get(`/api/noticeBoard/noticeView/${props.bno}`)
+  AxiosInst.get(`/api/noticeBoard/noticeUpdate/detail/${props.bno}`)
     .then((response) => {
       const data = response.data.Board;
       userId.value = data.userId;
        title.value = data.title;
        content.value = data.content;
        updateDate.value = data.updateDate;
+
     }).catch((err)=>{
-    // console.log(err);
+    AxiosInst
+      .get("/api/auth/refresh")
+      .then((response) => {
+        if (!response.data.ok) {
+          alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+          VueCookies.remove("authorization");
+          VueCookies.remove("refresh");
+          userStore().logout();
+          router.replace("/auth/login");
+        } else if (response.data.data.accessToken) {
+          VueCookies.set("authorization", response.data.data.accessToken);
+          VueCookies.set("refresh", response.data.data.refreshToken);
+          userStore().setUserId(response.data.data.userId);
+          alert("세션정보가 만료 되어. 재발급 받았습니다.");
+          //   router.go(0)
+          AxiosInst.get(`/api/noticeBoard/noticeUpdate/detail/${props.bno}`)
+            .then((response) => {
+              const data = response.data.Board;
+              userId.value = data.userId;
+              title.value = data.title;
+              content.value = data.content;
+              updateDate.value = data.updateDate;
+
+            }).catch((err)=>{
+              alert("비정상적인 접근으로 다시 로그인 해주세요");
+              VueCookies.remove("authorization");
+              VueCookies.remove("refresh");
+              userStore().logout();
+              router.replace("/auth/login");
+          });
+        }
+        else {
+          router.replace("/");
+        }
+      })
+      .catch(() => {
+        alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+        // console.log("아무겂도 없어");
+        VueCookies.remove("authorization");
+        VueCookies.remove("refresh");
+        userStore().logout();
+        router.replace("/auth/login");
+      });
   })
 });
 /**
