@@ -28,6 +28,7 @@ import White from "../views/LandingPages/Board/NoticeBoardWhite.vue"
 import NoticeBoardView from "../views/LandingPages/Board/NoticeBoardView.vue"
 import NoticeBoardUpdate from "@/views/LandingPages/Board/NoticeBoardUpdate.vue";
 import diaryTable from "@/examples/tables/diaryTable.vue";
+import diaryWhite from "../views/LandingPages/diaryBoard/diaryBoardWhite.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -191,9 +192,14 @@ const router = createRouter({
       props: true,  // 이 옵션을 설정하면 URL 파라미터를 컴포넌트의 props로 전달합니다
     },
     {
-      path: '/diaryTable',  // :bno는 동적 세그먼트로 정의됩니다
+      path: '/diaryTable',
       name: 'diaryTable',
       component: diaryTable,
+    },
+    {
+      path : "/diaryWhite",
+      name : "diarywhite",
+      component : diaryWhite,
     },
   ],
 });
