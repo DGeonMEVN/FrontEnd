@@ -33,10 +33,12 @@ onMounted(() => {
 let systolic = ref("");
 let diastolic = ref("");
 let pulse = ref("");
-let taking = ref("");
+let taking = ref(0);
+let gargle = ref(0);
 let significant = ref("");
 let weight = ref("");
-const btnradio = ref("");
+const takeMessage = ref("미복용");
+const gargleMessage= ref("미가글");
 /**
  * @author ovmkas
  * @created  2024-01-18
@@ -48,9 +50,10 @@ const submitForm = () => {
     systolic : systolic.value,
     diastolic : diastolic.value,
     pulse : pulse.value,
-    taking : btnradio.value,
+    take : taking.value,
     significant : significant.value,
-    weight : weight.value
+    weight : weight.value,
+    gargle : gargle.value,
   };
 
   AxiosInst.post("/api/diaryBoard/white", diaryBoard)
@@ -72,7 +75,7 @@ const submitForm = () => {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
-            userDeletePw.value="";
+            // userDeletePw.value="";
             alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
           }
           else {
@@ -88,6 +91,28 @@ const submitForm = () => {
           router.replace("/auth/login");
         });
     });
+};
+
+const btnTake = (e) => {
+  e.preventDefault();
+  if(takeMessage.value === "미복용"){
+    takeMessage.value="복용";
+    taking.value = 1;
+  }else{
+    takeMessage.value="미복용";
+    taking.value = 0;
+  }
+};
+
+const btnGargle = (e) => {
+  e.preventDefault();
+  if(gargleMessage.value === "미가글"){
+    gargleMessage.value="가글";
+    gargle.value = 1;
+  }else{
+    gargleMessage.value="미가글";
+    gargle.value = 0;
+  }
 };
 </script>
 <template>
@@ -148,12 +173,12 @@ label: 'Buy Now',
                 >
 
                   <table class="container-fluid">
-                    <tr>
+                    <tr class="col">
                       <td>
                         <label class="mt-5">작성자</label>
                       </td>
                     </tr>
-                    <tr class="m-9">
+                    <tr class="col">
                       <td>
                         <MaterialInput
                           :value="userId"
@@ -163,33 +188,36 @@ label: 'Buy Now',
                       </td>
                     </tr>
                     <tr>
-                      <td class="px-3">
-                        <label class="mt-5">수축기</label>
+                      <td class="col">
+                        <label class="mt-5" for="systolic">수축기</label>
                       </td>
-                      <td class="px-3">
-                        <label class="mt-5">이완기</label>
+                      <td class="col">
+                        <label class="mt-5" for="diastolic">이완기</label>
                       </td>
-                      <td class="px-3">
-                        <label class="mt-5">맥박</label>
+                      <td class="col">
+                        <label class="mt-5" for="pulse">맥박</label>
                       </td>
                     </tr>
                     <tr>
-                      <td class="px-3">
+                      <td class="col">
                         <MaterialInput
+                          id="systolic"
                           :value="systolic"
-                          class="input-group-static"
+                          class="input-group-static pe-3"
                           type="text"
                           @update:value="systolic = $event" />
                       </td>
-                      <td class="px-3">
+                      <td class="col">
                         <MaterialInput
+                          id="diastolic"
                           :value="diastolic"
-                          class="input-group-static"
+                          class="input-group-static pe-3"
                           type="text"
                           @update:value="diastolic = $event" />
                       </td>
-                      <td class="px-3">
+                      <td class="col">
                         <MaterialInput
+                          id="pulse"
                           :value="pulse"
                           class="input-group-static"
                           type="text"
@@ -197,63 +225,57 @@ label: 'Buy Now',
                       </td>
                     </tr>
                     <tr>
-                      <td class="px-3">
-                        <label class="mt-5">체중</label>
+                      <td class="col">
+                        <label class="mt-5" for="weight">체중</label>
                       </td>
-                      <td class="px-3">
-                        <label class="mt-5">복용</label>
+                      <td class="col">
+                        <label class="mt-5" for="taking">복용</label>
                       </td>
+                      <td class="col">
+                        <label class="mt-5" for="gargle">가글</label>
+                      </td>
+
                     </tr>
                     <tr>
-                      <td class="px-3">
+                      <td class="col">
                         <MaterialInput
                           :value="weight"
-                          class="input-group-static"
+                          class="input-group-static pe-3"
                           type="text"
                           @update:value="weight = $event" />
                       </td>
-                      <td class="px-3">
-                        <div
-                          aria-label="Basic radio toggle button group"
-                          class="btn-group"
-                          role="group"
+                      <td class="col">
+                        <MaterialButton
+                          id="taking"
+                          variant="gradient"
+                          :color="taking === 0 ? 'danger' : 'success'"
+                          class="mt-3 mb-0"
+                          @click="btnTake"
                         >
-                          <input
-                            id="taking"
-                            v-model="btnradio"
-                            autocomplete="off"
-                            class="btn-check"
-                            name="btnradio"
-                            type="radio"
-                            value="1"
-                          />
-                          <label class="btn btn-outline-success" for="taking"
-                          >복용</label
-                          >
-
-                          <input
-                            id="notTakingIt"
-                            v-model="btnradio"
-                            autocomplete="off"
-                            class="btn-check"
-                            name="btnradio"
-                            type="radio"
-                            value="0"
-                          />
-                          <label class="btn btn-outline-success" for="notTakingIt"
-                          >미복용</label
-                          >
-                        </div>
+                          {{ takeMessage }}
+                        </MaterialButton>
+                      </td>
+                      <td class="col">
+                        <MaterialButton
+                          id="gargle"
+                          variant="gradient"
+                          :color="gargle === 0 ? 'danger' : 'success'"
+                          class="mt-3 mb-0"
+                          @click="btnGargle"
+                        >
+                          {{ gargleMessage }}
+                        </MaterialButton>
                       </td>
                     </tr>
                     <tr>
                       <td class="px-3">
-                        <label class="mt-5">특이사항</label>
+                        <label class="mt-5" for="significant">특이사항</label>
                       </td>
                     </tr>
                     <tr>
                       <td colspan="3">
                         <MaterialInput
+                          id="significant"
                           :value="significant"
                           class="input-group-static"
                           type="text"
