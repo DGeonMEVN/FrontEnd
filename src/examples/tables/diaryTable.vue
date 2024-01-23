@@ -86,6 +86,7 @@ const getBoardList = async (pageNum) => {
     const response = await axios.post(`/api/diaryBoard/search`, searchData);
     console.log(response.data.diaryBoardList);
     diaryBoardList.value = response.data.diaryBoardList;
+    console.log(diaryBoardList);
     totalPageNum.value = response.data.pageCount;
     diaryBoardStore().setSystolic(systolicCheck.value);
     diaryBoardStore().setDiastolic(diastolicCheck.value);
@@ -238,21 +239,22 @@ const searchForm = () =>{
               <div v-for="item in diaryBoardList" :key="item.bno" class="row mb-4 text-center px-2" style="white-space: nowrap; overflow: visible;  padding: 0;">
 <!--                <div class="col text-center">{{ item.bno }}</div>-->
 <!--                <div class="col text-center">-->
-<!--                  <router-link :to="'/api/diaryBoard/diaryView/' + item.bno"-->
-<!--                               style="cursor: pointer; text-decoration: none;">-->
+                  <router-link :to="'/api/diaryBoard/diaryView/' + item.bno"
+                               style="cursor: pointer; text-decoration: none; display: flex;">
 
-                    <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;">{{ item.systolic }}</div>
-                    <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;">{{ item.diastolic }}</div>
-                    <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;">{{ item.pulse }}</div>
+                    <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;">{{ item.bloodPressure[0].systolic }}</div>
+                    <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;">{{ item.bloodPressure[0].diastolic }}</div>
+                    <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;">{{ item.bloodPressure[0].pulse }}</div>
                     <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;"> {{ item.weight }}</div>
-                    <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;"><input type="checkbox" v-model="item.taking" disabled="disabled" /></div>
+                    <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;"><input type="checkbox" v-model="item.take[0].take" disabled="disabled" /></div>
 <!--                    <div class="col text-center" style="white-space: nowrap; overflow: visible;  padding: 0;">{{ item.taking }}</div>-->
                     <div class="col text-center ellipsis" style="white-space: nowrap; margin: 2pt; padding: 0;">{{ item.significant }}</div>
-<!--                  </router-link>-->
+                    <div class="col text-center " style="white-space: nowrap; overflow: visible;  padding: 0;">{{ dayjs(item.updateDate).format("MM-DD") }}</div>
+                  </router-link>
 <!--                </div>-->
 <!--                <div class="col text-center">{{ item.userId }}</div>-->
 <!--                <div class="col text-center" >{{ dayjs(item.updateDate).format("YY-MM-DD HH:mm") }}</div>-->
-                <div class="col text-center " style="white-space: nowrap; overflow: visible;  padding: 0;">{{ dayjs(item.updateDate).format("MM-DD") }}</div>
+
               </div>
               <div class="row border-0">
                 <div v-if="user !=null" class="col-md-12 text-end">
