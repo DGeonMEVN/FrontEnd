@@ -3,16 +3,15 @@ import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "@/examples/footers/FooterDefault.vue";
 import { onMounted, ref } from "vue";
 import VueCookies from "vue-cookies";
-import axios from "axios";
 import dayjs from "dayjs";
 import router from "@/router/index.js";
 import MaterialPagination from "@/components/MaterialPagination.vue";
 import MaterialPaginationItem from "@/components/MaterialPaginationItem.vue";
-import MaterialInput from "@/components/MaterialInput.vue";
 import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
 import { userStore } from "@/stores/user.js";
 import { diaryBoardStore } from "@/stores/diaryBoard.js";
+import AxiosInst from "@/Module/JS/axiosInstance.js";
 
 
 defineProps({
@@ -82,18 +81,63 @@ const getBoardList = async (pageNum) => {
       weight : weighteCheck.value,
       search : search.value,
       pageNum : pageNum,
+      userId : userStore().userId,
     }
-    const response = await axios.post(`/api/diaryBoard/search`, searchData);
-    console.log(response.data.diaryBoardList);
-    diaryBoardList.value = response.data.diaryBoardList;
-    console.log(diaryBoardList);
-    totalPageNum.value = response.data.pageCount;
-    diaryBoardStore().setSystolic(systolicCheck.value);
-    diaryBoardStore().setDiastolic(diastolicCheck.value);
-    diaryBoardStore().setPulse(pulseCheck.value);
-    diaryBoardStore().setSignificant(significantCheck.value);
-    diaryBoardStore().setWeight(weighteCheck.value);
-    diaryBoardStore().setSearch(search.value);
+
+    await AxiosInst.post(`/api/diaryBoard/search`, searchData)
+      .then((response)=>{
+        console.log(response.data.diaryBoardList);
+        diaryBoardList.value = response.data.diaryBoardList;
+        console.log(diaryBoardList);
+        totalPageNum.value = response.data.pageCount;
+        diaryBoardStore().setSystolic(systolicCheck.value);
+        diaryBoardStore().setDiastolic(diastolicCheck.value);
+        diaryBoardStore().setPulse(pulseCheck.value);
+        diaryBoardStore().setSignificant(significantCheck.value);
+        diaryBoardStore().setWeight(weighteCheck.value);
+        diaryBoardStore().setSearch(search.value);
+      })
+      .catch(()=>{
+        AxiosInst
+          .get("/api/auth/refresh")
+          .then((response) => {
+            if (!response.data.ok) {
+              VueCookies.remove("authorization");
+              VueCookies.remove("refresh");
+              userStore().logout();
+              router.replace("/auth/login");
+            } else if (response.data.data.accessToken) {
+              VueCookies.set("authorization", response.data.data.accessToken);
+              VueCookies.set("refresh", response.data.data.refreshToken);
+              userStore().setUserId(response.data.data.userId);
+              AxiosInst.post(`/api/diaryBoard/search`, searchData)
+                .then((response)=>{
+                  console.log(response.data.diaryBoardList);
+                  diaryBoardList.value = response.data.diaryBoardList;
+                  console.log(diaryBoardList);
+                  totalPageNum.value = response.data.pageCount;
+                  diaryBoardStore().setSystolic(systolicCheck.value);
+                  diaryBoardStore().setDiastolic(diastolicCheck.value);
+                  diaryBoardStore().setPulse(pulseCheck.value);
+                  diaryBoardStore().setSignificant(significantCheck.value);
+                  diaryBoardStore().setWeight(weighteCheck.value);
+                  diaryBoardStore().setSearch(search.value);
+                })
+            }
+            else {
+              router.replace("/");
+            }
+          })
+          .catch(() => {
+            // console.log("아무겂도 없어");
+            VueCookies.remove("authorization");
+            VueCookies.remove("refresh");
+            userStore().logout();
+            router.replace("/auth/login");
+          });
+      })
+    // const response = await AxiosInst.post(`/api/diaryBoard/search`, searchData);
+
     // eslint-disable-next-line no-empty
   } catch (error) {
   }
