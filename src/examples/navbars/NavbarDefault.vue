@@ -48,6 +48,7 @@ import VueCookies from "vue-cookies";
 import { userStore } from "@/stores/user.js";
 import { noticeBoardStore } from "@/stores/noticeBoard.js";
 import AxiosInst from "@/Module/JS/axiosInstance.js";
+import { diaryBoardStore } from "@/stores/diaryBoard.js";
 
 let user = ref();
 let isVisible = ref();
@@ -160,12 +161,22 @@ watch(
   }
 );
 
-const currentPageStore = () => {
+const noticecurrentPage = () => {
   noticeBoardStore().setTitle(true);
   noticeBoardStore().setContent(false);
   noticeBoardStore().setUser(false);
   noticeBoardStore().setSearch("");
   noticeBoardStore().setCurrentPage(1);
+}
+
+const diarycurrentPage = () => {
+  diaryBoardStore().setSystolic(false);
+  diaryBoardStore().setDiastolic(false);
+  diaryBoardStore().setPulse(false);
+  diaryBoardStore().setWeight(false);
+  diaryBoardStore().setSignificant(true);
+  diaryBoardStore().setSearch("");
+  diaryBoardStore().setCurrentPage(1);
 }
 </script>
 <template>
@@ -263,7 +274,7 @@ const currentPageStore = () => {
                       <RouterLink
                         :to="{ name: 'table' }"
                         class="dropdown-item border-radius-md"
-                        @click="currentPageStore"
+                        @click="noticecurrentPage"
                       >
                         <span>공지사항</span>
                       </RouterLink>
@@ -271,6 +282,7 @@ const currentPageStore = () => {
                         :to="{ name: 'diaryTable' }"
                         class="dropdown-item border-radius-md"
                         v-if="user != null"
+                        @click="diarycurrentPage"
                       >
                         <span>일지</span>
                       </RouterLink>
@@ -300,7 +312,7 @@ const currentPageStore = () => {
                 <RouterLink
                   :to="{ name: 'table' }"
                   class="dropdown-item border-radius-md"
-                  @click="currentPageStore"
+                  @click="noticecurrentPage"
                 >
                   <span>공지사항</span>
                 </RouterLink>
@@ -308,6 +320,7 @@ const currentPageStore = () => {
                   :to="{ name: 'diaryTable' }"
                   class="dropdown-item border-radius-md"
                   v-if="user != null"
+                  @click="diarycurrentPage"
                 >
                   <span>일지</span>
                 </RouterLink>
