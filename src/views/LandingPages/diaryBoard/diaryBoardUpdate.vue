@@ -32,7 +32,7 @@ const taking = ref(0);
 const gargle = ref(0);
 
 const boardList = ref([]);
-const bloodPressurList = ref([]);
+const bloodPressureList = ref([]);
 const takeList = ref([]);
 const gargleList = ref([]);
 
@@ -52,7 +52,7 @@ onMounted(() => {
       weight.value = response.data.Board.weight;
       significant.value = response.data.Board.significant;
 
-      bloodPressurList.value = response.data.BloodPressure;
+      bloodPressureList.value = response.data.BloodPressure;
 
       takeList.value = response.data.Take;
       if (takeList.value[0].take) {
@@ -129,17 +129,40 @@ onMounted(() => {
     });
 });
 
+const addBloodPressure = () => {
+  // 새로운 혈압 항목 추가
+  const newItem = {
+    systolic: 0,
+    diastolic: 0,
+    pulse: 0,
+    // updateDate: new Date(),
+  };
+  bloodPressureList.value.push(newItem);
+};
+
+const updateBloodPressure = (index, field, value) => {
+  // 혈압 항목 업데이트
+  bloodPressureList.value[index][field] = value;
+};
+
 const submitForm = () => {
   const diaryBoard = {
     userId: userStore().userId,
-    systolic: systolic.value,
-    diastolic: diastolic.value,
-    pulse: pulse.value,
+    // systolic: systolic.value,
+    // diastolic: diastolic.value,
+    // pulse: pulse.value,
     take: taking.value,
     significant: significant.value,
     weight: weight.value,
     gargle: gargle.value,
-    bno : `${props.bno}`
+    bno : `${props.bno}`,
+    bloodPressureList: bloodPressureList.value.map(item => ({
+      bpno : item.bpno,
+      systolic: item.systolic,
+      diastolic: item.diastolic,
+      pulse: item.pulse,
+      // 추가로 필요한 속성이 있다면 여기에 계속 추가
+    }))
   };
   AxiosInst.put("/api/diaryBoard/update", diaryBoard)
     .then(() => {
@@ -175,9 +198,6 @@ const submitForm = () => {
           router.replace("/auth/login");
         });
     });
-};
-const addBloodPressure = (e) => {
-  e.preventDefault();
 };
 
 const btnTake = (e) => {
@@ -298,61 +318,60 @@ label: 'Buy Now',
                       @update:value="userId = $event"
                     />
                   </div>
-                  <div v-for="item in bloodPressurList" :key="item.bno" class="row">
+                  <div v-for="(item, index) in bloodPressureList" :key="index" class="row">
                     <div class="col-md-2">
                       <label class="mt-5 me-7 col" for="systolic">수축기</label>
                       <MaterialInput
-                        id="systolic"
+                        :id="'systolic' + index"
                         :value="String(item.systolic)"
                         class="form-control"
-                        isDisabled
                         type="text"
-                        @update:value="item.systolic = $event"
+                        @update:value="updateBloodPressure(index, 'systolic', $event)"
                       />
                     </div>
                     <div class="col-md-2">
                       <label class="mt-5 me-7 col" for="diastolic">이완기</label>
                       <MaterialInput
-                        id="diastolic"
+                        :id="'diastolic' + index"
                         :value="String(item.diastolic)"
                         class="form-control"
-                        isDisabled
                         type="text"
-                        @update:value="item.diastolic = $event"
+                        @update:value="updateBloodPressure(index, 'diastolic', $event)"
                       />
                     </div>
                     <div class="col-md-2">
                       <label class="mt-5 me-7 col" for="pulse">맥박</label>
                       <MaterialInput
-                        id="pulse"
+                        :id="'pulse' + index"
                         :value="String(item.pulse)"
                         class="form-control"
-                        isDisabled
                         type="text"
-                        @update:value="item.pulse = $event"
+                        @update:value="updateBloodPressure(index, 'pulse', $event)"
                       />
                     </div>
                     <div class="col-md-2">
                       <label class="mt-5 me-7 col">작성일자</label>
                       <MaterialInput
                         v-if="item.systolic !== 0"
+                        :id="'updateDate' + index"
                         :value="dayjs(item.updateDate).format('MM-DD HH:MM')"
                         class="form-control"
-
                         type="text"
-                        @update:value="item.updateDate = $event"
+                        @update:value="updateBloodPressure(index, 'updateDate', $event)"
                       />
                     </div>
-                    <!--                  <div class="col-md-2">-->
-                    <!--                    <label class="mt-5 me-7 col">혈압 추가 작성</label>-->
-                    <!--                    <MaterialButton-->
-                    <!--                      @click="addBloodPressure()"-->
-                    <!--                      class="ms-3 mt-4"-->
-                    <!--                      variant="gradient"-->
-                    <!--                      color="success">-->
-                    <!--                      추가-->
-                    <!--                    </MaterialButton>-->
-                    <!--                  </div>-->
+                    <label>인덱스 : {{ index }}</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="mt-5 me-7 col">혈압 추가 작성</label>
+                    <MaterialButton
+                      @click.prevent="addBloodPressure()"
+                      class="ms-3 mt-4"
+                      variant="gradient"
+                      color="success"
+                    >
+                      추가
+                    </MaterialButton>
                   </div>
                   <div class="row">
                     <div class="col-md-4">
@@ -461,4 +480,25 @@ label: 'Buy Now',
   <DefaultFooter />
 </template>
 
+<!--<script>-->
+<!--export default {-->
+<!--  methods: {-->
+<!--    updateBloodPressure(index, field, value) {-->
+<!--      // 혈압 항목 업데이트-->
+<!--      this.bloodPressureList[index][field] = value;-->
+<!--    },-->
+<!--    addBloodPressure(e) {-->
+<!--      // 새로운 혈압 항목 추가-->
 
+<!--      const newItem = {-->
+<!--        systolic: 0,-->
+<!--        diastolic: 0,-->
+<!--        pulse: 0,-->
+<!--        updateDate: new Date(),-->
+<!--      };-->
+<!--      this.bloodPressureList.push(newItem);-->
+<!--    },-->
+<!--    // ... 이전 코드 ...-->
+<!--  },-->
+<!--};-->
+<!--</script>-->
