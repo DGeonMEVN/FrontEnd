@@ -213,7 +213,7 @@ const router = createRouter({
     },
     {
       path: '/api/diaryBoard/diaryUpdate/:bno',  // :bno는 동적 세그먼트로 정의됩니다
-      name: 'diaryBoardView',
+      name: 'diaryBoardUpdate',
       component: DiaryBoardUpdate,
       props: true,  // 이 옵션을 설정하면 URL 파라미터를 컴포넌트의 props로 전달합니다
     },
