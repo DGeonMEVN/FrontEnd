@@ -17,7 +17,6 @@ import router from "@/router/index.js";
 
 
 const userId = ref();
-const bno = ref();
 const weight = ref();
 const significant = ref();
 const pulse = ref();
@@ -34,10 +33,11 @@ const takeUpdatedate = ref("");
 const gargleMessage = ref("");
 const gargleUpdatedate = ref("");
 const props = defineProps(["bno"]);
+const bno = { bno: `${props.bno}`, userId: userStore().userId };
 onMounted(() => {
   userId.value = userStore().userId;
   // 라우터에서 bno를 읽어옴
-  const bno = { bno: `${props.bno}`, userId: userStore().userId };
+
   AxiosInst
     .post("/api/diaryBoard/diaryView", bno)
     .then((response) => {
@@ -75,10 +75,12 @@ onMounted(() => {
             VueCookies.remove("refresh");
             userStore().logout();
             router.replace("/auth/login");
+            alert("오류")
           } else if (response.data.data.accessToken) {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            alert("세션이 만료되어 다시 불러옵니다");
             AxiosInst
               .post("/api/diaryBoard/diaryView", bno)
               .then((response) => {
