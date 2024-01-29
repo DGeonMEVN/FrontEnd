@@ -86,9 +86,7 @@ const getBoardList = async (pageNum) => {
 
     await AxiosInst.post(`/api/diaryBoard/search`, searchData)
       .then((response)=>{
-        console.log(response.data.diaryBoardList);
         diaryBoardList.value = response.data.diaryBoardList;
-        console.log(diaryBoardList);
         totalPageNum.value = response.data.pageCount;
         diaryBoardStore().setSystolic(systolicCheck.value);
         diaryBoardStore().setDiastolic(diastolicCheck.value);
