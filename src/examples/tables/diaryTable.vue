@@ -39,7 +39,7 @@ let pageNum = ref(1);
 let totalPageNum = ref();
 let currentPage = ref(diaryBoardStore().currentPage);
 
-const itemsPerPage = 3; // 페이지당 아이템 수
+// const itemsPerPage = 3; // 페이지당 아이템 수
 let pagesPerGroup = 10; // 그룹당 페이지 수
 const windowWidth = ref(window.innerWidth);
 let systolicCheck = ref(diaryBoardStore().systolic);
@@ -242,12 +242,12 @@ const searchForm = () =>{
 }
 
 /* 모바일 화면에서 스크롤을 추가하는 스타일 */
-@media only screen and (max-width: 500px) {
-  .mobile-scroll {
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-}
+//@media only screen and (max-width: 500px) {
+//  .mobile-scroll {
+//    overflow-x: auto;
+//    white-space: nowrap;
+//  }
+//}
 
 </style>
 

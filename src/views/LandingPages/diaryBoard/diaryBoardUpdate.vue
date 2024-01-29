@@ -354,13 +354,12 @@ label: 'Buy Now',
                       <MaterialInput
                         v-if="item.systolic !== 0"
                         :id="'updateDate' + index"
-                        :value="dayjs(item.updateDate).format('MM-DD HH:MM')"
+                        :value="dayjs(item.updateDate).format('MM-DD HH:mm')"
                         class="form-control"
                         type="text"
                         @update:value="updateBloodPressure(index, 'updateDate', $event)"
                       />
                     </div>
-                    <label>인덱스 : {{ index }}</label>
                   </div>
                   <div class="col-md-2">
                     <label class="mt-5 me-7 col">혈압 추가 작성</label>
@@ -394,7 +393,7 @@ label: 'Buy Now',
                       >
                         {{ takeMessage }}
                       </MaterialButton>
-                      <label v-if="takeUpdatedate !== ''" class="ms-3">{{ dayjs(takeUpdatedate).format("HH-DD HH:MM")
+                      <label v-if="takeUpdatedate !== ''" class="ms-3">{{ dayjs(takeUpdatedate).format("HH-DD HH:mm")
                         }}</label>
                     </div>
                     <div class="col-md-4">
@@ -409,7 +408,7 @@ label: 'Buy Now',
                         {{ gargleMessage }}
                       </MaterialButton>
                       <label v-if="gargleUpdatedate !== ''"
-                             class="ms-3">{{ dayjs(gargleUpdatedate).format("HH-DD HH:MM") }}</label>
+                             class="ms-3">{{ dayjs(gargleUpdatedate).format("HH-DD HH:mm") }}</label>
                     </div>
                   </div>
                   <div>
