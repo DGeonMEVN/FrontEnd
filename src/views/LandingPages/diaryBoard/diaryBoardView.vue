@@ -217,7 +217,7 @@ label: 'Buy Now',
                     <label class="mt-5 me-7 col">작성일자</label>
                     <MaterialInput
                       v-if="item.systolic !== 0"
-                      :value="dayjs(item.updateDate).format('MM-DD HH:MM')"
+                      :value="dayjs(item.updateDate).format('MM-DD HH:mm')"
                       class="form-control"
                       isDisabled
                       type="text"
@@ -256,7 +256,7 @@ label: 'Buy Now',
                     >
                       {{ takeMessage }}
                     </MaterialButton>
-                    <label class="ms-3" v-if="takeUpdatedate !== ''">{{ dayjs(takeUpdatedate).format("HH-DD HH:MM") }}</label>
+                    <label class="ms-3" v-if="takeUpdatedate !== ''">{{ dayjs(takeUpdatedate).format("HH-DD HH:mm") }}</label>
                   </div>
                   <div class="col-md-4">
                     <label class="mt-5">가글</label>
@@ -268,7 +268,7 @@ label: 'Buy Now',
                     >
                       {{ gargleMessage }}
                     </MaterialButton>
-                    <label class="ms-3" v-if="gargleUpdatedate !== ''">{{ dayjs(gargleUpdatedate).format("HH-DD HH:MM") }}</label>
+                    <label class="ms-3" v-if="gargleUpdatedate !== ''">{{ dayjs(gargleUpdatedate).format("HH-DD HH:mm") }}</label>
                   </div>
                 </div>
                 <div>
