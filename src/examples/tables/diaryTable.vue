@@ -219,6 +219,7 @@ const getVisiblePages = (totalPages, currentPage, pagesPerGroup) => {
  * @description 글제목, 글내용, 글작성자 기준으로 검색 ******************************************************************************
  */
 const searchForm = () =>{
+  console.log(systolicCheck.value, diastolicCheck.value, pulseCheck.value, significantCheck.value, weighteCheck.value, search.value);
   if(systolicCheck.value || diastolicCheck.value || pulseCheck.value || significantCheck.value || weighteCheck.value) {
     getBoardList(pageNum);
     diaryBoardStore().setCurrentPage(1);
@@ -230,7 +231,7 @@ const searchForm = () =>{
     significantCheck.value = diaryBoardStore().significant;
     weighteCheck.value = diaryBoardStore().weight;
     search.value = diaryBoardStore().search;
-    alert("하나라도 선택해야 합니다")
+    alert("하나라도 선택해야 합니다");
   }
 }
 </script>
@@ -242,12 +243,12 @@ const searchForm = () =>{
 }
 
 /* 모바일 화면에서 스크롤을 추가하는 스타일 */
-//@media only screen and (max-width: 500px) {
-//  .mobile-scroll {
-//    overflow-x: auto;
-//    white-space: nowrap;
-//  }
-//}
+@media only screen and (max-width: 500px) {
+  .mobile-scroll {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
 
 </style>
 
