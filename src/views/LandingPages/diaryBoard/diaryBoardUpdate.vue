@@ -19,7 +19,10 @@ import { isDisabled } from "bootstrap/js/src/util/index.js";
 import dayjs from "dayjs";
 import AxiosInst from "@/Module/JS/axiosInstance.js";
 import router from "@/router/index.js";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
+const date = ref();
 
 const userId = ref();
 const bno = ref();
@@ -59,6 +62,7 @@ onMounted(() => {
         taking.value = 1;
         takeMessage.value = "복용";
         takeUpdatedate.value = takeList.value[0].updateDate;
+
       } else {
         taking.value = 0;
         takeMessage.value = "미복용";
@@ -93,7 +97,7 @@ onMounted(() => {
                 weight.value = response.data.Board.weight;
                 significant.value = response.data.Board.significant;
 
-                bloodPressurList.value = response.data.BloodPressure;
+                bloodPressureList.value = response.data.BloodPressure;
 
                 takeList.value = response.data.Take;
                 if (takeList.value[0].take) {
@@ -261,6 +265,7 @@ const noticeBoardDelete = () =>{
         });
     });
 }
+
 </script>
 <template>
   <div class="container position-sticky z-index-sticky top-0">
@@ -298,6 +303,7 @@ label: 'Buy Now',
                   class="bg-gradient-success shadow-success border-radius-lg p-3"
                 >
                   <h3 class="text-white text-success mb-0">일지보기</h3>
+
                 </div>
               </div>
               <form
@@ -393,8 +399,11 @@ label: 'Buy Now',
                       >
                         {{ takeMessage }}
                       </MaterialButton>
-                      <label v-if="takeUpdatedate !== ''" class="ms-3">{{ dayjs(takeUpdatedate).format("HH-DD HH:mm")
-                        }}</label>
+                      <div class="col">
+                        <VueDatePicker v-model="takeUpdatedate" style="width:200px;"></VueDatePicker>
+                      </div>
+<!--                      <label v-if="takeUpdatedate !== ''" class="ms-3">{{ dayjs(takeUpdatedate).format("MM-DD HH:mm")-->
+<!--                        }}</label>-->
                     </div>
                     <div class="col-md-4">
                       <label class="mt-5">가글</label>
@@ -408,7 +417,7 @@ label: 'Buy Now',
                         {{ gargleMessage }}
                       </MaterialButton>
                       <label v-if="gargleUpdatedate !== ''"
-                             class="ms-3">{{ dayjs(gargleUpdatedate).format("HH-DD HH:mm") }}</label>
+                             class="ms-3">{{ dayjs(gargleUpdatedate).format("MM-DD HH:mm") }}</label>
                     </div>
                   </div>
                   <div>
