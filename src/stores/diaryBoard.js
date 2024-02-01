@@ -9,27 +9,27 @@ import {defineStore} from "pinia";
  */
 export const diaryBoardStore = defineStore("diaryBoard", {
   state : () =>({
-    systolic : false,
-    diastolic : false,
-    pulse : false,
-    weight : false,
+    // systolic : false,
+    // diastolic : false,
+    // pulse : false,
+    // weight : false,
     significant : true,
     search : "",
     currentPage : 1,
   }),
   actions :{
-    setSystolic(systolic){
-      this.systolic = systolic;
-    },
-    setDiastolic(diastolic){
-      this.diastolic = diastolic;
-    },
-    setPulse(pulse){
-      this.pulse = pulse;
-    },
-    setWeight(weight){
-      this.weight = weight;
-    },
+    // setSystolic(systolic){
+    //   this.systolic = systolic;
+    // },
+    // setDiastolic(diastolic){
+    //   this.diastolic = diastolic;
+    // },
+    // setPulse(pulse){
+    //   this.pulse = pulse;
+    // },
+    // setWeight(weight){
+    //   this.weight = weight;
+    // },
     setSignificant(significant){
       this.significant = significant;
     },

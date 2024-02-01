@@ -42,11 +42,11 @@ let currentPage = ref(diaryBoardStore().currentPage);
 // const itemsPerPage = 3; // 페이지당 아이템 수
 let pagesPerGroup = 10; // 그룹당 페이지 수
 const windowWidth = ref(window.innerWidth);
-let systolicCheck = ref(diaryBoardStore().systolic);
-let diastolicCheck = ref(diaryBoardStore().diastolic);
-let pulseCheck = ref(diaryBoardStore().pulse);
+// let systolicCheck = ref(diaryBoardStore().systolic);
+// let diastolicCheck = ref(diaryBoardStore().diastolic);
+// let pulseCheck = ref(diaryBoardStore().pulse);
 let significantCheck = ref(diaryBoardStore().significant);
-let weighteCheck = ref(diaryBoardStore().weight);
+// let weighteCheck = ref(diaryBoardStore().weight);
 let search = ref(diaryBoardStore().search);
 if(windowWidth.value<=500){
   pagesPerGroup=3;
@@ -74,11 +74,11 @@ const getBoardList = async (pageNum) => {
   try {
     //  console.log("pageNum", pageNum);
     const searchData = {
-      systolic : systolicCheck.value,
-      diastolic : diastolicCheck.value,
-      pulse : pulseCheck.value,
+      // systolic : systolicCheck.value,
+      // diastolic : diastolicCheck.value,
+      // pulse : pulseCheck.value,
       significant : significantCheck.value,
-      weight : weighteCheck.value,
+      // weight : weighteCheck.value,
       search : search.value,
       pageNum : pageNum,
       userId : userStore().userId,
@@ -88,11 +88,11 @@ const getBoardList = async (pageNum) => {
       .then((response)=>{
         diaryBoardList.value = response.data.diaryBoardList;
         totalPageNum.value = response.data.pageCount;
-        diaryBoardStore().setSystolic(systolicCheck.value);
-        diaryBoardStore().setDiastolic(diastolicCheck.value);
-        diaryBoardStore().setPulse(pulseCheck.value);
+        // diaryBoardStore().setSystolic(systolicCheck.value);
+        // diaryBoardStore().setDiastolic(diastolicCheck.value);
+        // diaryBoardStore().setPulse(pulseCheck.value);
         diaryBoardStore().setSignificant(significantCheck.value);
-        diaryBoardStore().setWeight(weighteCheck.value);
+        // diaryBoardStore().setWeight(weighteCheck.value);
         diaryBoardStore().setSearch(search.value);
       })
       .catch(()=>{
@@ -114,11 +114,11 @@ const getBoardList = async (pageNum) => {
                   diaryBoardList.value = response.data.diaryBoardList;
                   console.log(diaryBoardList);
                   totalPageNum.value = response.data.pageCount;
-                  diaryBoardStore().setSystolic(systolicCheck.value);
-                  diaryBoardStore().setDiastolic(diastolicCheck.value);
-                  diaryBoardStore().setPulse(pulseCheck.value);
+                  // diaryBoardStore().setSystolic(systolicCheck.value);
+                  // diaryBoardStore().setDiastolic(diastolicCheck.value);
+                  // diaryBoardStore().setPulse(pulseCheck.value);
                   diaryBoardStore().setSignificant(significantCheck.value);
-                  diaryBoardStore().setWeight(weighteCheck.value);
+                  // diaryBoardStore().setWeight(weighteCheck.value);
                   diaryBoardStore().setSearch(search.value);
                 })
             }
@@ -219,17 +219,16 @@ const getVisiblePages = (totalPages, currentPage, pagesPerGroup) => {
  * @description 글제목, 글내용, 글작성자 기준으로 검색 ******************************************************************************
  */
 const searchForm = () =>{
-  console.log(systolicCheck.value, diastolicCheck.value, pulseCheck.value, significantCheck.value, weighteCheck.value, search.value);
-  if(systolicCheck.value || diastolicCheck.value || pulseCheck.value || significantCheck.value || weighteCheck.value) {
+  if(significantCheck.value) {
     getBoardList(pageNum);
     diaryBoardStore().setCurrentPage(1);
     onPageChange(1);
   }else{
-    systolicCheck.value = diaryBoardStore().systolic;
-    diastolicCheck.value = diaryBoardStore().diastolic;
-    pulseCheck.value = diaryBoardStore().pulse;
+    // systolicCheck.value = diaryBoardStore().systolic;
+    // diastolicCheck.value = diaryBoardStore().diastolic;
+    // pulseCheck.value = diaryBoardStore().pulse;
     significantCheck.value = diaryBoardStore().significant;
-    weighteCheck.value = diaryBoardStore().weight;
+    // weighteCheck.value = diaryBoardStore().weight;
     search.value = diaryBoardStore().search;
     alert("하나라도 선택해야 합니다");
   }
@@ -332,10 +331,10 @@ const searchForm = () =>{
                     method="post"
                     autocomplete="off"
                     v-on:submit.prevent="searchForm">
-                    <MaterialCheckbox id="systolicCheck"  @update:checked="systolicCheck = $event" :checked="systolicCheck">수축기</MaterialCheckbox>
-                    <MaterialCheckbox id="diastolicCheck"  @update:checked="diastolicCheck = $event" :checked="diastolicCheck">이완기</MaterialCheckbox>
-                    <MaterialCheckbox id="pulseCheck"  @update:checked="pulseCheck = $event" :checked="pulseCheck">맥박</MaterialCheckbox>
-                    <MaterialCheckbox id="weighteCheck"  @update:checked="weighteCheck = $event" :checked="weighteCheck">체중</MaterialCheckbox>
+<!--                    <MaterialCheckbox id="systolicCheck"  @update:checked="systolicCheck = $event" :checked="systolicCheck">수축기</MaterialCheckbox>-->
+<!--                    <MaterialCheckbox id="diastolicCheck"  @update:checked="diastolicCheck = $event" :checked="diastolicCheck">이완기</MaterialCheckbox>-->
+<!--                    <MaterialCheckbox id="pulseCheck"  @update:checked="pulseCheck = $event" :checked="pulseCheck">맥박</MaterialCheckbox>-->
+<!--                    <MaterialCheckbox id="weighteCheck"  @update:checked="weighteCheck = $event" :checked="weighteCheck">체중</MaterialCheckbox>-->
                     <MaterialCheckbox id="significantCheck"  @update:checked="significantCheck = $event" :checked="significantCheck">특이사항</MaterialCheckbox>
                     <input
                       id="search"

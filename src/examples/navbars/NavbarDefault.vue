@@ -170,10 +170,10 @@ const noticecurrentPage = () => {
 }
 
 const diarycurrentPage = () => {
-  diaryBoardStore().setSystolic(false);
-  diaryBoardStore().setDiastolic(false);
-  diaryBoardStore().setPulse(false);
-  diaryBoardStore().setWeight(false);
+  // diaryBoardStore().setSystolic(false);
+  // diaryBoardStore().setDiastolic(false);
+  // diaryBoardStore().setPulse(false);
+  // diaryBoardStore().setWeight(false);
   diaryBoardStore().setSignificant(true);
   diaryBoardStore().setSearch("");
   diaryBoardStore().setCurrentPage(1);
