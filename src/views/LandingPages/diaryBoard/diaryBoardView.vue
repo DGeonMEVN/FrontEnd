@@ -256,7 +256,7 @@ label: 'Buy Now',
                     >
                       {{ takeMessage }}
                     </MaterialButton>
-                    <label class="ms-3" v-if="takeUpdatedate !== ''">{{ dayjs(takeUpdatedate).format("HH-DD HH:mm") }}</label>
+                    <label class="ms-3" v-if="takeUpdatedate !== ''">{{ dayjs(takeUpdatedate).format("MM-DD HH:mm") }}</label>
                   </div>
                   <div class="col-md-4">
                     <label class="mt-5">가글</label>
@@ -268,7 +268,7 @@ label: 'Buy Now',
                     >
                       {{ gargleMessage }}
                     </MaterialButton>
-                    <label class="ms-3" v-if="gargleUpdatedate !== ''">{{ dayjs(gargleUpdatedate).format("HH-DD HH:mm") }}</label>
+                    <label class="ms-3" v-if="gargleUpdatedate !== ''">{{ dayjs(gargleUpdatedate).format("MM-DD HH:mm") }}</label>
                   </div>
                 </div>
                 <div>
