@@ -135,7 +135,7 @@ onMounted(() => {
     });
 });
 
-const addBloodPressure = () => {
+const addBloodPressureBtn = () => {
   // 새로운 혈압 항목 추가
   const newItem = {
     systolic: 0,
@@ -146,7 +146,7 @@ const addBloodPressure = () => {
   bloodPressureList.value.push(newItem);
 };
 
-const updateBloodPressure = (index, field, value) => {
+const addBloodPressure = (index, field, value) => {
   // 혈압 항목 업데이트
   bloodPressureList.value[index][field] = value;
 };
@@ -236,7 +236,7 @@ const btnGargle = (e) => {
   }
 };
 
-const noticeBoardDelete = () =>{
+const diaryBoardDelete = () =>{
   const bno = `${props.bno}`;
   AxiosInst.delete("/api/diaryBoard/delete", { data : { bno: bno, userId : userStore().userId } })
     .then(()=>{
@@ -274,6 +274,50 @@ const noticeBoardDelete = () =>{
     });
 }
 
+const updateBloodPressureBtn = (bpno) =>{
+
+}
+
+const deleteBloodPressureBtn = (bpno, index) =>{
+  const bloodPressureInfo = {
+    bpno : bpno,
+    userId : userStore().userId,
+  };
+  AxiosInst
+    .delete('/api/diaryBoard/deleteBloodPressure', {data : {bpno : bpno ,userId : userStore().userId}})
+    .then(()=>{
+      bloodPressureList.value.splice(index, 1);
+    })
+    .catch(()=>{
+      AxiosInst
+        .get("/api/auth/refresh")
+        .then((response) => {
+          if (!response.data.ok) {
+            alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+            VueCookies.remove("authorization");
+            VueCookies.remove("refresh");
+            userStore().logout();
+            router.replace("/auth/login");
+          } else if (response.data.data.accessToken) {
+            VueCookies.set("authorization", response.data.data.accessToken);
+            VueCookies.set("refresh", response.data.data.refreshToken);
+            userStore().setUserId(response.data.data.userId);
+            alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
+          }
+          else {
+            router.replace("/");
+          }
+        })
+        .catch(() => {
+          // console.log("아무겂도 없어");
+          alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+          VueCookies.remove("authorization");
+          VueCookies.remove("refresh");
+          userStore().logout();
+          router.replace("/auth/login");
+        });
+    })
+}
 </script>
 <template>
   <div class="container position-sticky z-index-sticky top-0">
@@ -340,7 +384,7 @@ label: 'Buy Now',
                         :value="String(item.systolic)"
                         class="form-control"
                         type="text"
-                        @update:value="updateBloodPressure(index, 'systolic', $event)"
+                        @update:value="addBloodPressure(index, 'systolic', $event)"
                       />
                     </div>
                     <div class="col-md-2">
@@ -350,7 +394,7 @@ label: 'Buy Now',
                         :value="String(item.diastolic)"
                         class="form-control"
                         type="text"
-                        @update:value="updateBloodPressure(index, 'diastolic', $event)"
+                        @update:value="addBloodPressure(index, 'diastolic', $event)"
                       />
                     </div>
                     <div class="col-md-2">
@@ -360,25 +404,49 @@ label: 'Buy Now',
                         :value="String(item.pulse)"
                         class="form-control"
                         type="text"
-                        @update:value="updateBloodPressure(index, 'pulse', $event)"
+                        @update:value="addBloodPressure(index, 'pulse', $event)"
                       />
                     </div>
                     <div class="col-md-2">
                       <label class="mt-5 me-7 col">작성일자</label>
-                      <MaterialInput
-                        v-if="item.systolic !== 0"
-                        :id="'updateDate' + index"
-                        :value="dayjs(item.updateDate).format('MM-DD HH:mm')"
-                        class="form-control"
-                        type="text"
-                        @update:value="updateBloodPressure(index, 'updateDate', $event)"
-                      />
+                      <VueDatePicker  v-if="item.systolic !== 0"
+                                      :id="'updateDate' + index"
+                                      v-model="item.updateDate"
+                                      style="width: 200px;" format="yyyy-MM-dd, HH:mm">
+
+                      </VueDatePicker>
+<!--                      <MaterialInput-->
+<!--                        v-if="item.systolic !== 0"-->
+<!--                        :id="'updateDate' + index"-->
+<!--                        :value="dayjs(item.updateDate).format('MM-DD HH:mm')"-->
+<!--                        class="form-control"-->
+<!--                        type="text"-->
+<!--                        @update:value="updateBloodPressure(index, 'updateDate', $event)"-->
+<!--                      />-->
+                    </div>
+                    <div class="col-md-2">
+                      <MaterialButton
+                        @click.prevent="updateBloodPressureBtn(item.bpno)"
+                        class="ms-3 mt-6"
+                        variant="gradient"
+                        color="success"
+                      >
+                        수정
+                      </MaterialButton>
+                      <MaterialButton
+                        @click.prevent="deleteBloodPressureBtn(item.bpno, index)"
+                        class="ms-3 mt-6"
+                        variant="gradient"
+                        color="danger"
+                      >
+                        삭제
+                      </MaterialButton>
                     </div>
                   </div>
                   <div class="col-md-2">
                     <label class="mt-5 me-7 col">혈압 추가 작성</label>
                     <MaterialButton
-                      @click.prevent="addBloodPressure()"
+                      @click.prevent="addBloodPressureBtn()"
                       class="ms-3 mt-4"
                       variant="gradient"
                       color="success"
@@ -478,7 +546,7 @@ label: 'Buy Now',
         id="modal-deleteForm"
         autocomplete="off"
         method="post"
-        v-on:submit.prevent="noticeBoardDelete">
+        v-on:submit.prevent="diaryBoardDelete">
         <div class="modal-content">
           <div class="modal-header">
             <h5 id="exampleModalLabel" class="modal-title text-danger">일지 삭제</h5>
