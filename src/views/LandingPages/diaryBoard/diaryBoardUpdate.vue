@@ -32,7 +32,9 @@ const systolic = ref();
 const diastolic = ref();
 const pulse = ref();
 const taking = ref(0);
+const takeCheck =ref(false);
 const gargle = ref(0);
+const gargleCheck = ref(false);
 
 const boardList = ref([]);
 const bloodPressureList = ref([]);
@@ -156,9 +158,13 @@ const submitForm = () => {
     // diastolic: diastolic.value,
     // pulse: pulse.value,
     take: taking.value,
+    takeCheck : takeCheck.value,
+    takeUpdatedate : takeUpdatedate.value,
     significant: significant.value,
     weight: weight.value,
     gargle: gargle.value,
+    gargleCheck : gargleCheck.value,
+    gargleUpdatedate : gargleUpdatedate.value,
     bno : `${props.bno}`,
     bloodPressureList: bloodPressureList.value.map(item => ({
       bpno : item.bpno,
@@ -205,6 +211,7 @@ const submitForm = () => {
 };
 
 const btnTake = (e) => {
+  takeCheck.value = true;
   e.preventDefault();
   if (takeMessage.value === "미복용") {
     takeMessage.value = "복용";
@@ -218,6 +225,7 @@ const btnTake = (e) => {
 
 const btnGargle = (e) => {
   e.preventDefault();
+  gargleCheck.value = true;
   if (gargleMessage.value === "미가글") {
     gargleMessage.value = "가글";
     gargle.value = 1;
@@ -388,36 +396,40 @@ label: 'Buy Now',
                         @update:value="weight = $event"
                       />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" >
                       <label class="mt-5">복용</label>
-                      <MaterialButton
-                        id="taking"
-                        :color="taking === 0 ? 'danger' : 'success'"
-                        class="mt-3 mb-0 ms-3"
-                        variant="gradient"
-                        @click="btnTake"
-                      >
-                        {{ takeMessage }}
-                      </MaterialButton>
-                      <div class="col">
-                        <VueDatePicker v-model="takeUpdatedate" style="width:200px;"></VueDatePicker>
+                      <div style="display: flex; align-items: center;">
+                        <MaterialButton
+                          id="taking"
+                          :color="taking === 0 ? 'danger' : 'success'"
+                          class="me-3"
+                          variant="gradient"
+                          @click="btnTake"
+                        >
+                          {{ takeMessage }}
+                        </MaterialButton>
+                        <div class="mb-3">
+                          <VueDatePicker id="takePicker" v-model="takeUpdatedate" style="width: 200px;" format="yyyy-MM-dd, HH:mm"></VueDatePicker>
+                        </div>
                       </div>
-<!--                      <label v-if="takeUpdatedate !== ''" class="ms-3">{{ dayjs(takeUpdatedate).format("MM-DD HH:mm")-->
-<!--                        }}</label>-->
                     </div>
                     <div class="col-md-4">
                       <label class="mt-5">가글</label>
-                      <MaterialButton
-                        id="gargle"
-                        :color="gargle === 0 ? 'danger' : 'success'"
-                        class="mt-3 mb-0 ms-3"
-                        variant="gradient"
-                        @click="btnGargle"
-                      >
-                        {{ gargleMessage }}
-                      </MaterialButton>
-                      <label v-if="gargleUpdatedate !== ''"
-                             class="ms-3">{{ dayjs(gargleUpdatedate).format("MM-DD HH:mm") }}</label>
+                      <div style="display: flex; align-items: center;">
+                        <MaterialButton
+                          id="gargle"
+                          :color="gargle === 0 ? 'danger' : 'success'"
+                          class="me-3"
+                          variant="gradient"
+                          @click="btnGargle"
+                        >
+                          {{ gargleMessage }}
+                        </MaterialButton>
+                        <div class="mb-3">
+                          <VueDatePicker v-model="gargleUpdatedate" format="yyyy-MM-dd, HH:mm"
+                                         style="width: 200px;"></VueDatePicker>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div>
