@@ -141,6 +141,7 @@ const addBloodPressureBtn = () => {
     systolic: 0,
     diastolic: 0,
     pulse: 0,
+    updateDate : new Date(),
     // updateDate: new Date(),
   };
   bloodPressureList.value.push(newItem);
@@ -171,6 +172,7 @@ const submitForm = () => {
       systolic: item.systolic,
       diastolic: item.diastolic,
       pulse: item.pulse,
+      updateDate : item.updateDate,
       // 추가로 필요한 속성이 있다면 여기에 계속 추가
     }))
   };
@@ -274,49 +276,46 @@ const diaryBoardDelete = () =>{
     });
 }
 
-const updateBloodPressureBtn = (bpno) =>{
 
-}
 
 const deleteBloodPressureBtn = (bpno, index) =>{
-  const bloodPressureInfo = {
-    bpno : bpno,
-    userId : userStore().userId,
-  };
-  AxiosInst
-    .delete('/api/diaryBoard/deleteBloodPressure', {data : {bpno : bpno ,userId : userStore().userId}})
-    .then(()=>{
-      bloodPressureList.value.splice(index, 1);
-    })
-    .catch(()=>{
-      AxiosInst
-        .get("/api/auth/refresh")
-        .then((response) => {
-          if (!response.data.ok) {
+  if(index === 0){
+    alert("첫번째 혈압은 지울 수 없습니다")
+  }else {
+    AxiosInst
+      .delete('/api/diaryBoard/deleteBloodPressure', { data: { bpno: bpno, userId: userStore().userId } })
+      .then(() => {
+        bloodPressureList.value.splice(index, 1);
+      })
+      .catch(() => {
+        AxiosInst
+          .get("/api/auth/refresh")
+          .then((response) => {
+            if (!response.data.ok) {
+              alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+              VueCookies.remove("authorization");
+              VueCookies.remove("refresh");
+              userStore().logout();
+              router.replace("/auth/login");
+            } else if (response.data.data.accessToken) {
+              VueCookies.set("authorization", response.data.data.accessToken);
+              VueCookies.set("refresh", response.data.data.refreshToken);
+              userStore().setUserId(response.data.data.userId);
+              alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
+            } else {
+              router.replace("/");
+            }
+          })
+          .catch(() => {
+            // console.log("아무겂도 없어");
             alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
             VueCookies.remove("authorization");
             VueCookies.remove("refresh");
             userStore().logout();
             router.replace("/auth/login");
-          } else if (response.data.data.accessToken) {
-            VueCookies.set("authorization", response.data.data.accessToken);
-            VueCookies.set("refresh", response.data.data.refreshToken);
-            userStore().setUserId(response.data.data.userId);
-            alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
-          }
-          else {
-            router.replace("/");
-          }
-        })
-        .catch(() => {
-          // console.log("아무겂도 없어");
-          alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
-          VueCookies.remove("authorization");
-          VueCookies.remove("refresh");
-          userStore().logout();
-          router.replace("/auth/login");
-        });
-    })
+          });
+      })
+  }
 }
 </script>
 <template>
@@ -354,8 +353,7 @@ label: 'Buy Now',
                 <div
                   class="bg-gradient-success shadow-success border-radius-lg p-3"
                 >
-                  <h3 class="text-white text-success mb-0">일지보기</h3>
-
+                  <span class="text-white text-success mb-0 fs-3 font-weight-bold">일지보기 </span>
                 </div>
               </div>
               <form
@@ -365,6 +363,14 @@ label: 'Buy Now',
                 v-on:submit.prevent="submitForm"
               >
                 <div class="card-body">
+                  <div>
+                    <label class="mt-0">글번호</label>
+                    <MaterialInput
+                      :value="props.bno"
+                      isDisabled
+                      type="text"
+                    />
+                  </div>
                   <div>
                     <label class="mt-5">작성자</label>
                   </div>
@@ -425,14 +431,6 @@ label: 'Buy Now',
 <!--                      />-->
                     </div>
                     <div class="col-md-2">
-                      <MaterialButton
-                        @click.prevent="updateBloodPressureBtn(item.bpno)"
-                        class="ms-3 mt-6"
-                        variant="gradient"
-                        color="success"
-                      >
-                        수정
-                      </MaterialButton>
                       <MaterialButton
                         @click.prevent="deleteBloodPressureBtn(item.bpno, index)"
                         class="ms-3 mt-6"
