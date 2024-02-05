@@ -164,10 +164,18 @@ label: 'Buy Now',
                 <div
                   class="bg-gradient-success shadow-success border-radius-lg p-3"
                 >
-                  <h3 class="text-white text-success mb-0">일지보기</h3>
+                  <span class="text-white text-success mb-0 fs-3 font-weight-bold">일지보기 </span>
                 </div>
               </div>
               <div class="card-body">
+                <div>
+                  <label class="mt-0">글번호</label>
+                  <MaterialInput
+                    :value="props.bno"
+                    isDisabled
+                    type="text"
+                  />
+                </div>
                 <div>
                   <label class="mt-5">작성자</label>
                 </div>
@@ -178,6 +186,7 @@ label: 'Buy Now',
                     type="text"
                     @update:value="userId = $event"
                   />
+
                 </div>
                 <div class="row" v-for="item in bloodPressurList" :key="item.bno">
                   <div class="col-md-2" >
