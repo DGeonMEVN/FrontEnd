@@ -22,7 +22,7 @@ onMounted(() => {
 const userId = ref("");
 const userPw = ref("");
 let errormsg = ref("");
-
+let rememberMe = ref(false);
 /**
  * @author ovmkas
  * @data 2023-09-04
@@ -32,6 +32,8 @@ const submitForm = () => {
   const user = {
     userId: userId.value,
     userPw: userPw.value,
+    rememberMeCheck : rememberMe.value,
+
   };
   // console.log(user);
   axios
@@ -126,7 +128,7 @@ const submitForm = () => {
                     class="d-flex align-items-center mb-3"
                     id="rememberMe"
                     labelClass="mb-0 ms-3"
-                    checked
+                    @update:checked="rememberMe = $event"
                     >Remember me</MaterialSwitch
                   >
 
