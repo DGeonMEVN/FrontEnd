@@ -15,12 +15,15 @@ AxiosInst.interceptors.request.use(
 
     let accessToken = VueCookies.get("authorization");
     let refreshToken = VueCookies.get("refresh");
+    let userId =  JSON.parse(sessionStorage.getItem("userInfo"))
+    console.log(userId.userId)
     // console.log("accessToken", accessToken);
     // console.log("refreshToken", refreshToken);
 
     if (accessToken && refreshToken) {
       config.headers.Authorization = accessToken;
       config.headers.Refresh = refreshToken;
+      config.headers.userId = userId.userId;
       return config;
     } else {
       VueCookies.remove("authorization");
