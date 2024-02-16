@@ -52,6 +52,7 @@ defineProps({
     type: String,
     default: "",
   },
+  onBlur: Function,
 })
 ;
 function getClasses(size, success, error) {
@@ -88,6 +89,7 @@ function getClasses(size, success, error) {
       :isRequired="isRequired"
       :disabled="isDisabled"
       @input="$emit('update:value', $event.target.value)"
+      @blur="onBlur"
     />
   </div>
 </template>

@@ -52,7 +52,7 @@ onMounted(() => {
   // 라우터에서 bno를 읽어옴
   const bno = { bno: `${props.bno}`, userId: userStore().userId };
   AxiosInst
-    .post("/api/diaryBoard/diaryView", bno)
+    .post("https://mevnserver.ovmkas.co.kr/api/diaryBoard/diaryView", bno)
     .then((response) => {
       weight.value = response.data.Board.weight;
       significant.value = response.data.Board.significant;
@@ -82,7 +82,7 @@ onMounted(() => {
     })
     .catch(() => {
       AxiosInst
-        .get("/api/auth/refresh")
+        .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
         .then((response) => {
           if (!response.data.ok) {
             VueCookies.remove("authorization");
@@ -93,8 +93,9 @@ onMounted(() => {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            userStore().setAuthority(response.data.data.authority);
             AxiosInst
-              .post("/api/diaryBoard/diaryView", bno)
+              .post("https://mevnserver.ovmkas.co.kr/api/diaryBoard/diaryView", bno)
               .then((response) => {
                 weight.value = response.data.Board.weight;
                 significant.value = response.data.Board.significant;
@@ -176,14 +177,14 @@ const submitForm = () => {
       // 추가로 필요한 속성이 있다면 여기에 계속 추가
     }))
   };
-  AxiosInst.put("/api/diaryBoard/update", diaryBoard)
+  AxiosInst.put("https://mevnserver.ovmkas.co.kr/api/diaryBoard/update", diaryBoard)
     .then(() => {
       alert("수정이 완료 되었습니다");
       router.replace("/diaryTable");
     })
     .catch((err) => {
       AxiosInst
-        .get("/api/auth/refresh")
+        .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
         .then((response) => {
           if (!response.data.ok) {
             alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
@@ -195,6 +196,7 @@ const submitForm = () => {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            userStore().setAuthority(response.data.data.authority);
             alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
           }
           else {
@@ -240,14 +242,14 @@ const btnGargle = (e) => {
 
 const diaryBoardDelete = () =>{
   const bno = `${props.bno}`;
-  AxiosInst.delete("/api/diaryBoard/delete", { data : { bno: bno, userId : userStore().userId } })
+  AxiosInst.delete("https://mevnserver.ovmkas.co.kr/api/diaryBoard/delete", { data : { bno: bno, userId : userStore().userId } })
     .then(()=>{
       alert("삭제가 완료 되었습니다");
       router.replace("/diaryTable");
     })
     .catch((err) => {
       AxiosInst
-        .get("/api/auth/refresh")
+        .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
         .then((response) => {
           if (!response.data.ok) {
             alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
@@ -259,6 +261,7 @@ const diaryBoardDelete = () =>{
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            userStore().setAuthority(response.data.data.authority);
             alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
           }
           else {
@@ -283,13 +286,13 @@ const deleteBloodPressureBtn = (bpno, index) =>{
     alert("첫번째 혈압은 지울 수 없습니다")
   }else {
     AxiosInst
-      .delete('/api/diaryBoard/deleteBloodPressure', { data: { bpno: bpno, userId: userStore().userId } })
+      .delete('https://mevnserver.ovmkas.co.kr/api/diaryBoard/deleteBloodPressure', { data: { bpno: bpno, userId: userStore().userId } })
       .then(() => {
         bloodPressureList.value.splice(index, 1);
       })
       .catch(() => {
         AxiosInst
-          .get("/api/auth/refresh")
+          .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
           .then((response) => {
             if (!response.data.ok) {
               alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
@@ -301,6 +304,7 @@ const deleteBloodPressureBtn = (bpno, index) =>{
               VueCookies.set("authorization", response.data.data.accessToken);
               VueCookies.set("refresh", response.data.data.refreshToken);
               userStore().setUserId(response.data.data.userId);
+              userStore().setAuthority(response.data.data.authority);
               alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
             } else {
               router.replace("/");

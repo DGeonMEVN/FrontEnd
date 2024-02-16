@@ -37,7 +37,7 @@ const submitForm = () => {
   };
   // console.log(user);
   axios
-    .post("/api/auth/login", user)
+    .post("https://mevnserver.ovmkas.co.kr/api/auth/login", user)
     // eslint-disable-next-line no-unused-vars
     .then((response) => {
       // const token = response.data.data.accessToken;
@@ -62,6 +62,7 @@ const submitForm = () => {
       VueCookies.set("refresh", response.data.data.refreshToken);
       // console.log(response.data.data.userId);
       userStore().setUserId(response.data.data.userId);
+      userStore().setAuthority(response.data.data.authority);
       // console.log(userStore.get());
       router.replace("/");
     })

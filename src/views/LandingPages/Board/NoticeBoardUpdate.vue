@@ -41,7 +41,7 @@ onMounted(() => {
 
     }).catch((err)=>{
     AxiosInst
-      .get("/api/auth/refresh")
+      .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
       .then((response) => {
         if (!response.data.ok) {
           alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
@@ -53,6 +53,7 @@ onMounted(() => {
           VueCookies.set("authorization", response.data.data.accessToken);
           VueCookies.set("refresh", response.data.data.refreshToken);
           userStore().setUserId(response.data.data.userId);
+          userStore().setAuthority(response.data.data.authority);
           alert("세션정보가 만료 되어. 재발급 받았습니다.");
           //   router.go(0)
           AxiosInst.get(`/api/noticeBoard/noticeUpdate/detail/${props.bno}`)
@@ -91,21 +92,20 @@ onMounted(() => {
  * @description 공지사항 글 수정 전송
  */
 const submitForm = () => {
-  console.log("수정 눌림");
   const board = {
     userId: userId.value,
     title: title.value,
     content: content.value,
     bno : `${props.bno}`
   };
-  AxiosInst.put("/api/noticeBoard/update", board)
+  AxiosInst.put("https://mevnserver.ovmkas.co.kr/api/noticeBoard/update", board)
     .then(() => {
       alert("수정이 완료 되었습니다");
       router.replace("/table");
     })
     .catch((err) => {
       AxiosInst
-        .get("/api/auth/refresh")
+        .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
         .then((response) => {
           if (!response.data.ok) {
             alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
@@ -117,6 +117,7 @@ const submitForm = () => {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            userStore().setAuthority(response.data.data.authority);
             alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
           }
           else {
@@ -142,14 +143,14 @@ const submitForm = () => {
  */
 const noticeBoardDelete = () =>{
   const bno = `${props.bno}`;
-   AxiosInst.delete("/api/noticeBoard/delete", { data : { bno: bno, userId : userId.value } })
+   AxiosInst.delete("https://mevnserver.ovmkas.co.kr/api/noticeBoard/delete", { data : { bno: bno, userId : userId.value } })
      .then(()=>{
        alert("삭제가 완료 되었습니다");
        router.replace("/table");
      })
      .catch((err) => {
        AxiosInst
-         .get("/api/auth/refresh")
+         .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
          .then((response) => {
            if (!response.data.ok) {
              alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
@@ -161,6 +162,7 @@ const noticeBoardDelete = () =>{
              VueCookies.set("authorization", response.data.data.accessToken);
              VueCookies.set("refresh", response.data.data.refreshToken);
              userStore().setUserId(response.data.data.userId);
+             userStore().setAuthority(response.data.data.authority);
              alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
            }
            else {

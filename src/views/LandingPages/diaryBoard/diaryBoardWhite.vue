@@ -56,14 +56,14 @@ const submitForm = () => {
     gargle : gargle.value,
   };
 
-  AxiosInst.post("/api/diaryBoard/white", diaryBoard)
+  AxiosInst.post("https://mevnserver.ovmkas.co.kr/api/diaryBoard/white", diaryBoard)
     .then(() => {
       alert("작성이 완료 되었습니다");
       router.replace("/diaryTable");
     })
     .catch((err) => {
       AxiosInst
-        .get("/api/auth/refresh")
+        .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
         .then((response) => {
           if (!response.data.ok) {
             alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
@@ -75,6 +75,7 @@ const submitForm = () => {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            userStore().setAuthority(response.data.data.authority);
             // userDeletePw.value="";
             alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
           }
