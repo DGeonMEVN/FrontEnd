@@ -29,7 +29,7 @@ const props = defineProps(['bno']);
 onMounted(() => {
   localUserId.value = userStore().userId;
   // 라우터에서 bno를 읽어옴
-  axios.get(`/api/noticeBoard/noticeView/${props.bno}`)
+  axios.get(`https://mevnserver.ovmkas.co.kr/api/noticeBoard/noticeView/${props.bno}`)
     .then((response) => {
       const data = response.data.Board;
       userId.value = data.userId;

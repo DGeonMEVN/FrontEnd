@@ -84,7 +84,7 @@ const getBoardList = async (pageNum) => {
       userId : userStore().userId,
     }
 
-    await AxiosInst.post(`/api/diaryBoard/search`, searchData)
+    await AxiosInst.post(`https://mevnserver.ovmkas.co.kr/api/diaryBoard/search`, searchData)
       .then((response)=>{
         diaryBoardList.value = response.data.diaryBoardList;
         totalPageNum.value = response.data.pageCount;
@@ -97,7 +97,7 @@ const getBoardList = async (pageNum) => {
       })
       .catch(()=>{
         AxiosInst
-          .get("/api/auth/refresh")
+          .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
           .then((response) => {
             if (!response.data.ok) {
               VueCookies.remove("authorization");
@@ -108,11 +108,12 @@ const getBoardList = async (pageNum) => {
               VueCookies.set("authorization", response.data.data.accessToken);
               VueCookies.set("refresh", response.data.data.refreshToken);
               userStore().setUserId(response.data.data.userId);
+              userStore().setAuthority(response.data.data.authority);
               AxiosInst.post(`/api/diaryBoard/search`, searchData)
                 .then((response)=>{
-                  console.log(response.data.diaryBoardList);
+                  // console.log(response.data.diaryBoardList);
                   diaryBoardList.value = response.data.diaryBoardList;
-                  console.log(diaryBoardList);
+                  // console.log(diaryBoardList);
                   totalPageNum.value = response.data.pageCount;
                   // diaryBoardStore().setSystolic(systolicCheck.value);
                   // diaryBoardStore().setDiastolic(diastolicCheck.value);

@@ -27,10 +27,16 @@ import router from "@/router/index.js";
 const userId = ref("");
 const userPw = ref("");
 const userName = ref("");
-const btnradio = ref("");
+const btnradio = ref(1);
 const userPwCheck = ref("");
 let errormsg = ref("");
 
+const validateUserId = /^[A-Za-z0-9]{4,12}$/
+const validateUserName = /^[A-Za-z가-힣]{1,12}$/
+const validatePassword = /^(?=.*\d)(?=.*[a-zA-Z]).{4,16}$/
+let errorUserName = ref("");
+let errorUserId = ref("");
+let idCheck = ref(false);
 /**
  * @author ovmkas
  * @data 2023-08-24
@@ -43,19 +49,29 @@ const submitForm = () => {
     userName: userName.value,
     gender: btnradio.value,
   };
-  // console.log(user);
-  if (userPw.value === userPwCheck.value) {
-    axios
-      .post("/api/auth/signup", user)
-      .then(() => {
-        router.replace("/pages/landing-pages/basic");
-      })
-      .catch((error) => {
-        // console.error(error);
-      });
-  } else {
-    errormsg.value = "비밀번호가 서로 다릅니다";
-    // console.log(errormsg);
+  if(idCheck.value) {
+    errormsg.value="";
+    // console.log(user);
+    if (userPw.value === userPwCheck.value ) {
+      if (validatePassword.test(userPw.value)) {
+        errormsg.value = "올바른 비밀번호 입니다."
+        axios
+          .post("https://mevnserver.ovmkas.co.kr/api/auth/signup", user)
+          .then(() => {
+            router.replace("/pages/landing-pages/basic");
+          })
+          .catch((error) => {
+            // console.error(error);
+          });
+      } else {
+        errormsg.value = "비밀번호가 양식에 맞지 않습니다.(영어+숫자 4~16글자 이내)"
+      }
+    } else {
+      errormsg.value = "비밀번호가 서로 다릅니다";
+      // console.log(errormsg);
+    }
+  }else{
+    errormsg.value = "아이디 중복확인이 되지 않았습니다."
   }
 };
 
@@ -69,20 +85,34 @@ const userIdCehck=(e)=>{
   e.preventDefault();
   const id = { userId : userId.value}
   // console.log(id);
-  axios
-    .post("/api/auth/idcheck", id)
-    .then((res)=>{
-      // console.log(res.data.checkId);
-      if(res.data.checkId){
-        errormsg.value = "중복된 ID입니다."
-      }else{
-        errormsg.value = "사용가능한 ID입니다."
-      }
-    })
-    .catch((error)=>{
+  if(validateUserId.test(userId.value)) {
+    errorUserId.value="";
+    axios
+      .post("https://mevnserver.ovmkas.co.kr/api/auth/idcheck", id)
+      .then((res) => {
+        if (res.data.checkId) {
+          errorUserId.value = "중복된 ID입니다."
+          idCheck.value = false;
+        } else {
+          errorUserId.value = "사용가능한 ID입니다."
+          idCheck.value = true;
+        }
+      })
+      .catch((error) => {
 
-    });
+      });
+  }else{
+    errorUserId.value = "아이디가 양식에 맞지 않습니다.(4~12글자 이내)"
+  }
 };
+
+const usernameValidate =()=> {
+  if(validateUserName.test(userName.value)){
+    errorUserName.value = "";
+  }else{
+    errorUserName.value = "이름이 양식에 맞지 않습니다.(영어,한글 1~12글자 이내)"
+  }
+}
 </script>
 <template>
   <div class="container position-sticky z-index-sticky top-0">
@@ -150,8 +180,10 @@ const userIdCehck=(e)=>{
                           placeholder="Full Name"
                           :value="userName"
                           @update:value="userName = $event"
+                          @blur="usernameValidate"
                         />
                       </div>
+
                       <div class="col-md-6 text-center">
                         <div
                           class="btn-group"
@@ -185,6 +217,7 @@ const userIdCehck=(e)=>{
                           >
                         </div>
                       </div>
+                      <p class="text-danger">{{errorUserName}}</p>
                       <div class="col-md-6 ps-md-2">
                         <MaterialInput
                           class="input-group-static mb-4"
@@ -206,7 +239,7 @@ const userIdCehck=(e)=>{
                           중복확인
                         </MaterialButton>
                       </div>
-
+                      <p class="text-danger">{{errorUserId}}</p>
                       <div class="col-md-6">
                         <MaterialInput
                           id="userPw"

@@ -29,11 +29,12 @@ const errorModal = ref("");
 const newUserPwCheck = ref("");
 const newUserPw = ref("");
 const userDeletePw = ref("");
+const validatePassword = /^(?=.*\d)(?=.*[a-zA-Z]).{4,16}$/
 onMounted(() => {
   setMaterialInput();
 
   AxiosInst
-    .get("/api/auth/profile")
+    .get("https://mevnserver.ovmkas.co.kr/api/auth/profile")
     .then((response) => {
 // if(!response.data.ok){
 //     VueCookies.remove("authorization")
@@ -52,15 +53,16 @@ onMounted(() => {
       }
     })
     .catch((err) => {
-      if (!err.response.ok) {
-        setTimeout(function() {
-          router.go(0)
-        }, 50);
-
-
-      }
+      // if (!err.response.ok) {
+      //   alert("세션이 만료되어 새로 발급중입니다. 잠시만 기다려 주십시오")
+      //   setTimeout(function() {
+      //     router.go(0)
+      //   }, 500);
+      //
+      //
+      // }
       AxiosInst
-        .get("/api/auth/refresh")
+        .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
         .then((response) => {
           if (!response.data.ok) {
             VueCookies.remove("authorization");
@@ -71,9 +73,21 @@ onMounted(() => {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            userStore().setAuthority(response.data.data.authority);
+            AxiosInst
+              .get("https://mevnserver.ovmkas.co.kr/api/auth/profile")
+              .then((response) => {
+                userId.value = response.data.data.userId;
+                userName.value = response.data.data.userName;
+                if (response.data.data.gender) {
+                  btnradio.value = 1;
+                } else {
+                  btnradio.value = 0;
+                }
+              })
           }
           else {
-            router.replace("/");
+            router.replace("/auth/login");
           }
         })
         .catch(() => {
@@ -100,7 +114,7 @@ const submitForm = () => {
   };
 
   AxiosInst
-    .put("/api/auth/modify", user)
+    .put("https://mevnserver.ovmkas.co.kr/api/auth/modify", user)
     .then((response) => {
       if(response.data.ok) {
         VueCookies.remove("authorization");
@@ -118,7 +132,7 @@ const submitForm = () => {
       //   }, 50);
       // }
       AxiosInst
-        .get("/api/auth/refresh")
+        .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
         .then((response) => {
           if (!response.data.ok) {
             VueCookies.remove("authorization");
@@ -129,6 +143,7 @@ const submitForm = () => {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            userStore().setAuthority(response.data.data.authority);
             alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
           }
           else {
@@ -163,70 +178,50 @@ const close = () => {
  * @data 2023-11-03
  * @description 비밀번호 변경 modal
  */
-const passwordForm = () => {
+const passwordForm = (e) => {
   const checkUser = {
     userId: userId.value,
     userPw: userPwCheck.value,
     newUserPw: newUserPw.value
   };
-
+  errorModal.value = "";
   if (newUserPwCheck.value === newUserPw.value) {
-    AxiosInst
-      .post("/api/auth/passwordCheck", checkUser)
-      .then((response) => {
-        if (response.data.ok && response.data.passCheck) {
+    if(validatePassword.test(newUserPw.value)) {
+      AxiosInst
+        .post("https://mevnserver.ovmkas.co.kr/api/auth/passwordCheck", checkUser)
+        .then((response) => {
+          if (response.data.ok && response.data.passCheck) {
+            AxiosInst
+              .post("https://mevnserver.ovmkas.co.kr/api/auth/logout")
+              .then(() => {
+                alert("회원정보가 수정 되었습니다. 다시 로그인 해주세요");
+                VueCookies.remove("authorization");
+                VueCookies.remove("refresh");
+                userStore().logout();
+                router.replace("/auth/login");
+              })
+              .catch((error) => {
+                // router.replace("/auth/login");
+              });
+            // console.log("회원이 맞습니다");
+            // eslint-disable-next-line no-dupe-else-if
+          } else if (!response.data.ok && !response.data.passCheck) {
+            alert("비밀번호가 다릅니다.");
+            newUserPwCheck.value = "";
+            newUserPw.value = "";
+            userPwCheck.value = "";
+          }
+        })
+        .catch((error) => {
+          // console.log(error.response.data.message);
+          if (!error.response.data.ok) {
+            alert("회원이 아니거나, 입력하신 정보가 다릅니다.");
+          }
           AxiosInst
-            .post("/api/auth/logout")
-            .then(() => {
-              /*지우지 말 것 */
-              // const myModal = new bootstrap.Modal('#exampleModal', {})
-              // console.log(myModal)
-              // myModal.hide()
-              // const modalBackdrops = document.getElementsByClassName('modal-backdrop');
-              // if (modalBackdrops.length > 0) {
-              //   modalBackdrops[0].parentNode.removeChild(modalBackdrops[0]);
-              // }
-              // const backdrop = document.querySelector('.modal-backdrop');
-              // if(backdrop){
-              //   backdrop.parentNode.removeChild(backdrop);
-              // }
-              /*지우지 말 것 */
-              // const elements = document.querySelectorAll('.modal-backdrop');
-              // elements.forEach(element => {
-              //   element.remove(); // 모든 요소 삭제
-              // });
-              // const parentElement = document.querySelector('.modal-open'); // 클래스명이 'myClass'인 부모 요소 선택
-              //
-              // while (parentElement.firstChild) {
-              //   parentElement.firstChild.remove(); // 부모 요소의 모든 자식 요소 삭제
-              // }
-              // parentElement.remove();
-              VueCookies.remove("authorization");
-              VueCookies.remove("refresh");
-              userStore().logout();
-              router.replace("/auth/login");
-            })
-            .catch((error) => {
-              // router.replace("/auth/login");
-            });
-          // console.log("회원이 맞습니다");
-          // eslint-disable-next-line no-dupe-else-if
-        }else if(!response.data.ok && !response.data.passCheck){
-          alert("비밀번호가 다릅니다.");
-          newUserPwCheck.value = "";
-          newUserPw.value = "";
-          userPwCheck.value = "";
-        }
-      })
-      .catch((error) => {
-        // console.log(error.response.data.message);
-        if(!error.response.data.ok) {
-          errorModal.value = "회원이 아니거나, 입력하신 정보가 다릅니다.";
-        }
-          AxiosInst
-            .get("/api/auth/refresh")
+            .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
             .then((response) => {
               if (!response.data.ok) {
+
                 VueCookies.remove("authorization");
                 VueCookies.remove("refresh");
                 userStore().logout();
@@ -235,6 +230,7 @@ const passwordForm = () => {
                 VueCookies.set("authorization", response.data.data.accessToken);
                 VueCookies.set("refresh", response.data.data.refreshToken);
                 userStore().setUserId(response.data.data.userId);
+                userStore().setAuthority(response.data.data.authority);
                 newUserPwCheck.value = "";
                 newUserPw.value = "";
                 userPwCheck.value = "";
@@ -248,9 +244,17 @@ const passwordForm = () => {
               router.replace("/auth/login");
             });
 
-      });
+        });
+    }else{
+      alert("비밀번호가 양식에 맞지 않습니다.(영어+숫자 4~16글자 이내)");
+      newUserPwCheck.value = "";
+      newUserPw.value = "";
+    }
   } else {
-    errorModal.value = "입력하신 비밀번호가 다릅니다";
+    alert("입력하신 비밀번호가 다릅니다");
+    newUserPwCheck.value = "";
+    newUserPw.value = "";
+    userPwCheck.value = "";
   }
 };
 
@@ -259,7 +263,7 @@ const deleteForm = function () {
     userId: userId.value,
     userPw: userDeletePw.value,
   };
-  AxiosInst.post("/api/auth/deleteUser", user)
+  AxiosInst.post("https://mevnserver.ovmkas.co.kr/api/auth/deleteUser", user)
     .then((response) => {
       if(response.data.ok) {
         alert("회원탈퇴가 완료 되었습니다.");
@@ -269,12 +273,13 @@ const deleteForm = function () {
         router.replace("/auth/login");
         // console.log("삭제하고 왔어");
       }else if(!response.data.ok){
+        userDeletePw.value = "";
         alert("회원 정보가 맞지 않습니다");
       }
     })
     .catch((error) => {
       AxiosInst
-        .get("/api/auth/refresh")
+        .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
         .then((response) => {
           if (!response.data.ok) {
             VueCookies.remove("authorization");
@@ -285,6 +290,7 @@ const deleteForm = function () {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            userStore().setAuthority(response.data.data.authority);
             userDeletePw.value="";
             alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
           }
@@ -517,6 +523,7 @@ backgroundSize: 'cover',
                 class="input-group-outline my-3"
                 type="password"
                 @update:value="newUserPw = $event"
+                @blur="newPwValidate"
               />
               <MaterialInput
                 id="newUserPwCheck"

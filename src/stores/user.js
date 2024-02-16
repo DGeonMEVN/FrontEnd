@@ -10,10 +10,14 @@ import {defineStore} from "pinia";
 export const userStore = defineStore("user", {
   state : () =>({
     userId : null,
+    authority : null,
   }),
   actions :{
     setUserId(userId){
       this.userId = userId;
+    },
+    setAuthority(authority){
+      this.authority = authority;
     },
     logout() {
       this.userId = null;

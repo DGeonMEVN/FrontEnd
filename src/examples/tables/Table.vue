@@ -35,6 +35,7 @@ defineProps({
 });
 
 let user = ref();
+const authority = ref(userStore().authority);
 let boardList = ref([]);
 let pageNum = ref(1);
 let totalPageNum = ref();
@@ -53,12 +54,12 @@ if(windowWidth.value<=500){
   pagesPerGroup=10;
 }
 onMounted(() => {
-
   const token = VueCookies.get("authorization");
   user.value = null;
   //권한으로 변경 해야함
   if (token && userStore().userId !== null) {
     user.value = userStore().userId
+
   }
   getBoardList(noticeBoardStore().currentPage);//페이지 로드 시 공지사항 게시판 조회
 });
@@ -79,7 +80,7 @@ const getBoardList = async (pageNum) => {
       search : search.value,
       pageNum : pageNum,
     }
-    const response = await axios.post(`/api/noticeBoard/search`, searchData);
+    const response = await axios.post(`https://mevnserver.ovmkas.co.kr/api/noticeBoard/search`, searchData);
     boardList.value = response.data.boards;
     totalPageNum.value = response.data.pageCount;
     // console.log("totalPageNum.value", totalPageNum.value);
@@ -230,7 +231,7 @@ const searchForm = () =>{
                 <div class="col-3 text-center">{{ dayjs(item.updateDate).format("YYYY-MM-DD HH:mm") }}</div>
               </div>
               <div class="row border-0">
-                <div v-if="user !=null" class="col-md-12 text-end">
+                <div v-if="authority ==='admin'" class="col-md-12 text-end">
                   <RouterLink :to="{ name : 'white' }" class="btn bg-gradient-success me-5 mt-5">
                     글 작성
                   </RouterLink>

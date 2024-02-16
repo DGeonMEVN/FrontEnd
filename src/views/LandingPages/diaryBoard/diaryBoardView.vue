@@ -39,7 +39,7 @@ onMounted(() => {
   // 라우터에서 bno를 읽어옴
 
   AxiosInst
-    .post("/api/diaryBoard/diaryView", bno)
+    .post("https://mevnserver.ovmkas.co.kr/api/diaryBoard/diaryView", bno)
     .then((response) => {
       weight.value = response.data.Board.weight;
       significant.value = response.data.Board.significant;
@@ -68,7 +68,7 @@ onMounted(() => {
     })
     .catch(()=>{
       AxiosInst
-        .get("/api/auth/refresh")
+        .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
         .then((response) => {
           if (!response.data.ok) {
             VueCookies.remove("authorization");
@@ -80,9 +80,10 @@ onMounted(() => {
             VueCookies.set("authorization", response.data.data.accessToken);
             VueCookies.set("refresh", response.data.data.refreshToken);
             userStore().setUserId(response.data.data.userId);
+            userStore().setAuthority(response.data.data.authority);
             alert("세션이 만료되어 다시 불러옵니다");
             AxiosInst
-              .post("/api/diaryBoard/diaryView", bno)
+              .post("https://mevnserver.ovmkas.co.kr/api/diaryBoard/diaryView", bno)
               .then((response) => {
                 weight.value = response.data.Board.weight;
                 significant.value = response.data.Board.significant;

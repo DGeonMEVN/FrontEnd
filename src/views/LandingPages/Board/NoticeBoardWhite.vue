@@ -33,6 +33,8 @@ onMounted(() => {
 let title = ref();
 let content = ref();
 let userDeletePw = ref();
+const validateTitle = /^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣!@#$%^&*()\s\-_+=]{4,16}$/;
+let errorTitle = ref("");
 /**
  * @author ovmkas
  * @created  2023-12-07
@@ -46,42 +48,46 @@ const submitForm = () => {
     title: title.value,
     content: content.value
   };
-
-  AxiosInst.post("/api/noticeBoard/white", board)
-    .then(() => {
-      alert("작성이 완료 되었습니다");
-      router.replace("/table");
-    })
-    .catch((err) => {
-      AxiosInst
-        .get("/api/auth/refresh")
-        .then((response) => {
-          if (!response.data.ok) {
+  if(validateTitle.test(title.value)) {
+    errorTitle.value="";
+    AxiosInst.post("https://mevnserver.ovmkas.co.kr/api/noticeBoard/white", board)
+      .then(() => {
+        alert("작성이 완료 되었습니다");
+        router.replace("/table");
+      })
+      .catch((err) => {
+        AxiosInst
+          .get("https://mevnserver.ovmkas.co.kr/api/auth/refresh")
+          .then((response) => {
+            if (!response.data.ok) {
+              alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+              VueCookies.remove("authorization");
+              VueCookies.remove("refresh");
+              userStore().logout();
+              router.replace("/auth/login");
+            } else if (response.data.data.accessToken) {
+              VueCookies.set("authorization", response.data.data.accessToken);
+              VueCookies.set("refresh", response.data.data.refreshToken);
+              userStore().setUserId(response.data.data.userId);
+              userStore().setAuthority(response.data.data.authority);
+              userDeletePw.value = "";
+              alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
+            } else {
+              router.replace("/");
+            }
+          })
+          .catch(() => {
             alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
+            // console.log("아무겂도 없어");
             VueCookies.remove("authorization");
             VueCookies.remove("refresh");
             userStore().logout();
             router.replace("/auth/login");
-          } else if (response.data.data.accessToken) {
-            VueCookies.set("authorization", response.data.data.accessToken);
-            VueCookies.set("refresh", response.data.data.refreshToken);
-            userStore().setUserId(response.data.data.userId);
-            userDeletePw.value="";
-            alert("세션정보가 만료 되었습니다. 다시 눌러주세요");
-          }
-          else {
-            router.replace("/");
-          }
-        })
-        .catch(() => {
-          alert("세션정보가 초기화 되었습니다. 다시 로그인 해주세요")
-          // console.log("아무겂도 없어");
-          VueCookies.remove("authorization");
-          VueCookies.remove("refresh");
-          userStore().logout();
-          router.replace("/auth/login");
-        });
-    });
+          });
+      });
+  }else{
+    errorTitle.value="제목이 양식에 맞지 않습니다(4~16글자 이내로 입력해주세요)";
+  }
 };
 </script>
 <template>
@@ -306,6 +312,7 @@ label: 'Buy Now',
                     </tr>
                     <tr>
                       <td class="text-end">
+                        <p class="text-danger">{{errorTitle}}</p>
                         <button class="btn bg-gradient-success">글 작성</button>
                       </td>
                     </tr>

@@ -97,7 +97,7 @@ onMounted(() => {
  */
 const logout = () => {
   AxiosInst
-    .post("/api/auth/logout") // 헤더는 위의 인터셉터에서 설정됩니다.
+    .post("https://mevnserver.ovmkas.co.kr/api/auth/logout") // 헤더는 위의 인터셉터에서 설정됩니다.
     .then(() => {
       // console.log("로그아웃 완료");
       // 로그아웃 성공 시 필요한 로직을 추가할 수 있습니다.
