@@ -1,207 +1,261 @@
-# [Vue Material Kit 2](http://demos.creative-tim.com/vue-material-kit/#/?ref=readme-vmk) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?url=https://www.creative-tim.com/product/vue-material-kit&text=Check%20Vue%20Material%20kit%20Pro%20made%20by%20@CreativeTim%20#webdesign%20#kit%20#materialdesign%20#vue%20https://www.creative-tim.com/product/vue-material-kit)
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+<a name="readme-top"></a>
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Don't forget to give the project a star!
+*** Thanks again! Now go create something AMAZING! :D
+-->
 
-![version](https://img.shields.io/badge/version-2.0.0-blue.svg) [![GitHub issues open](https://img.shields.io/github/issues/creativetimofficial/vue-material-kit.svg)](https://github.com/creativetimofficial/vue-material-kit/issues?q=is%3Aopen+is%3Aissue) [![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/creativetimofficial/vue-material-kit.svg)](https://github.com/creativetimofficial/vue-material-kit/issues?q=is%3Aissue+is%3Aclosed)
 
-![Image](https://s3.amazonaws.com/creativetim_bucket/products/97/original/vue-material-kit-2.jpg)
 
-Vue Material Kit 2 is our newest free VueJS Design System. Its amazing design is inspired by Material Design and contains all the components you need for your development. If you’re a developer looking to create good-looking websites, rich with features, and highly customisable, here is your match.
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
 
-**Fully Coded Elements**
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://pf3.chanyongyang.com/" target="_blank">
+    <img src="src/assets/img/logo.png" alt="Logo" width="200">
+  </a>
 
-Vue Material Kit 2 is built with over 70 frontend individual elements, like buttons, inputs, navbars, alerts or cards, giving you the freedom of choosing and combining. All components can take variations in color, which you can easily modify using sass files. You will save a lot of time going from prototyping to full-functional code because all elements are implemented.
+<h3 align="center">건강관리 일지</h3>
 
-This free VueJS 3 & Bootstrap 5 template is coming with pre-built design blocks, so the development process is seamless,
-switching from our pages to the real website is very easy to be done.
-View [all components here.](https://www.creative-tim.com/learning-lab/vue/alerts/material-kit/)
+  <p align="center">
+    MEVN Project</p>
+    <br>
+    <p>작업기간 : 2023.08.24~2024.02.16</p>
 
-**Documentation built by Developers**
+    <br>
+  </p>
+  <a href="https://mevn.ovmkas.co.kr/" target="_blank">View Demo</a>
+</div>
 
-Each element is well presented in very complex documentation.
-You can read more about the [documentation here](https://www.creative-tim.com/learning-lab/vue/overview/material-kit/).
 
-**Example Pages**
 
-If you want to get inspiration or just show something directly to your clients, you can jump-start your development with our pre-built example pages. You will be able to quickly set up the basic structure for your web project.
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>목차</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+        <a href="#데이터베이스">데이터베이스</a>
+    </li>
+    <li>
+        <a href="#개발환경">개발 환경</a>
+    </li>
+    <li>
+	    <a href="#사용방법">사용방법</a>
+    </li>
+    <li>
+	    <a href="#요구사항">요구사항</a>
+    </li>
+    <li>
+	    <a href="#Etc">Etc</a>
+	    <ul>
+		    <li><a href="#PPT">PPT</a></li>
+		    <li>
+              <a href="#프로젝트 후기">프로젝트 후기</a>
+            </li>
+	    </ul>
+    </li>
+    <li><a href="#Contact">Contact</a></li>
+    <li>
+	    <a href="#Acknowledgments">Acknowledgments</a>
+	    <ul>
+		    <li><a href="#References">References</a></li>
+	    </ul>
+    </li>
+  </ol>
+</details>
 
-View [example pages here.](https://demos.creative-tim.com/vue-material-kit/)
 
-**HELPFUL LINKS**
 
-- View [Github Repository](https://github.com/creativetimofficial/vue-material-kit)
-- Check [FAQ Page](https://www.creative-tim.com/faq)
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-#### Special thanks
+<img src="src/assets/img/main.jpg" >
 
-During the development of this dashboard, we have used many existing resources from awesome developers. We want to thank them for providing their tools open source:
+<br>
+MEVN Project <br>
+Redis를 활용한 JWT 회원제 게시판
 
-- [VueJS 3](https://vuejs.org/) - An approachable, performant and versatile framework for building web user interfaces.
-- [Bootstrap 5](https://getbootstrap.com/) - Powerful, extensible, and feature-packed frontend toolkit.
-- [Popper.js](https://popper.js.org/) - Kickass library used to manage poppers
-- [Pinia](https://pinia.vuejs.org/) - The Vue Store that you will enjoy using.
-- [PrismJS](https://prismjs.com/) - A lightweight and extensible syntax highlighter.
-- [TypedJS](https://mattboldt.com/demos/typed-js/) - A JavaScript Typing Animation Library.
-- [Vue Clipboard 3](https://github.com/JamieCurnow/vue-clipboard3) - Easily copy to clipboard in Vue 3.
-- [Vue Count To](http://panjiachen.github.io/countTo/demo/) - A dependency-free, lightweight vue component for count up.
 
-Let us know your thoughts below. And good luck with development!
+### Built With
+<img src="https://img.shields.io/badge/vue.js-F7DF1E?style=flat&logo=vue.js&logoColor=black"/>
+<img src="https://img.shields.io/badge/bootstrap-F7DF1E?style=flat&logo=bootstrap&logoColor=black"/>
+<br/>
+<img src="https://img.shields.io/badge/express.js-green?style=flat&logo=express&logoColor=white"/>
+<img src="https://img.shields.io/badge/node.js-green?style=flat&logo=node.js&logoColor=white"/>
+<br/>
+<img src="https://img.shields.io/badge/MongoDB-red?style=flat&logo=MongoDB&logoColor=white"/><br>
+<img src="https://img.shields.io/badge/npm-gray?style=flat&logo=npm&logoColor=white"/><br>
+<img src="https://img.shields.io/badge/Linux-orange?style=flat&logo=Linux&logoColor=white"/><br>
 
-## Table of Contents
 
-- [Versions](#versions)
-- [Demo](#demo)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [File Structure](#file-structure)
-- [Browser Support](#browser-support)
-- [Resources](#resources)
-- [Reporting Issues](#reporting-issues)
-- [Technical Support or Questions](#technical-support-or-questions)
-- [Licensing](#licensing)
-- [Useful Links](#useful-links)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Versions
 
-[<img src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/vue-logo.jpg?raw=true" width="60" height="60" />](https://www.creative-tim.com/product/vue-material-kit?ref=readme-vmk)
+<!-- 데이터베이스 -->
+### 데이터베이스
 
-| VueJS |
-| ----- |
+  <img alt="ERD" src="src/assets/img/ERD.png" width="500">
 
-| [![Vue Material Dashboard 2 PRO](https://s3.amazonaws.com/creativetim_bucket/products/97/thumb/vue-material-kit-2.jpg)](http://demos.creative-tim.com/vue-material-kit/?ref=readme-vmk)
+<!-- 개발환경 -->
+### 개발환경
 
-## Demo
+1. MONGODB
+2. EXPRESS
+3. VUE
+4. NODE
+5. REDIS
+6. MONGODB COMPASS
+7. Pinia-Plugin-Persistedstate
 
-- [Landing page](https://demos.creative-tim.com/vue-material-kit/#/pages/landing-pages/about-us?ref=readme-mkrp)
-- [Author page](https://demos.creative-tim.com/vue-material-kit/#/pages/landing-pages/author?ref=readme-mkrp)
-- [Sign in page](https://demos.creative-tim.com/vue-material-kit/#/pages/landing-pages/basic?ref=readme-mkrp)
 
-[View More](https://demos.creative-tim.com/vue-material-kit/#/?ref=readme-mkp).
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Quick start
 
-Quick start options:
 
-- Buy from [Creative Tim](https://www.creative-tim.com/product/vue-material-kit?ref=readme-vmk).
+<!-- 사용방법및기능소개 -->
+## 사용방법
 
-## Terminal Commands
+#### 사용방법
+<pre>
+※ 일반회원
 
-1. Download and Install NodeJs LTS version from [NodeJs Official Page](https://nodejs.org/en/download/).
-2. Navigate to the root ./ directory of the product and run `yarn install` or `npm install` to install our local dependencies.
+1. 회원가입
+2. 로그인 (demo 페이지 기준 guest/guest0216 입력)
+3. 게시판
+ 	3-1. 공지사항 게시판확인
+	3-2. 일지 - 글작성
+    3-3. 일지 - 조회
+    3-4. 일지 - 상세보기
+    3-5. 일지 - 삭제
 
-## Documentation
 
-The documentation for the Material Kit is hosted at our [website](https://www.creative-tim.com/learning-lab/vue/overview/material-kit/?ref=readme-vmk).
+※ 관리자
 
-### What's included
+1. 게시판
+    1-1. 공지사항 글 작성
+    1-2. 공지사항 글 수정
+    1-3. 공지사항 글 삭제
+</pre>
 
-Within the download you'll find the following directories and files:
 
-```
-vue-material-kit-2
-    ├── public
-    ├── src
-    │   ├── assets
-    │   │   ├── css
-    │   │   ├── fonts
-    │   │   ├── img
-    │   │   ├── js
-    │   │   └── scss
-    │   ├── components
-    │   │   ├── MaterialAlert.vue
-    │   │   ├── MaterialAvatar.vue
-    │   │   ├── MaterialBadge.vue
-    │   │   ├── MaterialButton.vue
-    │   │   ├── MaterialCheckbox.vue
-    │   │   ├── MaterialInput.vue
-    │   │   ├── MaterialPagination.vue
-    │   │   ├── MaterialPaginationItem.vue
-    │   │   ├── MaterialProgress.vue
-    │   │   ├── MaterialSocialButton.vue
-    │   │   ├── MaterialSwitch.vue
-    │   │   └── MaterialTextArea
-    │   ├── examples
-    │   │   ├── cards
-    │   │   ├── footers
-    │   │   ├── navbars
-    │   │   ├── tables
-    │   │   ├── Breadcrumbs.vue
-    │   │   └── Header.vue
-    │   ├── layouts
-    │   │   ├── sections
-    │   │   │    ├── attention-catchers
-    │   │   │    ├── components
-    │   │   │    ├── elements
-    │   │   │    ├── input-areas
-    │   │   │    ├── navigation
-    │   │   └──  └── page-sections
-    │   ├── router
-    │   ├── stores
-    │   ├── views
-    │   │   ├── LandingPages
-    │   │   └── Presentation
-    │   ├── App.vue
-    │   ├── main.js
-    │   └── material-kit.js
-    ├── .eslintrc.json
-    ├── .gitignore
-    ├── CHANGELOG.md
-    ├── ISSUE_TEMPLATE.md
-    ├── LICENSE.md
-    ├── index.html
-    ├── package.json
-    ├── README.md
-    └── vite.config.js
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Browser Support
 
-At present, we officially aim to support the last two versions of the following browsers:
 
-<img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/chrome.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/firefox.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/edge.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/safari.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/opera.png" width="64" height="64">
+<!-- ROADMAP -->
+## 요구사항
 
-## Resources
+### 작업목록
+- [x] 작업완료
+- [ ] 작업예정
 
-- [Live Preview](https://demos.creative-tim.com/vue-material-kit/#/?ref=readme-vmk)
-- [Buy Page](https://www.creative-tim.com/product/vue-material-kit?ref=readme-vmk)
-- Documentation is [here](https://www.creative-tim.com/learning-lab/vue/overview/material-kit/?ref=readme-vmk)
-- [License Agreement](https://www.creative-tim.com/license?ref=readme-vmk)
-- [Support](https://www.creative-tim.com/contact-us?ref=readme-vmk)
-- Issues: [Github Issues Page](https://github.com/creativetimofficial/vue-material-kit/issues)
+#### 일반 회원
+- [x] 회원가입
+    - [x] 이름, ID, Password, 성별 입력으로 회원가입
+- [x] 로그인
+- [x] 회원상세조회
+- [x] 회원수정
+    - [x] 이름, Password 수정 가능
+- [x] 회원탈퇴
+    - [x] 회원정보, 게시글 삭제
+- [x] 게시판
+    - [x] 공지사항 게시판 조회
+    - [x] 일지조회
+    - [x] 일지쓰기
+    - [x] 일지삭제
 
-## Reporting Issues
+<br>
 
-We use GitHub Issues as the official bug tracker for the Vue Material Kit 2. Here are some advices for our users that want to report an issue:
+#### 관리자
+- [x] 공지사항
+    - [x] 공지사항 글 쓰기
+    - [x] 공지사항 글 수정
+    - [ ] 특정 사용자 게시물 조회
 
-1. Make sure that you are using the latest version of the Vue Material Kit 2. Check the CHANGELOG from your dashboard on our [website](https://www.creative-tim.com/product/vue-material-kit?ref=readme-vmk).
-2. Providing us reproducible steps for the issue will shorten the time it takes for it to be fixed.
-3. Some issues may be browser specific, so specifying in what browser you encountered the issue might help.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Technical Support or Questions
 
-If you have questions or need help integrating the product please [contact us](https://www.creative-tim.com/contact-us?ref=readme-vmk) instead of opening an issue.
 
-## Licensing
+<!-- LICENSE -->
+## Etc
 
-- Copyright 2022 [Creative Tim](https://www.creative-tim.com?ref=readme-vmk)
-- Creative Tim [license](https://www.creative-tim.com/license?ref=readme-vmk)
+#### PPT
 
-## Useful Links
+<details>
+<summary>PPT Images</summary>
+<img src="src/assets/img/ppt/슬라이드1.JPG">
+<img src="src/assets/img/ppt/슬라이드2.JPG">
+<img src="src/assets/img/ppt/슬라이드3.JPG">
+<img src="src/assets/img/ppt/슬라이드4.JPG">
+<img src="src/assets/img/ppt/슬라이드5.JPG">
+<img src="src/assets/img/ppt/슬라이드6.JPG">
+<img src="src/assets/img/ppt/슬라이드7.JPG">
+<img src="src/assets/img/ppt/슬라이드8.JPG">
+<img src="src/assets/img/ppt/슬라이드9.JPG">
+<img src="src/assets/img/ppt/슬라이드10.JPG">
+<img src="src/assets/img/ppt/슬라이드11.JPG">
+<img src="src/assets/img/ppt/슬라이드12.JPG">
+<img src="src/assets/img/ppt/슬라이드13.JPG">
+<img src="src/assets/img/ppt/슬라이드14.JPG">
+<img src="src/assets/img/ppt/슬라이드15.JPG">
+<img src="src/assets/img/ppt/슬라이드16.JPG">
+<img src="src/assets/img/ppt/슬라이드17.JPG">
 
-- [More products](https://www.creative-tim.com/templates?ref=readme-vmk) from Creative Tim
+</details>
 
-- [Tutorials](https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w)
+<br>
 
-- [Freebies](https://www.creative-tim.com/bootstrap-themes/free?ref=readme-vmk) from Creative Tim
+### 프로젝트 후기
 
-- [Affiliate Program](https://www.creative-tim.com/affiliates/new?ref=readme-vmk) (earn money)
+<pre>
+처음 접해보는 MEVN프로젝트여서 초반에 프로젝트를 진행함에 있어서 많이 힘들었지만 
+그 덕분에 회원관련 JWT,COOKIE 관련 정보를 많이 찾아보게 되었고,
+JavaScript를 많이 배울 수 있게 된 것 같아 좋았습니다
+</pre>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-##### Social Media
 
-Twitter: <https://twitter.com/CreativeTim>
 
-Facebook: <https://www.facebook.com/CreativeTim>
+<!-- CONTACT -->
+## Contact
 
-Dribbble: <https://dribbble.com/creativetim>
+Lee Dong Geon - ovmkas@gmail.com
 
-Google+: <https://plus.google.com/+CreativetimPage>
+<a href="https://www.ovmkas.co.kr" target="_blank">Portfolio Link</a>
 
-Instagram: <https://instagram.com/creativetimofficial>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+
+프로젝트에 관심 가져주셔서 감사합니다! <br/>
+궁금한 사항은 
+ovmkas@gmail.com
+로 부탁드립니다
+
+### References
+README Template : [README-Template](https://github.com/othneildrew/Best-README-Template)<br>
+VUE Template: [Creative Tim](https://demos.creative-tim.com/vue-material-kit/?_ga=2.214302814.816472569.1692249839-1215412141.1690963757#/)<br>
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
