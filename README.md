@@ -21,8 +21,13 @@
 
 <!-- PROJECT LOGO -->
 <br />
+
+
+###### readme-top
+
+
 <div align="center">
-  <a href="https://pf3.chanyongyang.com/" target="_blank">
+  <a href="https://mevn.ovmkas.co.kr/" target="_blank">
     <img src="src/assets/img/logo.png" alt="Logo" width="200">
   </a>
 
@@ -33,8 +38,6 @@
     <br>
     <p>작업기간 : 2023.08.24~2024.02.16</p>
 
-    <br>
-  </p>
   <a href="https://mevn.ovmkas.co.kr/" target="_blank">View Demo</a>
 </div>
 
@@ -66,9 +69,7 @@
 	    <a href="#Etc">Etc</a>
 	    <ul>
 		    <li><a href="#PPT">PPT</a></li>
-		    <li>
-              <a href="#프로젝트 후기">프로젝트 후기</a>
-            </li>
+		    <li><a href="#프로젝트후기">프로젝트 후기</a></li>
 	    </ul>
     </li>
     <li><a href="#Contact">Contact</a></li>
@@ -222,7 +223,10 @@ Redis를 활용한 JWT 회원제 게시판
 
 <br>
 
-### 프로젝트 후기
+
+
+<!-- 프로젝트 후기 -->
+#### 프로젝트후기
 
 <pre>
 처음 접해보는 MEVN프로젝트여서 초반에 프로젝트를 진행함에 있어서 많이 힘들었지만 
